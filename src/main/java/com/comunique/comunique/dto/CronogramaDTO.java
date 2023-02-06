@@ -1,42 +1,41 @@
 package com.comunique.comunique.dto;
 
-import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
-import com.comunique.comunique.model.Usuarios;
+import javax.validation.constraints.NotBlank;
 
-public class CronogramaDTO implements Serializable {
-	private static final long serialVersionUID = 1l;
+public class CronogramaDTO{
+	@NotBlank
+	private UUID idCronograma;
 	
-	private String idAtividade;
+	@NotBlank
 	private Date dataAtividade;
+	
+	@NotBlank
 	private String cor;
+	@NotBlank
 	private int prazo;
+	
+	@NotBlank
 	private String atividade;
-	private Usuarios usuario;
-	
-	
-	public CronogramaDTO(String idAtividade, Date dataAtividade, String cor, int prazo, String atividade,
-			Usuarios usuario) {
+
+	public CronogramaDTO(@NotBlank UUID idCronograma, @NotBlank Date dataAtividade, @NotBlank String cor,
+			@NotBlank int prazo, @NotBlank String atividade) {
 		super();
-		this.idAtividade = idAtividade;
+		this.idCronograma = idCronograma;
 		this.dataAtividade = dataAtividade;
 		this.cor = cor;
 		this.prazo = prazo;
 		this.atividade = atividade;
-		this.usuario = usuario;
 	}
 
-	public CronogramaDTO() {
-		super();
+	public UUID getIdCronograma() {
+		return idCronograma;
 	}
 
-	public String getIdAtividade() {
-		return idAtividade;
-	}
-
-	public void setIdAtividade(String idAtividade) {
-		this.idAtividade = idAtividade;
+	public void setIdCronograma(UUID idCronograma) {
+		this.idCronograma = idCronograma;
 	}
 
 	public Date getDataAtividade() {
@@ -71,23 +70,14 @@ public class CronogramaDTO implements Serializable {
 		this.atividade = atividade;
 	}
 
-	public Usuarios getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuarios usuario) {
-		this.usuario = usuario;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
 	@Override
 	public String toString() {
-		return "CronogramaDTO [idAtividade=" + idAtividade + ", dataAtividade=" + dataAtividade + ", cor=" + cor
-				+ ", prazo=" + prazo + ", atividade=" + atividade + ", usuario=" + usuario + "]";
+		return "CronogramaDTO [idCronograma=" + idCronograma + ", dataAtividade=" + dataAtividade + ", cor=" + cor
+				+ ", prazo=" + prazo + ", atividade=" + atividade + "]";
 	}
+	
+	
+	
 	
 }
 

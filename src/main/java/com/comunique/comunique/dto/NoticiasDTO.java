@@ -1,24 +1,20 @@
 package com.comunique.comunique.dto;
 
-import java.io.Serializable;
+import java.util.UUID;
 
-public class NoticiasDTO implements Serializable {
-private static final long serialVersionUID = 1l;
-private String idNoticia;
+import javax.validation.constraints.NotBlank;
 
+public class NoticiasDTO{
+	@NotBlank
+private UUID idNoticia;
+	@NotBlank
 private String titulo;
-
+	@NotBlank
 private String imagem;
-
+	@NotBlank
 private String texto;
 
-
-
-public NoticiasDTO() {
-	super();
-}
-
-public NoticiasDTO(String idNoticia, String titulo, String imagem, String texto) {
+public NoticiasDTO(UUID idNoticia, String titulo, String imagem, String texto) {
 	super();
 	this.idNoticia = idNoticia;
 	this.titulo = titulo;
@@ -26,11 +22,11 @@ public NoticiasDTO(String idNoticia, String titulo, String imagem, String texto)
 	this.texto = texto;
 }
 
-public String getIdNoticia() {
+public UUID getIdNoticia() {
 	return idNoticia;
 }
 
-public void setIdNoticia(String idNoticia) {
+public void setIdNoticia(UUID idNoticia) {
 	this.idNoticia = idNoticia;
 }
 
@@ -58,13 +54,13 @@ public void setTexto(String texto) {
 	this.texto = texto;
 }
 
-public static long getSerialversionuid() {
-	return serialVersionUID;
-}
-
 @Override
 public String toString() {
 	return "NoticiasDTO [idNoticia=" + idNoticia + ", titulo=" + titulo + ", imagem=" + imagem + ", texto=" + texto
 			+ "]";
 }
+
+
+
+
 }

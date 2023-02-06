@@ -1,85 +1,62 @@
 package com.comunique.comunique.dto;
 
-import java.io.Serializable;
-import java.util.Date;
+import java.util.UUID;
+
+import javax.validation.constraints.NotBlank;
 
 import com.comunique.comunique.model.Chat;
 
-public class MensagensDTO implements Serializable {
-    private static final long serialVersionUID = 1L;
-    
-    private String idMensagem;
-    private String usuarioEnviou;
-    private String mensagem;
-    private Date dataMensagem;
-    public Chat chat;
-    
-    
-   
 
-    public MensagensDTO() {
+public class MensagensDTO {
+    @NotBlank
+    private UUID idMensagens;
+    @NotBlank
+	private UUID usuarioEnviou;
+	@NotBlank
+	private String mensagem;
+    @NotBlank
+	private Chat chat;
+	public MensagensDTO(@NotBlank UUID idMensagens, @NotBlank UUID usuarioEnviou, @NotBlank String mensagem,
+			@NotBlank Chat chat) {
 		super();
-	}
-
-	public MensagensDTO(String idMensagem, String usuarioEnviou, String mensagem, Date dataMensagem, Chat chat) {
-		super();
-		this.idMensagem = idMensagem;
+		this.idMensagens = idMensagens;
 		this.usuarioEnviou = usuarioEnviou;
 		this.mensagem = mensagem;
-		this.dataMensagem = dataMensagem;
 		this.chat = chat;
 	}
-    
+	public UUID getIdMensagens() {
+		return idMensagens;
+	}
+	public void setIdMensagens(UUID idMensagens) {
+		this.idMensagens = idMensagens;
+	}
+	public UUID getUsuarioEnviou() {
+		return usuarioEnviou;
+	}
+	public void setUsuarioEnviou(UUID usuarioEnviou) {
+		this.usuarioEnviou = usuarioEnviou;
+	}
+	public String getMensagem() {
+		return mensagem;
+	}
+	public void setMensagem(String mensagem) {
+		this.mensagem = mensagem;
+	}
 	public Chat getChat() {
 		return chat;
 	}
-
 	public void setChat(Chat chat) {
 		this.chat = chat;
 	}
-
-	public String getIdMensagem() {
-        return idMensagem;
-    }
-
-    public void setIdMensagem(String idMensagem) {
-        this.idMensagem = idMensagem;
-    }
-
-    public String getUsuarioEnviou() {
-        return usuarioEnviou;
-    }
-
-    public void setUsuarioEnviou(String usuarioEnviou) {
-        this.usuarioEnviou = usuarioEnviou;
-    }
-
-    public String getMensagem() {
-        return mensagem;
-    }
-
-    public void setMensagem(String mensagem) {
-        this.mensagem = mensagem;
-    }
-
-    public Date getDataMensagem() {
-        return dataMensagem;
-    }
-
-    public void setDataMensagem(Date dataMensagem) {
-        this.dataMensagem = dataMensagem;
-    }
-
-    public static long getSerialversionuid() {
-        return serialVersionUID;
-    }
-
 	@Override
 	public String toString() {
-		return "MensagensDTO [idMensagem=" + idMensagem + ", usuarioEnviou=" + usuarioEnviou + ", mensagem=" + mensagem
-				+ ", dataMensagem=" + dataMensagem + ", chat=" + chat + "]";
+		return "MensagensDTO [idMensagens=" + idMensagens + ", usuarioEnviou=" + usuarioEnviou + ", mensagem="
+				+ mensagem + ", chat=" + chat + "]";
 	}
-
     
+    
+	
+    
+	
 }
 

@@ -1,17 +1,31 @@
 package com.comunique.comunique.dto;
 
-public class UsuariosDTO {
-	private String nomeUsuario;
-	private String tipoUsuario;
-	private String email;
-	private String senha;
-	private String fotoPerfil;
-	private String fotoBackground;
-	private boolean usuarioOnline;
+import java.util.UUID;
 
-	public UsuariosDTO(String nomeUsuario, String tipoUsuario, String email, String senha, String fotoPerfil,
-			String fotoBackground, boolean usuarioOnline) {
+import javax.validation.constraints.NotBlank;
+
+public class UsuariosDTO {
+	@NotBlank
+	private UUID idUsuario;
+	@NotBlank
+	private String nomeUsuario;
+	@NotBlank
+	private String tipoUsuario;
+	@NotBlank
+	private String email;
+	@NotBlank
+	private String senha;
+	@NotBlank
+	private String fotoPerfil;
+	@NotBlank
+	private String fotoBackground;
+	@NotBlank
+	private boolean usuarioOnline;
+	public UsuariosDTO(@NotBlank UUID idUsuario, @NotBlank String nomeUsuario, @NotBlank String tipoUsuario,
+			@NotBlank String email, @NotBlank String senha, @NotBlank String fotoPerfil,
+			@NotBlank String fotoBackground, @NotBlank boolean usuarioOnline) {
 		super();
+		this.idUsuario = idUsuario;
 		this.nomeUsuario = nomeUsuario;
 		this.tipoUsuario = tipoUsuario;
 		this.email = email;
@@ -19,6 +33,12 @@ public class UsuariosDTO {
 		this.fotoPerfil = fotoPerfil;
 		this.fotoBackground = fotoBackground;
 		this.usuarioOnline = usuarioOnline;
+	}
+	public UUID getIdUsuario() {
+		return idUsuario;
+	}
+	public void setIdUsuario(UUID idUsuario) {
+		this.idUsuario = idUsuario;
 	}
 	public String getNomeUsuario() {
 		return nomeUsuario;
@@ -64,9 +84,14 @@ public class UsuariosDTO {
 	}
 	@Override
 	public String toString() {
-		return "UsuariosDTO [nomeUsuario=" + nomeUsuario + ", tipoUsuario=" + tipoUsuario + ", email=" + email
-				+ ", senha=" + senha + ", fotoPerfil=" + fotoPerfil + ", fotoBackground=" + fotoBackground
-				+ ", usuarioOnline=" + usuarioOnline + "]";
+		return "UsuariosDTO [idUsuario=" + idUsuario + ", nomeUsuario=" + nomeUsuario + ", tipoUsuario=" + tipoUsuario
+				+ ", email=" + email + ", senha=" + senha + ", fotoPerfil=" + fotoPerfil + ", fotoBackground="
+				+ fotoBackground + ", usuarioOnline=" + usuarioOnline + "]";
 	}
+	
+	
+	
+
+
 	
 }

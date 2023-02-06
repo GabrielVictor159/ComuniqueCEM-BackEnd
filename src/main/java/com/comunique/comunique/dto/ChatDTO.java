@@ -1,25 +1,35 @@
 package com.comunique.comunique.dto;
 
-import java.io.Serializable;
+import java.util.UUID;
+
+import javax.validation.constraints.NotBlank;
 
 import com.comunique.comunique.model.Usuarios;
 
-public class ChatDTO implements Serializable{
-	private static final long serialVersionUID = 1l;
+
+public class ChatDTO{
 	
+	@NotBlank
+	private UUID idChat;
+	@NotBlank
 	private Usuarios usuario1;
 	
+	@NotBlank
 	private Usuarios usuario2;
 
-	
-	public ChatDTO(Usuarios usuario1, Usuarios usuario2) {
+	public ChatDTO(@NotBlank UUID idChat, @NotBlank Usuarios usuario1, @NotBlank Usuarios usuario2) {
 		super();
+		this.idChat = idChat;
 		this.usuario1 = usuario1;
 		this.usuario2 = usuario2;
 	}
 
-	public ChatDTO() {
-		super();
+	public UUID getIdChat() {
+		return idChat;
+	}
+
+	public void setIdChat(UUID idChat) {
+		this.idChat = idChat;
 	}
 
 	public Usuarios getUsuario1() {
@@ -38,13 +48,13 @@ public class ChatDTO implements Serializable{
 		this.usuario2 = usuario2;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
 	@Override
 	public String toString() {
-		return "ChatDTO [usuario1=" + usuario1 + ", usuario2=" + usuario2 + "]";
+		return "ChatDTO [idChat=" + idChat + ", usuario1=" + usuario1 + ", usuario2=" + usuario2 + "]";
 	}
+
+
+	
+	
 }
 

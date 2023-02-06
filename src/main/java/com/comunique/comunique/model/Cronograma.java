@@ -2,13 +2,18 @@ package com.comunique.comunique.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
+
 
 @Entity
 @Table(name="cronograma")
@@ -16,8 +21,10 @@ public class Cronograma implements Serializable {
 	private static final long serialVersionUID = 1l;
 	
 	@Id
-	@Column
-	private String idAtividade;
+	@GeneratedValue(generator = "uuid2")
+	@GenericGenerator(name = "uuid2", strategy = "uuid2")
+	@Column(nullable=false)
+	private UUID idCronograma;
 	
 	@Column(nullable=false)
 	private Date dataAtividade;
@@ -33,16 +40,14 @@ public class Cronograma implements Serializable {
 	
 	@ManyToOne
 	@JoinColumn(
-			name = "nomeUsuario"
+			name = "idUsuario"
 			)
 	private Usuarios usuario;
 
-	
-	
-	public Cronograma(String idAtividade, Date dataAtividade, String cor, int prazo, String atividade,
+	public Cronograma(UUID idCronograma, Date dataAtividade, String cor, int prazo, String atividade,
 			Usuarios usuario) {
 		super();
-		this.idAtividade = idAtividade;
+		this.idCronograma = idCronograma;
 		this.dataAtividade = dataAtividade;
 		this.cor = cor;
 		this.prazo = prazo;
@@ -50,12 +55,16 @@ public class Cronograma implements Serializable {
 		this.usuario = usuario;
 	}
 
-	public String getIdAtividade() {
-		return idAtividade;
+	public Cronograma() {
+		super();
 	}
 
-	public void setIdAtividade(String idAtividade) {
-		this.idAtividade = idAtividade;
+	public UUID getIdCronograma() {
+		return idCronograma;
+	}
+
+	public void setIdCronograma(UUID idCronograma) {
+		this.idCronograma = idCronograma;
 	}
 
 	public Date getDataAtividade() {
@@ -104,10 +113,12 @@ public class Cronograma implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Cronograma [idAtividade=" + idAtividade + ", dataAtividade=" + dataAtividade + ", cor=" + cor
+		return "Cronograma [idCronograma=" + idCronograma + ", dataAtividade=" + dataAtividade + ", cor=" + cor
 				+ ", prazo=" + prazo + ", atividade=" + atividade + ", usuario=" + usuario + "]";
 	}
 
+	
+	
 	
 	
 	

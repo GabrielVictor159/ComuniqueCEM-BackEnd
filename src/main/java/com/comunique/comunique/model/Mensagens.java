@@ -2,13 +2,18 @@ package com.comunique.comunique.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Table(name="mensagens")
@@ -16,16 +21,19 @@ public class Mensagens implements Serializable {
 	private static final long serialVersionUID = 1l;
 	
 	@Id
-	@Column
-	private String idMensagem;
+	@GeneratedValue(generator = "uuid2")
+	@GenericGenerator(name = "uuid2", strategy = "uuid2")
+	@Column(nullable=false)
+	private UUID idMensagens;
 	
 	@Column(nullable=false)
-	private String usuarioEnviou;
+	private UUID usuarioEnviou;
 	
 	@Column(nullable=false)
 	private String mensagem;
 	
 	@Column(nullable=false)
+	@CreatedDate
 	private Date dataMensagem;
 	
 	@ManyToOne
@@ -34,30 +42,32 @@ public class Mensagens implements Serializable {
 			)
 	private Chat chat;
 
-	
-	
-	public Mensagens(String idMensagem, String usuarioEnviou, String mensagem, Date dataMensagem, Chat chat) {
+	public Mensagens(UUID idMensagens, UUID usuarioEnviou, String mensagem, Date dataMensagem, Chat chat) {
 		super();
-		this.idMensagem = idMensagem;
+		this.idMensagens = idMensagens;
 		this.usuarioEnviou = usuarioEnviou;
 		this.mensagem = mensagem;
 		this.dataMensagem = dataMensagem;
 		this.chat = chat;
 	}
 
-	public String getIdMensagem() {
-		return idMensagem;
+	public Mensagens() {
+		super();
 	}
 
-	public void setIdMensagem(String idMensagem) {
-		this.idMensagem = idMensagem;
+	public UUID getIdMensagens() {
+		return idMensagens;
 	}
 
-	public String getUsuarioEnviou() {
+	public void setIdMensagens(UUID idMensagens) {
+		this.idMensagens = idMensagens;
+	}
+
+	public UUID getUsuarioEnviou() {
 		return usuarioEnviou;
 	}
 
-	public void setUsuarioEnviou(String usuarioEnviou) {
+	public void setUsuarioEnviou(UUID usuarioEnviou) {
 		this.usuarioEnviou = usuarioEnviou;
 	}
 
@@ -89,11 +99,9 @@ public class Mensagens implements Serializable {
 		return serialVersionUID;
 	}
 
-	@Override
-	public String toString() {
-		return "Mensagens [idMensagem=" + idMensagem + ", usuarioEnviou=" + usuarioEnviou + ", mensagem=" + mensagem
-				+ ", dataMensagem=" + dataMensagem + ", chat=" + chat + "]";
-	}
+	
+	
+	
 	
 	
 }
