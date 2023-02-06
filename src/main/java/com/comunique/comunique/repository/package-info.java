@@ -1,1 +1,0 @@
-package com.comunique.comunique.repository;

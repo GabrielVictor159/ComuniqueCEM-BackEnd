@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 @Entity
 @Table(name="questoes")
-public class questoes implements Serializable {
+public class Questoes implements Serializable {
 	private static final long serialVersionUID = 1l;
 	
 	@Id
@@ -35,7 +35,7 @@ public class questoes implements Serializable {
 
 	
 	
-	public questoes(String idQuestao, String titulo, String resposta1, String resposta2, String resposta3,
+	public Questoes(String idQuestao, String titulo, String resposta1, String resposta2, String resposta3,
 			String resposta4, String respostaCorreta) {
 		super();
 		this.idQuestao = idQuestao;
