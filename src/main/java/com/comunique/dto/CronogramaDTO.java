@@ -6,8 +6,7 @@ import java.util.UUID;
 import javax.validation.constraints.NotBlank;
 
 public class CronogramaDTO{
-	@NotBlank
-	private UUID idCronograma;
+
 	
 	@NotBlank
 	private Date dataAtividade;
@@ -20,22 +19,11 @@ public class CronogramaDTO{
 	@NotBlank
 	private String atividade;
 
-	public CronogramaDTO(@NotBlank UUID idCronograma, @NotBlank Date dataAtividade, @NotBlank String cor,
-			@NotBlank int prazo, @NotBlank String atividade) {
-		super();
-		this.idCronograma = idCronograma;
+	public CronogramaDTO(Date dataAtividade, String cor, int prazo, String atividade) {
 		this.dataAtividade = dataAtividade;
 		this.cor = cor;
 		this.prazo = prazo;
 		this.atividade = atividade;
-	}
-
-	public UUID getIdCronograma() {
-		return idCronograma;
-	}
-
-	public void setIdCronograma(UUID idCronograma) {
-		this.idCronograma = idCronograma;
 	}
 
 	public Date getDataAtividade() {
@@ -72,12 +60,12 @@ public class CronogramaDTO{
 
 	@Override
 	public String toString() {
-		return "CronogramaDTO [idCronograma=" + idCronograma + ", dataAtividade=" + dataAtividade + ", cor=" + cor
-				+ ", prazo=" + prazo + ", atividade=" + atividade + "]";
+		return "CronogramaDTO{" +
+				"dataAtividade=" + dataAtividade +
+				", cor='" + cor + '\'' +
+				", prazo=" + prazo +
+				", atividade='" + atividade + '\'' +
+				'}';
 	}
-	
-	
-	
-	
 }
 

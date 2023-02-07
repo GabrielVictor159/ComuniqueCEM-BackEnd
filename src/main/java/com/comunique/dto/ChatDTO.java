@@ -8,28 +8,16 @@ import com.comunique.model.Usuarios;
 
 
 public class ChatDTO{
-	
-	@NotBlank
-	private UUID idChat;
+
 	@NotBlank
 	private Usuarios usuario1;
 	
 	@NotBlank
 	private Usuarios usuario2;
 
-	public ChatDTO(@NotBlank UUID idChat, @NotBlank Usuarios usuario1, @NotBlank Usuarios usuario2) {
-		super();
-		this.idChat = idChat;
+	public ChatDTO(Usuarios usuario1, Usuarios usuario2) {
 		this.usuario1 = usuario1;
 		this.usuario2 = usuario2;
-	}
-
-	public UUID getIdChat() {
-		return idChat;
-	}
-
-	public void setIdChat(UUID idChat) {
-		this.idChat = idChat;
 	}
 
 	public Usuarios getUsuario1() {
@@ -50,11 +38,10 @@ public class ChatDTO{
 
 	@Override
 	public String toString() {
-		return "ChatDTO [idChat=" + idChat + ", usuario1=" + usuario1 + ", usuario2=" + usuario2 + "]";
+		return "ChatDTO{" +
+				"usuario1=" + usuario1 +
+				", usuario2=" + usuario2 +
+				'}';
 	}
-
-
-	
-	
 }
 

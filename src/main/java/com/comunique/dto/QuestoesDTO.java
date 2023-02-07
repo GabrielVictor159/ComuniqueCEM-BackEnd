@@ -6,8 +6,6 @@ import javax.validation.constraints.NotBlank;
 
 public class QuestoesDTO {
 	@NotBlank
-    private UUID idQuestao;
-	@NotBlank
     private String Titulo;
 	@NotBlank
     private String Resposta1;
@@ -19,23 +17,16 @@ public class QuestoesDTO {
     private String Resposta4;
 	@NotBlank
     private String RespostaCorreta;
-	public QuestoesDTO(@NotBlank UUID idQuestao, @NotBlank String titulo, @NotBlank String resposta1,
+	public QuestoesDTO( @NotBlank String titulo, @NotBlank String resposta1,
 			@NotBlank String resposta2, @NotBlank String resposta3, @NotBlank String resposta4,
 			@NotBlank String respostaCorreta) {
 		super();
-		this.idQuestao = idQuestao;
 		Titulo = titulo;
 		Resposta1 = resposta1;
 		Resposta2 = resposta2;
 		Resposta3 = resposta3;
 		Resposta4 = resposta4;
 		RespostaCorreta = respostaCorreta;
-	}
-	public UUID getIdQuestao() {
-		return idQuestao;
-	}
-	public void setIdQuestao(UUID idQuestao) {
-		this.idQuestao = idQuestao;
 	}
 	public String getTitulo() {
 		return Titulo;

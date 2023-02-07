@@ -23,7 +23,14 @@ public class UsuariosTest {
     public void getUser(){
         Assertions.assertEquals("Sucesso get user", GetUser());
     }
-
+    @Test
+    public void getAllUser(){
+        Assertions.assertEquals("Sucesso", GetAllUser());
+    }
+    @Test
+    public void updateUser(){
+        Assertions.assertEquals("Sucesso",UpdateUser());
+    }
     public String cadastrarExcluir(){
         try{
             UsuariosDTO dto = new UsuariosDTO("test", "test","test","test","test","test",true);
@@ -51,6 +58,36 @@ public class UsuariosTest {
             return e.getMessage();
         }
     }
+    public String GetAllUser(){
+        try{
+            usuariosService.getAllUsers();
+            return "Sucesso";
+        }
+        catch (Exception e){
+            return e.getMessage();
+        }
+    }
+    public String UpdateUser(){
+        try {
+            UsuariosDTO dto = new UsuariosDTO("test", "test", "test8", "test", "test", "test", true);
+            Usuarios usuario = new Usuarios();
+            BeanUtils.copyProperties(dto, usuario);
+            Usuarios a = usuariosService.Cadastrar(usuario);
+            a.setEmail("reter");
+            a.setNomeUsuario("kghjjgh");
+            a.setFotoBackground("ytyj");
+            a.setTipoUsuario("fadfas");
+            a.setUsuarioOnline(false);
+            a.setSenha("regerger");
+            usuariosService.Cadastrar(a);
+            usuariosService.Deletar(a);
+            return "Sucesso";
+        }
+        catch (Exception e){
+            return  e.getMessage();
+        }
+    }
+
 
 
 }
