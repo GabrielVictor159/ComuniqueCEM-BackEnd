@@ -1,4 +1,4 @@
-package com.comunique;
+package com.comunique.ServicesTests;
 
 import com.comunique.dto.UsuariosDTO;
 import com.comunique.model.Usuarios;

@@ -1,5 +1,7 @@
 package com.comunique.dto;
 
+import com.comunique.model.Usuarios;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -19,11 +21,15 @@ public class CronogramaDTO{
 	@NotBlank
 	private String atividade;
 
-	public CronogramaDTO(Date dataAtividade, String cor, int prazo, String atividade) {
+	@NotBlank
+	private Usuarios usuario;
+
+	public CronogramaDTO(Date dataAtividade, String cor, int prazo, String atividade, Usuarios usuario) {
 		this.dataAtividade = dataAtividade;
 		this.cor = cor;
 		this.prazo = prazo;
 		this.atividade = atividade;
+		this.usuario = usuario;
 	}
 
 	public Date getDataAtividade() {
@@ -58,6 +64,14 @@ public class CronogramaDTO{
 		this.atividade = atividade;
 	}
 
+	public Usuarios getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuarios usuario) {
+		this.usuario = usuario;
+	}
+
 	@Override
 	public String toString() {
 		return "CronogramaDTO{" +
@@ -65,6 +79,7 @@ public class CronogramaDTO{
 				", cor='" + cor + '\'' +
 				", prazo=" + prazo +
 				", atividade='" + atividade + '\'' +
+				", usuario=" + usuario +
 				'}';
 	}
 }

@@ -1,4 +1,4 @@
-package com.comunique;
+package com.comunique.ServicesTests;
 
 import com.comunique.dto.NoticiasDTO;
 import com.comunique.model.Noticias;
