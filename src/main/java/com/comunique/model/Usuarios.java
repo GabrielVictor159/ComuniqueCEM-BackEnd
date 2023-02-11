@@ -3,127 +3,127 @@ package com.comunique.model;
 import java.io.Serializable;
 import java.util.UUID;
 
+import com.comunique.functions.MD5Encoder;
 
-import jakarta.persistence.*;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name="usuarios")
+@Table(name = "usuarios")
 public class Usuarios implements Serializable {
-		private static final long serialVersionUID = 1l;
-		  @Id
-		  @GeneratedValue(strategy = GenerationType.UUID)
-		  private UUID idUsuario;
-		  @Column(nullable=false)
-		  private String nomeUsuario;
-		  
-		  @Column(nullable=false)
-		  private String tipoUsuario;
-		  
-		  @Column(nullable=false, unique=true)
-		  private String email;
-		  
-		  @Column(nullable=false)
-		  private String senha;
-		  
-		  @Column(nullable=false)
-		  private String fotoPerfil;
-		  
-		  @Column(nullable=false)
-		  private String fotoBackground;
-		  
-		  @Column(nullable=false)
-		  private boolean usuarioOnline;
+	private static final long serialVersionUID = 1l;
+	@Id
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private UUID idUsuario;
+	@Column(nullable = false)
+	private String nomeUsuario;
 
-		public Usuarios(UUID idUsuario, String nomeUsuario, String tipoUsuario, String email, String senha,
-				String fotoPerfil, String fotoBackground, boolean usuarioOnline) {
-			super();
-			this.idUsuario = idUsuario;
-			this.nomeUsuario = nomeUsuario;
-			this.tipoUsuario = tipoUsuario;
-			this.email = email;
-			this.senha = senha;
-			this.fotoPerfil = fotoPerfil;
-			this.fotoBackground = fotoBackground;
-			this.usuarioOnline = usuarioOnline;
-		}
+	@Column(nullable = false)
+	private String tipoUsuario;
 
-		public Usuarios() {
+	@Column(nullable = false, unique = true)
+	private String email;
 
-		}
+	@Column(nullable = false)
+	private String senha;
 
-		public UUID getIdUsuario() {
-			return idUsuario;
-		}
+	@Column(nullable = false)
+	private String fotoPerfil;
 
-		public void setIdUsuario(UUID idUsuario) {
-			this.idUsuario = idUsuario;
-		}
+	@Column(nullable = false)
+	private String fotoBackground;
 
-		public String getNomeUsuario() {
-			return nomeUsuario;
-		}
+	@Column(nullable = false)
+	private boolean usuarioOnline;
 
-		public void setNomeUsuario(String nomeUsuario) {
-			this.nomeUsuario = nomeUsuario;
-		}
+	public Usuarios(UUID idUsuario, String nomeUsuario, String tipoUsuario, String email, String senha,
+			String fotoPerfil, String fotoBackground, boolean usuarioOnline) {
+		super();
+		this.idUsuario = idUsuario;
+		this.nomeUsuario = nomeUsuario;
+		this.tipoUsuario = tipoUsuario;
+		this.email = email;
+		this.senha = MD5Encoder.encode(senha);
+		this.fotoPerfil = fotoPerfil;
+		this.fotoBackground = fotoBackground;
+		this.usuarioOnline = usuarioOnline;
+	}
 
-		public String getTipoUsuario() {
-			return tipoUsuario;
-		}
+	public Usuarios() {
 
-		public void setTipoUsuario(String tipoUsuario) {
-			this.tipoUsuario = tipoUsuario;
-		}
+	}
 
-		public String getEmail() {
-			return email;
-		}
+	public UUID getIdUsuario() {
+		return idUsuario;
+	}
 
-		public void setEmail(String email) {
-			this.email = email;
-		}
+	public void setIdUsuario(UUID idUsuario) {
+		this.idUsuario = idUsuario;
+	}
 
-		public String getSenha() {
-			return senha;
-		}
+	public String getNomeUsuario() {
+		return nomeUsuario;
+	}
 
-		public void setSenha(String senha) {
-			this.senha = senha;
-		}
+	public void setNomeUsuario(String nomeUsuario) {
+		this.nomeUsuario = nomeUsuario;
+	}
 
-		public String getFotoPerfil() {
-			return fotoPerfil;
-		}
+	public String getTipoUsuario() {
+		return tipoUsuario;
+	}
 
-		public void setFotoPerfil(String fotoPerfil) {
-			this.fotoPerfil = fotoPerfil;
-		}
+	public void setTipoUsuario(String tipoUsuario) {
+		this.tipoUsuario = tipoUsuario;
+	}
 
-		public String getFotoBackground() {
-			return fotoBackground;
-		}
+	public String getEmail() {
+		return email;
+	}
 
-		public void setFotoBackground(String fotoBackground) {
-			this.fotoBackground = fotoBackground;
-		}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-		public boolean isUsuarioOnline() {
-			return usuarioOnline;
-		}
+	public String getSenha() {
+		return senha;
+	}
 
-		public void setUsuarioOnline(boolean usuarioOnline) {
-			this.usuarioOnline = usuarioOnline;
-		}
+	public void setSenha(String senha) {
+		this.senha = MD5Encoder.encode(senha);
+	}
 
-		public static long getSerialversionuid() {
-			return serialVersionUID;
-		}
+	public String getFotoPerfil() {
+		return fotoPerfil;
+	}
 
+	public void setFotoPerfil(String fotoPerfil) {
+		this.fotoPerfil = fotoPerfil;
+	}
+
+	public String getFotoBackground() {
+		return fotoBackground;
+	}
+
+	public void setFotoBackground(String fotoBackground) {
+		this.fotoBackground = fotoBackground;
+	}
+
+	public boolean isUsuarioOnline() {
+		return usuarioOnline;
+	}
+
+	public void setUsuarioOnline(boolean usuarioOnline) {
+		this.usuarioOnline = usuarioOnline;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 
 	@Override
 	public String toString() {

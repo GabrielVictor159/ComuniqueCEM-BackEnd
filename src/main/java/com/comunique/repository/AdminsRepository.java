@@ -7,11 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.comunique.model.Usuarios;
+import com.comunique.model.Admins;
 
 @Repository
-public interface UsuariosRepository extends JpaRepository<Usuarios, UUID> {
-
-    @Query("SELECT e FROM Usuarios e WHERE e.email = ?1 AND e.senha = ?2")
-    Optional<Usuarios> login(String Email, String Senha);
+public interface AdminsRepository extends JpaRepository<Admins, UUID> {
+    @Query("SELECT e FROM Admins e WHERE e.nome = ?1 AND e.senha = ?2")
+    Optional<Admins> login(String Nome, String Senha);
 }
