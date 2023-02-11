@@ -41,6 +41,8 @@ public class CronogramaTest {
         try {
             Usuarios user = CadastrarUsuario();
             Cronograma cronograma = CadastrarCronograma(user);
+            System.out.println(user);
+            System.out.println(cronograma);
             cronogramaService.Deletar(cronograma.getIdCronograma());
             usuariosService.Deletar(user);
             return "Sucesso";
@@ -55,6 +57,7 @@ public class CronogramaTest {
             Usuarios user = CadastrarUsuario();
             Cronograma cronograma = CadastrarCronograma(user);
             Optional<Cronograma> test = cronogramaService.getCronograma(cronograma.getIdCronograma());
+            System.out.println(test);
             cronogramaService.Deletar(cronograma.getIdCronograma());
             usuariosService.Deletar(user);
             return "Sucesso";
@@ -68,6 +71,7 @@ public class CronogramaTest {
             Usuarios user = CadastrarUsuario();
             Cronograma cronograma = CadastrarCronograma(user);
             List<Cronograma> list = cronogramaService.getCronogramaUser(user);
+            System.out.println(list);
             cronogramaService.Deletar(cronograma.getIdCronograma());
             usuariosService.Deletar(user);
             return "Sucesso";

@@ -1,6 +1,7 @@
 package com.comunique.model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -27,7 +28,6 @@ public class Mensagens implements Serializable {
 	private String mensagem;
 	
 	@Column(nullable=false)
-	@CreatedDate
 	private Date dataMensagem;
 	
 	@ManyToOne
@@ -36,17 +36,18 @@ public class Mensagens implements Serializable {
 			)
 	private Chat chat;
 
-	public Mensagens(UUID idMensagens, UUID usuarioEnviou, String mensagem, Date dataMensagem, Chat chat) {
+	public Mensagens(UUID idMensagens, UUID usuarioEnviou, String mensagem,  Chat chat) {
 		super();
 		this.idMensagens = idMensagens;
 		this.usuarioEnviou = usuarioEnviou;
 		this.mensagem = mensagem;
-		this.dataMensagem = dataMensagem;
+		this.dataMensagem = new Date();
 		this.chat = chat;
 	}
 
 	public Mensagens() {
 		super();
+		this.dataMensagem = new Date();
 	}
 
 	public UUID getIdMensagens() {
@@ -93,9 +94,14 @@ public class Mensagens implements Serializable {
 		return serialVersionUID;
 	}
 
-	
-	
-	
-	
-	
+	@Override
+	public String toString() {
+		return "Mensagens{" +
+				"idMensagens=" + idMensagens +
+				", usuarioEnviou=" + usuarioEnviou +
+				", mensagem='" + mensagem + '\'' +
+				", dataMensagem=" + dataMensagem +
+				", chat=" + chat +
+				'}';
+	}
 }

@@ -12,4 +12,5 @@ import com.comunique.model.Mensagens;
 public interface MensagensRepository extends JpaRepository<Mensagens, UUID> {
     List<Mensagens> findAllByChat(Chat chat);
     void deleteByidMensagensIn(List<UUID> idMensagens);
+    void deleteAllByChat(Chat chat);
 }

@@ -35,4 +35,7 @@ public class MensagensService {
     public void DeleteIn(List<UUID> idMensagens){
         mensagensRepository.deleteByidMensagensIn(idMensagens);
     }
+
+    @Transactional
+    public void DeleteForChat(Chat chat){mensagensRepository.deleteAllByChat(chat);}
 }
