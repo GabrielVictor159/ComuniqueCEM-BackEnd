@@ -4,38 +4,38 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
-
-
-import org.hibernate.annotations.GenericGenerator;
-
-import jakarta.persistence.*;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name="cronograma")
+@Table(name = "cronograma")
 public class Cronograma implements Serializable {
 	private static final long serialVersionUID = 1l;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID idCronograma;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	private Date dataAtividade;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	private String cor;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	private int prazo;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	private String atividade;
-	
+
 	@ManyToOne
-	@JoinColumn(
-			name = "idUsuario"
-			)
+	@JoinColumn(name = "idUsuario")
 	private Usuarios usuario;
 
 	public Cronograma(UUID idCronograma, Date dataAtividade, String cor, int prazo, String atividade,
@@ -111,9 +111,4 @@ public class Cronograma implements Serializable {
 				+ ", prazo=" + prazo + ", atividade=" + atividade + ", usuario=" + usuario + "]";
 	}
 
-	
-	
-	
-	
-	
 }

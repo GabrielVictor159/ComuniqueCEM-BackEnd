@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -100,9 +101,38 @@ public class QuestoesController {
 
     }
 
+    @PutMapping("/{adminNome}/{adminSenha}/{id}")
+    public ResponseEntity<Object> updateQuestao(@PathVariable(value = "id") UUID id,
+            @PathVariable(value = "adminNome") String adminNome, @PathVariable(value = "adminSenha") String adminSenha,
+            @RequestBody @Valid QuestoesDTO questoesDTO) {
+        Optional<Questoes> questao = questoesService.getQuestao(id);
+        if (!adminsService.Login(adminNome, adminSenha)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } else {
+            if (questao.isEmpty()) {
+                return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
+            } else {
+                BeanUtils.copyProperties(questoesDTO, questao);
+                try {
+                    Questoes questaoAlterada = questoesService.Cadastrar(questao.get());
+                    questaoAlterada
+                            .add(linkTo(methodOn(QuestoesController.class).findQuestionIp(id))
+                                    .withSelfRel());
+                    questaoAlterada.add(linkTo(methodOn(QuestoesController.class).findQuestionLimit(10))
+                            .withRel("Questões aleatorias com tamanho de 10"));
+                    questaoAlterada.add(
+                            linkTo(methodOn(QuestoesController.class).findAll()).withRel("todas as questoes"));
+                    return new ResponseEntity<Object>(questaoAlterada, HttpStatus.OK);
+                } catch (Exception e) {
+                    return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            }
+        }
+    }
+
     @DeleteMapping("/{adminNome}/{senhaAdmin}/{questao}")
     public ResponseEntity<Object> deleteQuestion(@PathVariable(value = "adminNome") String adminNome,
-            @PathVariable(value = "senhaNome") String senhaAdmin, @PathVariable(value = "questao") Questoes questao) {
+            @PathVariable(value = "senhaNome") String senhaAdmin, @PathVariable(value = "questao") UUID questao) {
         if (!adminsService.Login(adminNome, senhaAdmin)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
@@ -110,7 +140,7 @@ public class QuestoesController {
                 questoesService.Deletar(questao);
                 return new ResponseEntity<>(HttpStatus.OK);
             } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
             }
         }
     }

@@ -35,7 +35,7 @@ public class QuestoesService {
     }
 
     @Transactional
-    public void Deletar(Questoes questao) {
-        questoesRepository.delete(questao);
+    public void Deletar(UUID questao) {
+        questoesRepository.deleteById(questao);
     }
 }

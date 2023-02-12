@@ -1,42 +1,41 @@
 package com.comunique.model;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
-
-import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.annotation.CreatedDate;
-
-import jakarta.persistence.*;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name="mensagens")
+@Table(name = "mensagens")
 public class Mensagens implements Serializable {
 	private static final long serialVersionUID = 1l;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID idMensagens;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	private UUID usuarioEnviou;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	private String mensagem;
-	
-	@Column(nullable=false)
+
+	@Column(nullable = false)
 	private Date dataMensagem;
-	
+
 	@ManyToOne
-	@JoinColumn(
-			name="chat"
-			)
+	@JoinColumn(name = "chat")
 	private Chat chat;
 
-	public Mensagens(UUID idMensagens, UUID usuarioEnviou, String mensagem,  Chat chat) {
+	public Mensagens(UUID idMensagens, UUID usuarioEnviou, String mensagem, Chat chat) {
 		super();
 		this.idMensagens = idMensagens;
 		this.usuarioEnviou = usuarioEnviou;
