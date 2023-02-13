@@ -1,24 +1,23 @@
 package com.comunique.ServicesTests;
 
-import com.comunique.dto.ChatDTO;
-import com.comunique.dto.MensagensDTO;
-import com.comunique.dto.UsuariosDTO;
-import com.comunique.model.Chat;
-import com.comunique.model.Mensagens;
-import com.comunique.model.Usuarios;
-import com.comunique.service.ChatService;
-import com.comunique.service.MensagensService;
-import com.comunique.service.UsuariosService;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import com.comunique.functions.ModelCadastrosTests;
+import com.comunique.model.Chat;
+import com.comunique.model.Instituicoes;
+import com.comunique.model.Mensagens;
+import com.comunique.model.Usuarios;
+import com.comunique.service.ChatService;
+import com.comunique.service.InstituicoesService;
+import com.comunique.service.MensagensService;
+import com.comunique.service.UsuariosService;
 
 @SpringBootTest
 public class MensagensTest {
@@ -32,25 +31,32 @@ public class MensagensTest {
     @Autowired
     MensagensService mensagensService;
 
+    @Autowired
+    InstituicoesService instituicoesService;
+
     @Test
-    public void cadastrarMensagemTest(){
-        Assertions.assertEquals("Sucesso",CadastrarMensagemTest());
+    public void cadastrarMensagemTest() {
+        Assertions.assertEquals("Sucesso", CadastrarMensagemTest());
     }
+
     @Test
-    public void getAllMensagensForChatTest(){
-        Assertions.assertEquals("Sucesso",GetAllMensagensForChatTest());
+    public void getAllMensagensForChatTest() {
+        Assertions.assertEquals("Sucesso", GetAllMensagensForChatTest());
     }
+
     @Test
-    public void deleteInMensagensTest(){
-        Assertions.assertEquals("Sucesso",DeleteInMensagensTest());
+    public void deleteInMensagensTest() {
+        Assertions.assertEquals("Sucesso", DeleteInMensagensTest());
     }
-    public String DeleteInMensagensTest(){
+
+    public String DeleteInMensagensTest() {
         try {
-            Usuarios user1 = CadastrarUsuario();
-            Usuarios user2 = CadastrarUsuario();
-            Chat chat = CadastrarChat(user1, user2);
-            Mensagens mensagem1 = CadastrarMensagem(chat, user1.getIdUsuario());
-            Mensagens mensagem2 = CadastrarMensagem(chat,user2.getIdUsuario());
+            Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
+            Usuarios user1 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
+            Usuarios user2 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
+            Chat chat = ModelCadastrosTests.CadastrarChat(user1, user2, chatService);
+            Mensagens mensagem1 = ModelCadastrosTests.CadastrarMensagem(chat, user1.getIdUsuario(), mensagensService);
+            Mensagens mensagem2 = ModelCadastrosTests.CadastrarMensagem(chat, user2.getIdUsuario(), mensagensService);
             List<UUID> idMensagens = new ArrayList<>();
             idMensagens.add(mensagem1.getIdMensagens());
             idMensagens.add(mensagem2.getIdMensagens());
@@ -59,94 +65,51 @@ public class MensagensTest {
             chatService.Deletar(chat);
             usuariosService.Deletar(user1);
             usuariosService.Deletar(user2);
+            instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso";
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return e.getMessage();
         }
     }
-    public String GetAllMensagensForChatTest(){
+
+    public String GetAllMensagensForChatTest() {
         try {
-            Usuarios user1 = CadastrarUsuario();
-            Usuarios user2 = CadastrarUsuario();
-            Chat chat = CadastrarChat(user1, user2);
-            Mensagens mensagem1 = CadastrarMensagem(chat, user1.getIdUsuario());
-            Mensagens mensagem2 = CadastrarMensagem(chat,user2.getIdUsuario());
-            List<Mensagens> test= mensagensService.getAllMensagensForChat(chat);
+            Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
+            Usuarios user1 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
+            Usuarios user2 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
+            Chat chat = ModelCadastrosTests.CadastrarChat(user1, user2, chatService);
+            Mensagens mensagem1 = ModelCadastrosTests.CadastrarMensagem(chat, user1.getIdUsuario(), mensagensService);
+            Mensagens mensagem2 = ModelCadastrosTests.CadastrarMensagem(chat, user2.getIdUsuario(), mensagensService);
+            List<Mensagens> test = mensagensService.getAllMensagensForChat(chat);
             System.out.println(test);
             mensagensService.DeleteForChat(chat);
             chatService.Deletar(chat);
             usuariosService.Deletar(user1);
             usuariosService.Deletar(user2);
+            instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso";
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return e.getMessage();
         }
     }
 
-    public String CadastrarMensagemTest(){
+    public String CadastrarMensagemTest() {
         try {
-            Usuarios user1 = CadastrarUsuario();
-            Usuarios user2 = CadastrarUsuario();
-            Chat chat = CadastrarChat(user1, user2);
-            Mensagens mensagem = CadastrarMensagem(chat, user1.getIdUsuario());
+            Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
+            Usuarios user1 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
+            Usuarios user2 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
+            Chat chat = ModelCadastrosTests.CadastrarChat(user1, user2, chatService);
+            Mensagens mensagem = ModelCadastrosTests.CadastrarMensagem(chat, user1.getIdUsuario(), mensagensService);
             System.out.println(mensagem);
             mensagensService.Deletar(mensagem.getIdMensagens());
             chatService.Deletar(chat);
             usuariosService.Deletar(user1);
             usuariosService.Deletar(user2);
+            instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso";
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return e.getMessage();
         }
     }
-    public Usuarios CadastrarUsuario(){
-        UsuariosDTO userDto = new UsuariosDTO(getAlphaNumericString(7), getAlphaNumericString(7),getAlphaNumericString(7),getAlphaNumericString(7),getAlphaNumericString(7),getAlphaNumericString(7),true);
-        Usuarios user = new Usuarios();
-        BeanUtils.copyProperties(userDto, user);
-        return   usuariosService.Cadastrar(user);
-    }
 
-    public Chat CadastrarChat(Usuarios user1, Usuarios user2){
-        ChatDTO dto = new ChatDTO(user1, user2);
-        Chat chat = new Chat();
-        BeanUtils.copyProperties(dto, chat);
-        return chatService.Cadastrar(chat);
-
-    }
-    public Mensagens CadastrarMensagem(Chat chat, UUID idUsuario){
-        MensagensDTO mensagemDto = new MensagensDTO(idUsuario,getAlphaNumericString(7),chat);
-        Mensagens mensagem = new Mensagens();
-        BeanUtils.copyProperties(mensagemDto, mensagem);
-        return mensagensService.Cadastrar(mensagem);
-
-    }
-    public String getAlphaNumericString(int n)
-    {
-
-        // choose a Character random from this String
-        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                + "0123456789"
-                + "abcdefghijklmnopqrstuvxyz";
-
-        // create StringBuffer size of AlphaNumericString
-        StringBuilder sb = new StringBuilder(n);
-
-        for (int i = 0; i < n; i++) {
-
-            // generate a random number between
-            // 0 to AlphaNumericString variable length
-            int index
-                    = (int)(AlphaNumericString.length()
-                    * Math.random());
-
-            // add Character one by one in end of sb
-            sb.append(AlphaNumericString
-                    .charAt(index));
-        }
-
-        return sb.toString();
-    }
 }

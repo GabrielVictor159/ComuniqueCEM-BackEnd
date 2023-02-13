@@ -10,6 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -40,9 +42,15 @@ public class Usuarios implements Serializable {
 	@Column(nullable = false)
 	private boolean usuarioOnline;
 
+	@ManyToOne
+	@JoinColumn(name = "instituicao", nullable = false)
+	private Instituicoes instituicao;
+
+	public Usuarios() {
+	}
+
 	public Usuarios(UUID idUsuario, String nomeUsuario, String tipoUsuario, String email, String senha,
-			String fotoPerfil, String fotoBackground, boolean usuarioOnline) {
-		super();
+			String fotoPerfil, String fotoBackground, boolean usuarioOnline, Instituicoes instituicao) {
 		this.idUsuario = idUsuario;
 		this.nomeUsuario = nomeUsuario;
 		this.tipoUsuario = tipoUsuario;
@@ -51,14 +59,11 @@ public class Usuarios implements Serializable {
 		this.fotoPerfil = fotoPerfil;
 		this.fotoBackground = fotoBackground;
 		this.usuarioOnline = usuarioOnline;
-	}
-
-	public Usuarios() {
-
+		this.instituicao = instituicao;
 	}
 
 	public UUID getIdUsuario() {
-		return idUsuario;
+		return this.idUsuario;
 	}
 
 	public void setIdUsuario(UUID idUsuario) {
@@ -66,7 +71,7 @@ public class Usuarios implements Serializable {
 	}
 
 	public String getNomeUsuario() {
-		return nomeUsuario;
+		return this.nomeUsuario;
 	}
 
 	public void setNomeUsuario(String nomeUsuario) {
@@ -74,7 +79,7 @@ public class Usuarios implements Serializable {
 	}
 
 	public String getTipoUsuario() {
-		return tipoUsuario;
+		return this.tipoUsuario;
 	}
 
 	public void setTipoUsuario(String tipoUsuario) {
@@ -82,7 +87,7 @@ public class Usuarios implements Serializable {
 	}
 
 	public String getEmail() {
-		return email;
+		return this.email;
 	}
 
 	public void setEmail(String email) {
@@ -90,7 +95,7 @@ public class Usuarios implements Serializable {
 	}
 
 	public String getSenha() {
-		return senha;
+		return this.senha;
 	}
 
 	public void setSenha(String senha) {
@@ -98,7 +103,7 @@ public class Usuarios implements Serializable {
 	}
 
 	public String getFotoPerfil() {
-		return fotoPerfil;
+		return this.fotoPerfil;
 	}
 
 	public void setFotoPerfil(String fotoPerfil) {
@@ -106,7 +111,7 @@ public class Usuarios implements Serializable {
 	}
 
 	public String getFotoBackground() {
-		return fotoBackground;
+		return this.fotoBackground;
 	}
 
 	public void setFotoBackground(String fotoBackground) {
@@ -114,28 +119,38 @@ public class Usuarios implements Serializable {
 	}
 
 	public boolean isUsuarioOnline() {
-		return usuarioOnline;
+		return this.usuarioOnline;
+	}
+
+	public boolean getUsuarioOnline() {
+		return this.usuarioOnline;
 	}
 
 	public void setUsuarioOnline(boolean usuarioOnline) {
 		this.usuarioOnline = usuarioOnline;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public Instituicoes getInstituicao() {
+		return this.instituicao;
+	}
+
+	public void setInstituicao(Instituicoes instituicao) {
+		this.instituicao = instituicao;
 	}
 
 	@Override
 	public String toString() {
-		return "Usuarios{" +
-				"idUsuario=" + idUsuario +
-				", nomeUsuario='" + nomeUsuario + '\'' +
-				", tipoUsuario='" + tipoUsuario + '\'' +
-				", email='" + email + '\'' +
-				", senha='" + senha + '\'' +
-				", fotoPerfil='" + fotoPerfil + '\'' +
-				", fotoBackground='" + fotoBackground + '\'' +
-				", usuarioOnline=" + usuarioOnline +
-				'}';
+		return "{" +
+				" idUsuario='" + getIdUsuario() + "'" +
+				", nomeUsuario='" + getNomeUsuario() + "'" +
+				", tipoUsuario='" + getTipoUsuario() + "'" +
+				", email='" + getEmail() + "'" +
+				", senha='" + getSenha() + "'" +
+				", fotoPerfil='" + getFotoPerfil() + "'" +
+				", fotoBackground='" + getFotoBackground() + "'" +
+				", usuarioOnline='" + isUsuarioOnline() + "'" +
+				", instituicao='" + getInstituicao() + "'" +
+				"}";
 	}
+
 }

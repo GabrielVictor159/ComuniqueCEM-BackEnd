@@ -1,6 +1,5 @@
 package com.comunique.service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,10 +24,6 @@ public class UsuariosService {
 
 	public Optional<Usuarios> getUser(UUID idUsuario) {
 		return usuariosRepository.findById(idUsuario);
-	}
-
-	public List<Usuarios> getAllUsers() {
-		return usuariosRepository.findAll();
 	}
 
 	public boolean Login(String email, String Senha) {

@@ -1,22 +1,20 @@
 package com.comunique.ServicesTests;
 
-import com.comunique.dto.CronogramaDTO;
-import com.comunique.dto.UsuariosDTO;
-import com.comunique.model.Cronograma;
-import com.comunique.model.Usuarios;
-import com.comunique.service.CronogramaService;
-import com.comunique.service.UsuariosService;
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import com.comunique.functions.ModelCadastrosTests;
+import com.comunique.model.Cronograma;
+import com.comunique.model.Instituicoes;
+import com.comunique.model.Usuarios;
+import com.comunique.service.CronogramaService;
+import com.comunique.service.InstituicoesService;
+import com.comunique.service.UsuariosService;
 
 @SpringBootTest
 public class CronogramaTest {
@@ -24,76 +22,71 @@ public class CronogramaTest {
     CronogramaService cronogramaService;
     @Autowired
     UsuariosService usuariosService;
+    @Autowired
+    InstituicoesService instituicoesService;
 
     @Test
-    public void testCadastro(){
-        Assertions.assertEquals("Sucesso",Cadastro());
+    public void testCadastro() {
+        Assertions.assertEquals("Sucesso", Cadastro());
     }
+
     @Test
-    public void testGetCronograma(){
-        Assertions.assertEquals("Sucesso",GetCronograma());
+    public void testGetCronograma() {
+        Assertions.assertEquals("Sucesso", GetCronograma());
     }
+
     @Test
-    public void testGetUserCronograma(){
-        Assertions.assertEquals("Sucesso",GetUserCronogramas());
+    public void testGetUserCronograma() {
+        Assertions.assertEquals("Sucesso", GetUserCronogramas());
     }
-    public String Cadastro(){
+
+    public String Cadastro() {
         try {
-            Usuarios user = CadastrarUsuario();
-            Cronograma cronograma = CadastrarCronograma(user);
+            Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
+            Usuarios user = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
+            Cronograma cronograma = ModelCadastrosTests.CadastrarCronograma(user, cronogramaService);
             System.out.println(user);
             System.out.println(cronograma);
             cronogramaService.Deletar(cronograma.getIdCronograma());
             usuariosService.Deletar(user);
+            instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso";
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return e.getMessage();
         }
 
     }
-    public String GetCronograma(){
+
+    public String GetCronograma() {
         try {
-            Usuarios user = CadastrarUsuario();
-            Cronograma cronograma = CadastrarCronograma(user);
+            Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
+            Usuarios user = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
+            Cronograma cronograma = ModelCadastrosTests.CadastrarCronograma(user, cronogramaService);
             Optional<Cronograma> test = cronogramaService.getCronograma(cronograma.getIdCronograma());
             System.out.println(test);
             cronogramaService.Deletar(cronograma.getIdCronograma());
             usuariosService.Deletar(user);
+            instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso";
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return e.getMessage();
         }
     }
-    public String GetUserCronogramas(){
+
+    public String GetUserCronogramas() {
         try {
-            Usuarios user = CadastrarUsuario();
-            Cronograma cronograma = CadastrarCronograma(user);
+            Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
+            Usuarios user = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
+            Cronograma cronograma = ModelCadastrosTests.CadastrarCronograma(user, cronogramaService);
             List<Cronograma> list = cronogramaService.getCronogramaUser(user);
             System.out.println(list);
             cronogramaService.Deletar(cronograma.getIdCronograma());
             usuariosService.Deletar(user);
+            instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso";
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return e.getMessage();
         }
-    }
-    public Usuarios CadastrarUsuario(){
-        UsuariosDTO userDto = new UsuariosDTO("test", "test","test","test","test","test",true);
-        Usuarios user = new Usuarios();
-        BeanUtils.copyProperties(userDto, user);
-        return   usuariosService.Cadastrar(user);
-    }
-    public Cronograma CadastrarCronograma(Usuarios user) throws ParseException {
-        String dateString = "2023-02-09";
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = dateFormat.parse(dateString);
-        CronogramaDTO cronogramaDto = new CronogramaDTO(date,"blue",30,"dasdas",user);
-        Cronograma cronograma = new Cronograma();
-        BeanUtils.copyProperties(cronogramaDto, cronograma);
-        return cronogramaService.Cadastrar(cronograma);
     }
 
 }

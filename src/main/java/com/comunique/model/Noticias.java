@@ -10,6 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -30,20 +32,23 @@ public class Noticias extends RepresentationModel<Noticias> implements Serializa
 	@Column(nullable = false)
 	private String texto;
 
+	@ManyToOne
+	@JoinColumn(name = "instituicao", nullable = false)
+	private Instituicoes instituicao;
+
 	public Noticias() {
-		super();
 	}
 
-	public Noticias(UUID idNoticia, String titulo, String imagem, String texto) {
-		super();
+	public Noticias(UUID idNoticia, String titulo, String imagem, String texto, Instituicoes instituicao) {
 		this.idNoticia = idNoticia;
 		this.titulo = titulo;
 		this.imagem = imagem;
 		this.texto = texto;
+		this.instituicao = instituicao;
 	}
 
 	public UUID getIdNoticia() {
-		return idNoticia;
+		return this.idNoticia;
 	}
 
 	public void setIdNoticia(UUID idNoticia) {
@@ -51,7 +56,7 @@ public class Noticias extends RepresentationModel<Noticias> implements Serializa
 	}
 
 	public String getTitulo() {
-		return titulo;
+		return this.titulo;
 	}
 
 	public void setTitulo(String titulo) {
@@ -59,7 +64,7 @@ public class Noticias extends RepresentationModel<Noticias> implements Serializa
 	}
 
 	public String getImagem() {
-		return imagem;
+		return this.imagem;
 	}
 
 	public void setImagem(String imagem) {
@@ -67,21 +72,30 @@ public class Noticias extends RepresentationModel<Noticias> implements Serializa
 	}
 
 	public String getTexto() {
-		return texto;
+		return this.texto;
 	}
 
 	public void setTexto(String texto) {
 		this.texto = texto;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public Instituicoes getInstituicao() {
+		return this.instituicao;
+	}
+
+	public void setInstituicao(Instituicoes instituicao) {
+		this.instituicao = instituicao;
 	}
 
 	@Override
 	public String toString() {
-		return "Noticias [idNoticia=" + idNoticia + ", titulo=" + titulo + ", imagem=" + imagem + ", texto=" + texto
-				+ "]";
+		return "{" +
+				" idNoticia='" + getIdNoticia() + "'" +
+				", titulo='" + getTitulo() + "'" +
+				", imagem='" + getImagem() + "'" +
+				", texto='" + getTexto() + "'" +
+				", instituicao='" + getInstituicao() + "'" +
+				"}";
 	}
 
 }

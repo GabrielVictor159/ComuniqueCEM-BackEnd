@@ -2,25 +2,21 @@ package com.comunique.ServicesTests;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.comunique.dto.NoticiasDTO;
+import com.comunique.functions.ModelCadastrosTests;
+import com.comunique.model.Instituicoes;
 import com.comunique.model.Noticias;
+import com.comunique.service.InstituicoesService;
 import com.comunique.service.NoticiasService;
 
 @SpringBootTest
 public class NoticiasTest {
     @Autowired
     NoticiasService noticiasService;
-
-    public Noticias cadastro() {
-        NoticiasDTO a = new NoticiasDTO("sadas", "dasasd", "dsadas");
-        Noticias b = new Noticias();
-        BeanUtils.copyProperties(a, b);
-        return noticiasService.Cadastrar(b);
-    }
+    @Autowired
+    InstituicoesService instituicoesService;
 
     @Test
     public void getNoticiaTest() {
@@ -39,12 +35,14 @@ public class NoticiasTest {
 
     public String atualiza() {
         try {
-            Noticias noticia = cadastro();
+            Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
+            Noticias noticia = ModelCadastrosTests.CadastrarNoticia(instituicao, noticiasService);
             noticia.setImagem("asdas");
             noticia.setTexto("asdas");
             noticia.setTitulo("gerge");
             noticiasService.Cadastrar(noticia);
             noticiasService.Deletar(noticia.getIdNoticia());
+            instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso";
         } catch (Exception e) {
             return e.getMessage();
@@ -62,9 +60,11 @@ public class NoticiasTest {
 
     public String getNoticia() {
         try {
-            Noticias noticia = cadastro();
+            Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
+            Noticias noticia = ModelCadastrosTests.CadastrarNoticia(instituicao, noticiasService);
             noticiasService.getNoticia(noticia.getIdNoticia());
             noticiasService.Deletar(noticia.getIdNoticia());
+            instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso";
         } catch (Exception e) {
             return e.getMessage();

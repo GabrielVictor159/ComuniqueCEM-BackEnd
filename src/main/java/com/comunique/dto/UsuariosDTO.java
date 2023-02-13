@@ -1,8 +1,8 @@
 package com.comunique.dto;
 
-import java.util.UUID;
-
 import javax.validation.constraints.NotBlank;
+
+import com.comunique.model.Instituicoes;
 
 public class UsuariosDTO {
 	@NotBlank
@@ -19,10 +19,14 @@ public class UsuariosDTO {
 	private String fotoBackground;
 	@NotBlank
 	private boolean usuarioOnline;
-	public UsuariosDTO( @NotBlank String nomeUsuario, @NotBlank String tipoUsuario,
-			@NotBlank String email, @NotBlank String senha, @NotBlank String fotoPerfil,
-			@NotBlank String fotoBackground, @NotBlank boolean usuarioOnline) {
-		super();
+	@NotBlank
+	private Instituicoes instituicao;
+
+	public UsuariosDTO() {
+	}
+
+	public UsuariosDTO(String nomeUsuario, String tipoUsuario, String email, String senha, String fotoPerfil,
+			String fotoBackground, boolean usuarioOnline, Instituicoes instituicao) {
 		this.nomeUsuario = nomeUsuario;
 		this.tipoUsuario = tipoUsuario;
 		this.email = email;
@@ -30,60 +34,89 @@ public class UsuariosDTO {
 		this.fotoPerfil = fotoPerfil;
 		this.fotoBackground = fotoBackground;
 		this.usuarioOnline = usuarioOnline;
+		this.instituicao = instituicao;
 	}
+
 	public String getNomeUsuario() {
-		return nomeUsuario;
+		return this.nomeUsuario;
 	}
+
 	public void setNomeUsuario(String nomeUsuario) {
 		this.nomeUsuario = nomeUsuario;
 	}
+
 	public String getTipoUsuario() {
-		return tipoUsuario;
+		return this.tipoUsuario;
 	}
+
 	public void setTipoUsuario(String tipoUsuario) {
 		this.tipoUsuario = tipoUsuario;
 	}
+
 	public String getEmail() {
-		return email;
+		return this.email;
 	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 	public String getSenha() {
-		return senha;
+		return this.senha;
 	}
+
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
+
 	public String getFotoPerfil() {
-		return fotoPerfil;
+		return this.fotoPerfil;
 	}
+
 	public void setFotoPerfil(String fotoPerfil) {
 		this.fotoPerfil = fotoPerfil;
 	}
+
 	public String getFotoBackground() {
-		return fotoBackground;
+		return this.fotoBackground;
 	}
+
 	public void setFotoBackground(String fotoBackground) {
 		this.fotoBackground = fotoBackground;
 	}
+
 	public boolean isUsuarioOnline() {
-		return usuarioOnline;
+		return this.usuarioOnline;
 	}
+
+	public boolean getUsuarioOnline() {
+		return this.usuarioOnline;
+	}
+
 	public void setUsuarioOnline(boolean usuarioOnline) {
 		this.usuarioOnline = usuarioOnline;
 	}
 
+	public Instituicoes getInstituicao() {
+		return this.instituicao;
+	}
+
+	public void setInstituicao(Instituicoes instituicao) {
+		this.instituicao = instituicao;
+	}
+
 	@Override
 	public String toString() {
-		return "UsuariosDTO{" +
-				"nomeUsuario='" + nomeUsuario + '\'' +
-				", tipoUsuario='" + tipoUsuario + '\'' +
-				", email='" + email + '\'' +
-				", senha='" + senha + '\'' +
-				", fotoPerfil='" + fotoPerfil + '\'' +
-				", fotoBackground='" + fotoBackground + '\'' +
-				", usuarioOnline=" + usuarioOnline +
-				'}';
+		return "{" +
+				" nomeUsuario='" + getNomeUsuario() + "'" +
+				", tipoUsuario='" + getTipoUsuario() + "'" +
+				", email='" + getEmail() + "'" +
+				", senha='" + getSenha() + "'" +
+				", fotoPerfil='" + getFotoPerfil() + "'" +
+				", fotoBackground='" + getFotoBackground() + "'" +
+				", usuarioOnline='" + isUsuarioOnline() + "'" +
+				", instituicao='" + getInstituicao() + "'" +
+				"}";
 	}
+
 }

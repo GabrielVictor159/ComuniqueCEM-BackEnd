@@ -2,18 +2,21 @@ package com.comunique.ServicesTests;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.comunique.dto.QuestoesDTO;
+import com.comunique.functions.ModelCadastrosTests;
+import com.comunique.model.Instituicoes;
 import com.comunique.model.Questoes;
+import com.comunique.service.InstituicoesService;
 import com.comunique.service.QuestoesService;
 
 @SpringBootTest
 public class QuestoesTest {
     @Autowired
     QuestoesService questoesService;
+    @Autowired
+    InstituicoesService instituicoesService;
 
     @Test
     public void cadastrarTest() {
@@ -37,8 +40,10 @@ public class QuestoesTest {
 
     public String cadastro() {
         try {
-            Questoes a = cadastrar("asda", "asdas", "htrgfh", "4rretge", "rthrt", "dasda");
+            Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
+            Questoes a = ModelCadastrosTests.cadastrarQuestao(instituicao, questoesService);
             questoesService.Deletar(a.getIdQuestao());
+            instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso";
         } catch (Exception e) {
             return e.getMessage();
@@ -47,9 +52,11 @@ public class QuestoesTest {
 
     public String GetQuestao() {
         try {
-            Questoes a = cadastrar("asda", "asdas", "htrgfh", "4rretge", "rthrt", "dasda");
+            Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
+            Questoes a = ModelCadastrosTests.cadastrarQuestao(instituicao, questoesService);
             questoesService.getQuestao(a.getIdQuestao());
             questoesService.Deletar(a.getIdQuestao());
+            instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso";
         } catch (Exception e) {
             return e.getMessage();
@@ -58,7 +65,8 @@ public class QuestoesTest {
 
     public String Update() {
         try {
-            Questoes a = cadastrar("asda", "asd", "htrgfh", "4rretge", "rthrt", "dasda");
+            Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
+            Questoes a = ModelCadastrosTests.cadastrarQuestao(instituicao, questoesService);
             a.setResposta1("asgfhfs");
             a.setResposta2("gdfdg");
             a.setResposta3("ytjgh");
@@ -66,6 +74,7 @@ public class QuestoesTest {
             a.setRespostaCorreta("reter");
             questoesService.Cadastrar(a);
             questoesService.Deletar(a.getIdQuestao());
+            instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso";
         } catch (Exception e) {
             return e.getMessage();
@@ -81,11 +90,4 @@ public class QuestoesTest {
         }
     }
 
-    public Questoes cadastrar(String titulo, String resposta1, String resposta2, String resposta3, String resposta4,
-            String RespostaCorreta) {
-        QuestoesDTO questao = new QuestoesDTO(titulo, resposta1, resposta2, resposta3, resposta4, RespostaCorreta);
-        Questoes a = new Questoes();
-        BeanUtils.copyProperties(questao, a);
-        return questoesService.Cadastrar(a);
-    }
 }

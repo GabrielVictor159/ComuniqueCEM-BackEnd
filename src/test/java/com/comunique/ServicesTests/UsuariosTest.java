@@ -1,93 +1,82 @@
 package com.comunique.ServicesTests;
 
-import com.comunique.dto.UsuariosDTO;
-import com.comunique.model.Usuarios;
-import com.comunique.service.UsuariosService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.w3c.dom.CDATASection;
+
+import com.comunique.functions.ModelCadastrosTests;
+import com.comunique.model.Instituicoes;
+import com.comunique.model.Usuarios;
+import com.comunique.service.InstituicoesService;
+import com.comunique.service.UsuariosService;
 
 @SpringBootTest
 public class UsuariosTest {
+
     @Autowired
     UsuariosService usuariosService;
+    @Autowired
+    InstituicoesService instituicoesService;
+
     @Test
-    public void cadastrar(){
-      Assertions.assertEquals("Sucesso Registrar e deletar usuario", cadastrarExcluir());
+    public void cadastrar() {
+        Assertions.assertEquals("Sucesso Registrar e deletar usuario", cadastrarExcluir());
 
     }
+
     @Test
-    public void getUser(){
+    public void getUser() {
         Assertions.assertEquals("Sucesso get user", GetUser());
     }
+
     @Test
-    public void getAllUser(){
-        Assertions.assertEquals("Sucesso", GetAllUser());
+    public void updateUser() {
+        Assertions.assertEquals("Sucesso", UpdateUser());
     }
-    @Test
-    public void updateUser(){
-        Assertions.assertEquals("Sucesso",UpdateUser());
-    }
-    public String cadastrarExcluir(){
-        try{
-            UsuariosDTO dto = new UsuariosDTO("test", "test","test","test","test","test",true);
-            Usuarios usuario = new Usuarios();
-            BeanUtils.copyProperties(dto,usuario);
-            Usuarios cadastro = usuariosService.Cadastrar(usuario);
-            usuariosService.Deletar(cadastro);
+
+    public String cadastrarExcluir() {
+        try {
+            Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
+            Usuarios usuario = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
+            usuariosService.Deletar(usuario);
+            instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso Registrar e deletar usuario";
-        }
-        catch (Exception e){
-            return  e.getMessage();
+        } catch (Exception e) {
+            return e.getMessage();
         }
     }
-    public String GetUser(){
+
+    public String GetUser() {
         try {
-            UsuariosDTO dto = new UsuariosDTO("test", "test","test1","test","test","test",true);
-            Usuarios usuario = new Usuarios();
-            BeanUtils.copyProperties(dto,usuario);
-            Usuarios a = usuariosService.Cadastrar(usuario);
-            usuariosService.getUser(a.getIdUsuario());
-            usuariosService.Deletar(a);
+            Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
+            Usuarios usuario = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
+            usuariosService.getUser(usuario.getIdUsuario());
+            usuariosService.Deletar(usuario);
+            instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso get user";
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return e.getMessage();
         }
     }
-    public String GetAllUser(){
-        try{
-            usuariosService.getAllUsers();
-            return "Sucesso";
-        }
-        catch (Exception e){
-            return e.getMessage();
-        }
-    }
-    public String UpdateUser(){
+
+    public String UpdateUser() {
         try {
-            UsuariosDTO dto = new UsuariosDTO("test", "test", "test8", "test", "test", "test", true);
-            Usuarios usuario = new Usuarios();
-            BeanUtils.copyProperties(dto, usuario);
-            Usuarios a = usuariosService.Cadastrar(usuario);
-            a.setEmail("reter");
-            a.setNomeUsuario("kghjjgh");
-            a.setFotoBackground("ytyj");
-            a.setTipoUsuario("fadfas");
-            a.setUsuarioOnline(false);
-            a.setSenha("regerger");
-            usuariosService.Cadastrar(a);
-            usuariosService.Deletar(a);
+            Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
+            Usuarios usuario = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
+            usuario.setEmail("reter");
+            usuario.setNomeUsuario("kghjjgh");
+            usuario.setFotoBackground("ytyj");
+            usuario.setTipoUsuario("fadfas");
+            usuario.setUsuarioOnline(false);
+            usuario.setSenha("regerger");
+            usuariosService.Cadastrar(usuario);
+            usuariosService.Deletar(usuario);
+            instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso";
-        }
-        catch (Exception e){
-            return  e.getMessage();
+        } catch (Exception e) {
+            return e.getMessage();
         }
     }
-
-
 
 }
