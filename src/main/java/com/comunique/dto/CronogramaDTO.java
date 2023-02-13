@@ -1,23 +1,21 @@
 package com.comunique.dto;
 
-import com.comunique.model.Usuarios;
-
 import java.util.Date;
-import java.util.UUID;
 
 import javax.validation.constraints.NotBlank;
 
-public class CronogramaDTO{
+import com.comunique.model.Usuarios;
 
-	
+public class CronogramaDTO {
+
 	@NotBlank
 	private Date dataAtividade;
-	
+
 	@NotBlank
 	private String cor;
 	@NotBlank
 	private int prazo;
-	
+
 	@NotBlank
 	private String atividade;
 
@@ -83,4 +81,3 @@ public class CronogramaDTO{
 				'}';
 	}
 }
-

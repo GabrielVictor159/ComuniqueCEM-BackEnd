@@ -26,14 +26,15 @@ public class UsuariosService {
 		return usuariosRepository.findById(idUsuario);
 	}
 
-	public boolean Login(String email, String Senha) {
+	public Optional<Usuarios> Login(String email, String Senha) {
 		Optional<Usuarios> teste = usuariosRepository.login(email, MD5Encoder.encode(Senha));
-		return teste.isPresent();
+		return teste;
 	}
 
 	@Transactional
-	public void Deletar(Usuarios usuarios) {
-		usuariosRepository.delete(usuarios);
+	public void Deletar(UUID id) {
+		usuariosRepository.deleteById(id);
+		;
 	}
 
 }

@@ -17,7 +17,7 @@ import com.comunique.service.InstituicoesService;
 import com.comunique.service.UsuariosService;
 
 @SpringBootTest
-public class ChatTest {
+public class ChatServicesTest {
     @Autowired
     ChatService chatService;
 
@@ -49,9 +49,9 @@ public class ChatTest {
             System.out.println(listChats);
             chatService.Deletar(chat);
             chatService.Deletar(chat2);
-            usuariosService.Deletar(user1);
-            usuariosService.Deletar(user2);
-            usuariosService.Deletar(user3);
+            usuariosService.Deletar(user1.getIdUsuario());
+            usuariosService.Deletar(user2.getIdUsuario());
+            usuariosService.Deletar(user3.getIdUsuario());
             instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso";
         } catch (Exception e) {
@@ -68,8 +68,8 @@ public class ChatTest {
             Optional<Chat> chat2 = chatService.getChatById(chat.getIdChat());
             System.out.println(chat2.get());
             chatService.Deletar(chat2.get());
-            usuariosService.Deletar(user1);
-            usuariosService.Deletar(user2);
+            usuariosService.Deletar(user1.getIdUsuario());
+            usuariosService.Deletar(user2.getIdUsuario());
             instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso";
         } catch (Exception e) {

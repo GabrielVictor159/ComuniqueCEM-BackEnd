@@ -10,7 +10,7 @@ import com.comunique.model.Instituicoes;
 import com.comunique.service.InstituicoesService;
 
 @SpringBootTest
-public class InstituicoesTest {
+public class InstituicoesServicesTest {
     @Autowired
     InstituicoesService instituicoesService;
 

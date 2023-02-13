@@ -12,7 +12,7 @@ import com.comunique.service.InstituicoesService;
 import com.comunique.service.QuestoesService;
 
 @SpringBootTest
-public class QuestoesTest {
+public class QuestoesServicesTest {
     @Autowired
     QuestoesService questoesService;
     @Autowired

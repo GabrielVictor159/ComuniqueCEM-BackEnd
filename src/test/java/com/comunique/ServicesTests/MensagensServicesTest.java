@@ -20,7 +20,7 @@ import com.comunique.service.MensagensService;
 import com.comunique.service.UsuariosService;
 
 @SpringBootTest
-public class MensagensTest {
+public class MensagensServicesTest {
 
     @Autowired
     UsuariosService usuariosService;
@@ -63,8 +63,8 @@ public class MensagensTest {
             System.out.println(idMensagens);
             mensagensService.DeleteIn(idMensagens);
             chatService.Deletar(chat);
-            usuariosService.Deletar(user1);
-            usuariosService.Deletar(user2);
+            usuariosService.Deletar(user1.getIdUsuario());
+            usuariosService.Deletar(user2.getIdUsuario());
             instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso";
         } catch (Exception e) {
@@ -84,8 +84,8 @@ public class MensagensTest {
             System.out.println(test);
             mensagensService.DeleteForChat(chat);
             chatService.Deletar(chat);
-            usuariosService.Deletar(user1);
-            usuariosService.Deletar(user2);
+            usuariosService.Deletar(user1.getIdUsuario());
+            usuariosService.Deletar(user2.getIdUsuario());
             instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso";
         } catch (Exception e) {
@@ -103,8 +103,8 @@ public class MensagensTest {
             System.out.println(mensagem);
             mensagensService.Deletar(mensagem.getIdMensagens());
             chatService.Deletar(chat);
-            usuariosService.Deletar(user1);
-            usuariosService.Deletar(user2);
+            usuariosService.Deletar(user1.getIdUsuario());
+            usuariosService.Deletar(user2.getIdUsuario());
             instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso";
         } catch (Exception e) {

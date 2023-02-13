@@ -7,6 +7,8 @@ import java.util.UUID;
 
 import org.springframework.beans.BeanUtils;
 
+import com.comunique.dto.AdminsDTO;
+import com.comunique.dto.AdminsMasterDTO;
 import com.comunique.dto.ChatDTO;
 import com.comunique.dto.CronogramaDTO;
 import com.comunique.dto.InstituicoesDTO;
@@ -14,6 +16,8 @@ import com.comunique.dto.MensagensDTO;
 import com.comunique.dto.NoticiasDTO;
 import com.comunique.dto.QuestoesDTO;
 import com.comunique.dto.UsuariosDTO;
+import com.comunique.model.Admins;
+import com.comunique.model.AdminsMaster;
 import com.comunique.model.Chat;
 import com.comunique.model.Cronograma;
 import com.comunique.model.Instituicoes;
@@ -21,6 +25,8 @@ import com.comunique.model.Mensagens;
 import com.comunique.model.Noticias;
 import com.comunique.model.Questoes;
 import com.comunique.model.Usuarios;
+import com.comunique.service.AdminsMasterService;
+import com.comunique.service.AdminsService;
 import com.comunique.service.ChatService;
 import com.comunique.service.CronogramaService;
 import com.comunique.service.InstituicoesService;
@@ -36,10 +42,11 @@ public class ModelCadastrosTests {
         UsuariosDTO userDto = new UsuariosDTO(AleatoryString.getAlphaNumericString(7),
                 AleatoryString.getAlphaNumericString(7), AleatoryString.getAlphaNumericString(7),
                 AleatoryString.getAlphaNumericString(7),
-                AleatoryString.getAlphaNumericString(7), AleatoryString.getAlphaNumericString(7), true, instituicao);
+                AleatoryString.getAlphaNumericString(7), AleatoryString.getAlphaNumericString(7), true);
 
         Usuarios user = new Usuarios();
         BeanUtils.copyProperties(userDto, user);
+        user.setInstituicao(instituicao);
         return usuariosService.Cadastrar(user);
 
     }
@@ -98,4 +105,21 @@ public class ModelCadastrosTests {
         BeanUtils.copyProperties(dto, instituicao);
         return instituicoesService.Cadastrar(instituicao);
     }
+
+    public static Admins CadastrarAdmin(Instituicoes instituicao, AdminsService adminsService) {
+        AdminsDTO dto = new AdminsDTO(AleatoryString.getAlphaNumericString(7), AleatoryString.getAlphaNumericString(7));
+        Admins admin = new Admins();
+        BeanUtils.copyProperties(dto, admin);
+        admin.setInstituicao(instituicao);
+        return adminsService.Cadastrar(admin);
+    }
+
+    public static AdminsMaster CadastrarAdminMaster(AdminsMasterService adminsMasterService) {
+        AdminsMasterDTO dto = new AdminsMasterDTO(AleatoryString.getAlphaNumericString(7),
+                AleatoryString.getAlphaNumericString(7));
+        AdminsMaster adminMaster = new AdminsMaster();
+        BeanUtils.copyProperties(dto, adminMaster);
+        return adminsMasterService.Cadastrar(adminMaster);
+    }
+
 }

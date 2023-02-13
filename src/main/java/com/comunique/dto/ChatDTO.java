@@ -1,17 +1,14 @@
 package com.comunique.dto;
 
-import java.util.UUID;
-
 import javax.validation.constraints.NotBlank;
 
 import com.comunique.model.Usuarios;
 
-
-public class ChatDTO{
+public class ChatDTO {
 
 	@NotBlank
 	private Usuarios usuario1;
-	
+
 	@NotBlank
 	private Usuarios usuario2;
 
@@ -44,4 +41,3 @@ public class ChatDTO{
 				'}';
 	}
 }
-

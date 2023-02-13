@@ -12,7 +12,7 @@ import com.comunique.service.InstituicoesService;
 import com.comunique.service.NoticiasService;
 
 @SpringBootTest
-public class NoticiasTest {
+public class NoticiasServicesTest {
     @Autowired
     NoticiasService noticiasService;
     @Autowired

@@ -10,13 +10,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "admins")
-public class Admins implements Serializable {
+@Table(name = "adminsmaster")
+public class AdminsMaster implements Serializable {
     private static final long serialVersionUID = 1l;
 
     @Id
@@ -29,18 +27,13 @@ public class Admins implements Serializable {
     @Column(nullable = false)
     private String senha;
 
-    @ManyToOne
-    @JoinColumn(name = "instituicao", nullable = false)
-    private Instituicoes instituicao;
-
-    public Admins() {
+    public AdminsMaster() {
     }
 
-    public Admins(UUID idAdmin, String nome, String senha, Instituicoes instituicao) {
+    public AdminsMaster(UUID idAdmin, String nome, String senha) {
         this.idAdmin = idAdmin;
         this.nome = nome;
         this.senha = MD5Encoder.encode(senha);
-        this.instituicao = instituicao;
     }
 
     public UUID getIdAdmin() {
@@ -67,21 +60,12 @@ public class Admins implements Serializable {
         this.senha = MD5Encoder.encode(senha);
     }
 
-    public Instituicoes getInstituicao() {
-        return this.instituicao;
-    }
-
-    public void setInstituicao(Instituicoes instituicao) {
-        this.instituicao = instituicao;
-    }
-
     @Override
     public String toString() {
         return "{" +
                 " idAdmin='" + getIdAdmin() + "'" +
                 ", nome='" + getNome() + "'" +
                 ", senha='" + getSenha() + "'" +
-                ", instituicao='" + getInstituicao() + "'" +
                 "}";
     }
 

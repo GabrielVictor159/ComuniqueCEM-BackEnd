@@ -2,8 +2,6 @@ package com.comunique.dto;
 
 import javax.validation.constraints.NotBlank;
 
-import com.comunique.model.Instituicoes;
-
 public class UsuariosDTO {
 	@NotBlank
 	private String nomeUsuario;
@@ -19,14 +17,12 @@ public class UsuariosDTO {
 	private String fotoBackground;
 	@NotBlank
 	private boolean usuarioOnline;
-	@NotBlank
-	private Instituicoes instituicao;
 
 	public UsuariosDTO() {
 	}
 
 	public UsuariosDTO(String nomeUsuario, String tipoUsuario, String email, String senha, String fotoPerfil,
-			String fotoBackground, boolean usuarioOnline, Instituicoes instituicao) {
+			String fotoBackground, boolean usuarioOnline) {
 		this.nomeUsuario = nomeUsuario;
 		this.tipoUsuario = tipoUsuario;
 		this.email = email;
@@ -34,7 +30,6 @@ public class UsuariosDTO {
 		this.fotoPerfil = fotoPerfil;
 		this.fotoBackground = fotoBackground;
 		this.usuarioOnline = usuarioOnline;
-		this.instituicao = instituicao;
 	}
 
 	public String getNomeUsuario() {
@@ -97,14 +92,6 @@ public class UsuariosDTO {
 		this.usuarioOnline = usuarioOnline;
 	}
 
-	public Instituicoes getInstituicao() {
-		return this.instituicao;
-	}
-
-	public void setInstituicao(Instituicoes instituicao) {
-		this.instituicao = instituicao;
-	}
-
 	@Override
 	public String toString() {
 		return "{" +
@@ -115,7 +102,6 @@ public class UsuariosDTO {
 				", fotoPerfil='" + getFotoPerfil() + "'" +
 				", fotoBackground='" + getFotoBackground() + "'" +
 				", usuarioOnline='" + isUsuarioOnline() + "'" +
-				", instituicao='" + getInstituicao() + "'" +
 				"}";
 	}
 

@@ -85,7 +85,7 @@ public class QuestoesController {
     @PostMapping("/{adminNome}/{senhaAdmin}")
     public ResponseEntity<Questoes> cadastrarQuestion(@PathVariable(value = "adminNome") String adminNome,
             @PathVariable(value = "senhaAdmin") String senhaAdmin, @RequestBody @Valid QuestoesDTO questoesDto) {
-        if (!adminsService.Login(adminNome, senhaAdmin)) {
+        if (adminsService.Login(adminNome, senhaAdmin).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
             Questoes questao = new Questoes();
@@ -106,7 +106,7 @@ public class QuestoesController {
             @PathVariable(value = "adminNome") String adminNome, @PathVariable(value = "adminSenha") String adminSenha,
             @RequestBody @Valid QuestoesDTO questoesDTO) {
         Optional<Questoes> questao = questoesService.getQuestao(id);
-        if (!adminsService.Login(adminNome, adminSenha)) {
+        if (adminsService.Login(adminNome, adminSenha).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
             if (questao.isEmpty()) {
@@ -133,7 +133,7 @@ public class QuestoesController {
     @DeleteMapping("/{adminNome}/{senhaAdmin}/{questao}")
     public ResponseEntity<Object> deleteQuestion(@PathVariable(value = "adminNome") String adminNome,
             @PathVariable(value = "senhaNome") String senhaAdmin, @PathVariable(value = "questao") UUID questao) {
-        if (!adminsService.Login(adminNome, senhaAdmin)) {
+        if (adminsService.Login(adminNome, senhaAdmin).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
             try {

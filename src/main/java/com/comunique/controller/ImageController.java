@@ -30,7 +30,7 @@ public class ImageController {
     public ResponseEntity<Object> uploadImage(@RequestParam("image") MultipartFile image,
             @PathVariable(value = "adminNome") String adminNome,
             @PathVariable(value = "senhaNome") String senhaAdmin) {
-        if (!adminsService.Login(adminNome, senhaAdmin)) {
+        if (adminsService.Login(adminNome, senhaAdmin).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
             try {

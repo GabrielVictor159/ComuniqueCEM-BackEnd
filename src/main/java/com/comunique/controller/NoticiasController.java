@@ -84,7 +84,7 @@ public class NoticiasController {
     @PostMapping("/{adminNome}/{senhaAdmin}")
     public ResponseEntity<Object> cadastrarQuestion(@PathVariable(value = "adminNome") String adminNome,
             @PathVariable(value = "senhaAdmin") String senhaAdmin, @RequestBody @Valid NoticiasDTO noticiasDto) {
-        if (!adminsService.Login(adminNome, senhaAdmin)) {
+        if (adminsService.Login(adminNome, senhaAdmin).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
             try {
@@ -107,7 +107,7 @@ public class NoticiasController {
             @PathVariable(value = "adminNome") String adminNome, @PathVariable(value = "adminSenha") String adminSenha,
             @RequestBody @Valid NoticiasDTO noticiasDTO) {
         Optional<Noticias> noticia = noticiasService.getNoticia(id);
-        if (!adminsService.Login(adminNome, adminSenha)) {
+        if (adminsService.Login(adminNome, adminSenha).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
             if (noticia.isEmpty()) {
@@ -135,7 +135,7 @@ public class NoticiasController {
     public ResponseEntity<Object> deleteNoticia(@PathVariable(value = "id") UUID id,
             @PathVariable(value = "adminNome") String adminNome,
             @PathVariable(value = "adminSenha") String adminSenha) {
-        if (!adminsService.Login(adminNome, adminSenha)) {
+        if (adminsService.Login(adminNome, adminSenha).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
             try {

@@ -17,7 +17,7 @@ import com.comunique.service.InstituicoesService;
 import com.comunique.service.UsuariosService;
 
 @SpringBootTest
-public class CronogramaTest {
+public class CronogramaServicesTest {
     @Autowired
     CronogramaService cronogramaService;
     @Autowired
@@ -48,7 +48,7 @@ public class CronogramaTest {
             System.out.println(user);
             System.out.println(cronograma);
             cronogramaService.Deletar(cronograma.getIdCronograma());
-            usuariosService.Deletar(user);
+            usuariosService.Deletar(user.getIdUsuario());
             instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso";
         } catch (Exception e) {
@@ -65,7 +65,7 @@ public class CronogramaTest {
             Optional<Cronograma> test = cronogramaService.getCronograma(cronograma.getIdCronograma());
             System.out.println(test);
             cronogramaService.Deletar(cronograma.getIdCronograma());
-            usuariosService.Deletar(user);
+            usuariosService.Deletar(user.getIdUsuario());
             instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso";
         } catch (Exception e) {
@@ -81,7 +81,7 @@ public class CronogramaTest {
             List<Cronograma> list = cronogramaService.getCronogramaUser(user);
             System.out.println(list);
             cronogramaService.Deletar(cronograma.getIdCronograma());
-            usuariosService.Deletar(user);
+            usuariosService.Deletar(user.getIdUsuario());
             instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso";
         } catch (Exception e) {
