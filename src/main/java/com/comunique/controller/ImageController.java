@@ -46,6 +46,7 @@ public class ImageController {
     UsuariosService usuariosService;
     @Autowired
     ChatService chatService;
+    
 
     private static String GlobalPath = "src/main/resources/static/images/";
 
@@ -156,6 +157,8 @@ public class ImageController {
                             GlobalPath + usuarioLogin.get().getInstituicao().getNome() + "/"
                                     + removeSpecialCharacters(chat.get().getUsuario1().getEmail()) + "&"
                                     + removeSpecialCharacters(chat.get().getUsuario2().getEmail()));
+
+                    
                     return ResponseEntity.status(HttpStatus.OK).body("Imagem adicionada");
                 } catch (IOException e) {
                     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -196,5 +199,6 @@ public class ImageController {
             }
         }
     }
+
 
 }

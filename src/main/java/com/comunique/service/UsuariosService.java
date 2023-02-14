@@ -1,5 +1,6 @@
 package com.comunique.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,6 +30,10 @@ public class UsuariosService {
 	public Optional<Usuarios> Login(String email, String Senha) {
 		Optional<Usuarios> teste = usuariosRepository.login(email, MD5Encoder.encode(Senha));
 		return teste;
+	}
+
+	public List<Usuarios> getAllUsuariosInstituicao(UUID idInstituicao) {
+		return usuariosRepository.getAllUsuariosInstituicao(idInstituicao);
 	}
 
 	@Transactional
