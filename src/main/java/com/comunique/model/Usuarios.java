@@ -4,9 +4,12 @@ import java.io.Serializable;
 import java.util.UUID;
 
 import com.comunique.functions.MD5Encoder;
+import com.comunique.model.enums.typeUsuario;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,7 +28,8 @@ public class Usuarios implements Serializable {
 	private String nomeUsuario;
 
 	@Column(nullable = false)
-	private String tipoUsuario;
+	@Enumerated(EnumType.STRING)
+	private typeUsuario tipoUsuario;
 
 	@Column(nullable = false, unique = true)
 	private String email;
@@ -49,7 +53,7 @@ public class Usuarios implements Serializable {
 	public Usuarios() {
 	}
 
-	public Usuarios(UUID idUsuario, String nomeUsuario, String tipoUsuario, String email, String senha,
+	public Usuarios(UUID idUsuario, String nomeUsuario, typeUsuario tipoUsuario, String email, String senha,
 			String fotoPerfil, String fotoBackground, boolean usuarioOnline, Instituicoes instituicao) {
 		this.idUsuario = idUsuario;
 		this.nomeUsuario = nomeUsuario;
@@ -78,11 +82,11 @@ public class Usuarios implements Serializable {
 		this.nomeUsuario = nomeUsuario;
 	}
 
-	public String getTipoUsuario() {
+	public typeUsuario getTipoUsuario() {
 		return this.tipoUsuario;
 	}
 
-	public void setTipoUsuario(String tipoUsuario) {
+	public void setTipoUsuario(typeUsuario tipoUsuario) {
 		this.tipoUsuario = tipoUsuario;
 	}
 

@@ -26,6 +26,14 @@ public class InstituicoesService {
         return instituicoesRepository.findById(id);
     }
 
+    public Optional<Instituicoes> LoginUsuario(String nomeInstituicao, String senha) {
+        return instituicoesRepository.loginUsuario(nomeInstituicao, senha);
+    }
+
+    public Optional<Instituicoes> LoginProfessores(String nomeInstituicao, String senha) {
+        return instituicoesRepository.loginProfessores(nomeInstituicao, senha);
+    }
+
     @Transactional
     public void Deletar(UUID id) {
         instituicoesRepository.deleteById(id);

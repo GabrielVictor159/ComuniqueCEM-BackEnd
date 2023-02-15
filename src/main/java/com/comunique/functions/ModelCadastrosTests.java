@@ -25,6 +25,7 @@ import com.comunique.model.Mensagens;
 import com.comunique.model.Noticias;
 import com.comunique.model.Questoes;
 import com.comunique.model.Usuarios;
+import com.comunique.model.enums.typeUsuario;
 import com.comunique.service.AdminsMasterService;
 import com.comunique.service.AdminsService;
 import com.comunique.service.ChatService;
@@ -40,7 +41,7 @@ public class ModelCadastrosTests {
     public static Usuarios CadastrarUsuario(Instituicoes instituicao, UsuariosService usuariosService) {
 
         UsuariosDTO userDto = new UsuariosDTO(AleatoryString.getAlphaNumericString(7),
-                AleatoryString.getAlphaNumericString(7), AleatoryString.getAlphaNumericString(7),
+                typeUsuario.ALUNO, AleatoryString.getAlphaNumericString(7),
                 AleatoryString.getAlphaNumericString(7),
                 AleatoryString.getAlphaNumericString(7), AleatoryString.getAlphaNumericString(7), true);
 

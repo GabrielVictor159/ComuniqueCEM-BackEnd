@@ -13,6 +13,7 @@ import com.comunique.functions.AleatoryString;
 import com.comunique.functions.ModelCadastrosTests;
 import com.comunique.model.Instituicoes;
 import com.comunique.model.Usuarios;
+import com.comunique.model.enums.typeUsuario;
 import com.comunique.service.InstituicoesService;
 import com.comunique.service.UsuariosService;
 
@@ -82,7 +83,7 @@ public class UsuariosServicesTest {
             usuario.setEmail("reter");
             usuario.setNomeUsuario("kghjjgh");
             usuario.setFotoBackground("ytyj");
-            usuario.setTipoUsuario("fadfas");
+            usuario.setTipoUsuario(typeUsuario.PROFESSOR);
             usuario.setUsuarioOnline(false);
             usuario.setSenha("regerger");
             usuariosService.Cadastrar(usuario);
@@ -98,7 +99,7 @@ public class UsuariosServicesTest {
         try {
             Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
             UsuariosDTO userDto = new UsuariosDTO(AleatoryString.getAlphaNumericString(7),
-                    AleatoryString.getAlphaNumericString(7), AleatoryString.getAlphaNumericString(7),
+                    typeUsuario.ALUNO, AleatoryString.getAlphaNumericString(7),
                     AleatoryString.getAlphaNumericString(7),
                     AleatoryString.getAlphaNumericString(7), AleatoryString.getAlphaNumericString(7), true);
             Usuarios user = new Usuarios();

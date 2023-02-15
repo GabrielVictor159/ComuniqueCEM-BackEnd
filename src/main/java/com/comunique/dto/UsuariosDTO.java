@@ -2,11 +2,13 @@ package com.comunique.dto;
 
 import javax.validation.constraints.NotBlank;
 
+import com.comunique.model.enums.typeUsuario;
+
 public class UsuariosDTO {
 	@NotBlank
 	private String nomeUsuario;
 	@NotBlank
-	private String tipoUsuario;
+	private typeUsuario tipoUsuario;
 	@NotBlank
 	private String email;
 	@NotBlank
@@ -21,7 +23,7 @@ public class UsuariosDTO {
 	public UsuariosDTO() {
 	}
 
-	public UsuariosDTO(String nomeUsuario, String tipoUsuario, String email, String senha, String fotoPerfil,
+	public UsuariosDTO(String nomeUsuario, typeUsuario tipoUsuario, String email, String senha, String fotoPerfil,
 			String fotoBackground, boolean usuarioOnline) {
 		this.nomeUsuario = nomeUsuario;
 		this.tipoUsuario = tipoUsuario;
@@ -40,11 +42,11 @@ public class UsuariosDTO {
 		this.nomeUsuario = nomeUsuario;
 	}
 
-	public String getTipoUsuario() {
+	public typeUsuario getTipoUsuario() {
 		return this.tipoUsuario;
 	}
 
-	public void setTipoUsuario(String tipoUsuario) {
+	public void setTipoUsuario(typeUsuario tipoUsuario) {
 		this.tipoUsuario = tipoUsuario;
 	}
 
