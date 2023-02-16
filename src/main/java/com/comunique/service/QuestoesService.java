@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.comunique.model.Instituicoes;
 import com.comunique.model.Questoes;
 import com.comunique.repository.QuestoesRepository;
 
@@ -30,8 +31,12 @@ public class QuestoesService {
         return questoesRepository.findAll();
     }
 
-    public List<Questoes> findRandomRowsLimited(int limit) {
-        return questoesRepository.findRandomRowsLimited(limit);
+    public List<Questoes> getAllQuestoesByInstituicao(Instituicoes instituicao) {
+        return questoesRepository.findAllByInstituicao(instituicao);
+    }
+
+    public List<Questoes> findRandomRowsLimited(Instituicoes instituicao, int limit) {
+        return questoesRepository.findRandomRowsLimited(instituicao, limit);
     }
 
     @Transactional

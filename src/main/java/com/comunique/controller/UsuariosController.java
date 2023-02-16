@@ -159,6 +159,7 @@ public class UsuariosController {
                 for (Chat chat : chatsUsuario) {
                     mensagensService.DeleteForChat(chat);
                 }
+                chatService.DeletarAllByUsuario(usuario.get());
                 usuariosService.Deletar(usuario.get().getIdUsuario());
                 return new ResponseEntity<>(HttpStatus.OK);
             } catch (Exception e) {

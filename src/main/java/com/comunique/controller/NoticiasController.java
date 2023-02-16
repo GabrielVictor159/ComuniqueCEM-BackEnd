@@ -28,8 +28,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.comunique.dto.NoticiasDTO;
+import com.comunique.model.Admins;
+import com.comunique.model.Instituicoes;
 import com.comunique.model.Noticias;
 import com.comunique.service.AdminsService;
+import com.comunique.service.InstituicoesService;
 import com.comunique.service.NoticiasService;
 
 @RestController
@@ -41,24 +44,32 @@ public class NoticiasController {
     NoticiasService noticiasService;
     @Autowired
     AdminsService adminsService;
+    @Autowired
+    InstituicoesService instituicoesService;
 
-    @GetMapping("/{index}/{size}")
+    @GetMapping("/{idInstituicao}/{index}/{size}")
     public ResponseEntity<Object> getAllNoticiasPage(@PathVariable(value = "index") int page,
-            @PathVariable(value = "size") int size) {
+            @PathVariable(value = "size") int size, @PathVariable(value = "idInstituicao") UUID idInstituicao) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("idNoticia").descending());
-        List<Noticias> noticias = noticiasService.getAllNoticiasPageable(pageable);
+        Optional<Instituicoes> instituicao = instituicoesService.getInstituicao(idInstituicao);
+        if (instituicao.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            List<Noticias> noticias = noticiasService.getAllNoticiasPageable(instituicao.get(), pageable);
 
-        for (Noticias noticia : noticias) {
-            UUID id = noticia.getIdNoticia();
-            noticia.add(linkTo(methodOn(NoticiasController.class).getNoticia(id)).withSelfRel());
+            for (Noticias noticia : noticias) {
+                UUID id = noticia.getIdNoticia();
+                noticia.add(linkTo(methodOn(NoticiasController.class).getNoticia(id)).withSelfRel());
+            }
+
+            return new ResponseEntity<Object>(noticias, HttpStatus.OK);
         }
-
-        return new ResponseEntity<Object>(noticias, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getNoticia(@PathVariable(value = "id") UUID id) {
         Optional<Noticias> noticia = noticiasService.getNoticia(id);
+
         if (noticia.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
@@ -67,35 +78,46 @@ public class NoticiasController {
         }
     }
 
-    @GetMapping("/")
-    public ResponseEntity<Object> GetAllNoticias() {
-        List<Noticias> noticiasList = noticiasService.getAllNoticias();
-        if (noticiasList.isEmpty()) {
+    @GetMapping("/getAll/{idInstituicao}")
+    public ResponseEntity<Object> GetAllNoticias(@PathVariable(value = "idInstituicao") UUID idInstituicao) {
+        Optional<Instituicoes> instituicao = instituicoesService.getInstituicao(idInstituicao);
+        if (instituicao.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            for (Noticias noticia : noticiasList) {
-                UUID id = noticia.getIdNoticia();
-                noticia.add(linkTo(methodOn(NoticiasController.class).getNoticia(id)).withSelfRel());
+            List<Noticias> noticiasList = noticiasService.getAllNoticiasInsituto(instituicao.get());
+
+            if (noticiasList.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                for (Noticias noticia : noticiasList) {
+                    UUID id = noticia.getIdNoticia();
+                    noticia.add(linkTo(methodOn(NoticiasController.class).getNoticia(id)).withSelfRel());
+                }
+                return new ResponseEntity<Object>(noticiasList, HttpStatus.OK);
             }
-            return new ResponseEntity<Object>(noticiasList, HttpStatus.OK);
         }
     }
 
     @PostMapping("/{adminNome}/{senhaAdmin}")
     public ResponseEntity<Object> cadastrarQuestion(@PathVariable(value = "adminNome") String adminNome,
             @PathVariable(value = "senhaAdmin") String senhaAdmin, @RequestBody @Valid NoticiasDTO noticiasDto) {
-        if (adminsService.Login(adminNome, senhaAdmin).isEmpty()) {
+        Optional<Admins> admin = adminsService.Login(adminNome, senhaAdmin);
+        if (admin.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
+
             try {
                 Noticias noticia = new Noticias();
                 BeanUtils.copyProperties(noticiasDto, noticia);
-                noticia.add(
+                noticia.setInstituicao(admin.get().getInstituicao());
+                Noticias noticiaFinal = noticiasService.Cadastrar(noticia);
+                noticiaFinal.add(
                         linkTo(methodOn(NoticiasController.class).getNoticia(noticia.getIdNoticia())).withSelfRel());
-                noticia.add(linkTo(methodOn(NoticiasController.class).getAllNoticiasPage(0, 10))
-                        .withRel("Noticias com paginação"));
-                noticia.add(linkTo(methodOn(NoticiasController.class).GetAllNoticias()).withRel("todas as noticias"));
-                return new ResponseEntity<Object>(noticia, HttpStatus.OK);
+                noticiaFinal.add(
+                        linkTo(methodOn(NoticiasController.class)
+                                .GetAllNoticias(admin.get().getInstituicao().getIdInstituicao()))
+                                .withRel("todas as noticias"));
+                return new ResponseEntity<Object>(noticiaFinal, HttpStatus.OK);
             } catch (Exception e) {
                 return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -107,22 +129,27 @@ public class NoticiasController {
             @PathVariable(value = "adminNome") String adminNome, @PathVariable(value = "adminSenha") String adminSenha,
             @RequestBody @Valid NoticiasDTO noticiasDTO) {
         Optional<Noticias> noticia = noticiasService.getNoticia(id);
-        if (adminsService.Login(adminNome, adminSenha).isEmpty()) {
+        Optional<Admins> admin = adminsService.Login(adminNome, adminSenha);
+        if (admin.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
             if (noticia.isEmpty()) {
                 return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
             } else {
+                if (admin.get().getInstituicao() != noticia.get().getInstituicao()) {
+                    return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+                }
                 BeanUtils.copyProperties(noticiasDTO, noticia);
                 try {
                     Noticias noticiaAlterada = noticiasService.Cadastrar(noticia.get());
                     noticiaAlterada
                             .add(linkTo(methodOn(NoticiasController.class).getNoticia(noticiaAlterada.getIdNoticia()))
                                     .withSelfRel());
-                    noticiaAlterada.add(linkTo(methodOn(NoticiasController.class).getAllNoticiasPage(0, 10))
-                            .withRel("Noticias com paginação"));
+
                     noticiaAlterada.add(
-                            linkTo(methodOn(NoticiasController.class).GetAllNoticias()).withRel("todas as noticias"));
+                            linkTo(methodOn(NoticiasController.class)
+                                    .GetAllNoticias(admin.get().getInstituicao().getIdInstituicao()))
+                                    .withRel("todas as noticias"));
                     return new ResponseEntity<Object>(noticiaAlterada, HttpStatus.OK);
                 } catch (Exception e) {
                     return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -135,9 +162,16 @@ public class NoticiasController {
     public ResponseEntity<Object> deleteNoticia(@PathVariable(value = "id") UUID id,
             @PathVariable(value = "adminNome") String adminNome,
             @PathVariable(value = "adminSenha") String adminSenha) {
-        if (adminsService.Login(adminNome, adminSenha).isEmpty()) {
+        Optional<Noticias> noticia = noticiasService.getNoticia(id);
+        Optional<Admins> admin = adminsService.Login(adminNome, adminSenha);
+        if (noticia.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else if (admin.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } else if (admin.get().getInstituicao() != noticia.get().getInstituicao()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
+
             try {
                 noticiasService.Deletar(id);
                 return new ResponseEntity<>(HttpStatus.OK);

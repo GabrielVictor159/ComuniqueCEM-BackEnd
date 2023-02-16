@@ -36,4 +36,8 @@ public class ChatService {
         chatRepository.delete(chat);
     }
 
+    @Transactional
+    public void DeletarAllByUsuario(Usuarios user) {
+        chatRepository.deleteChatsByUsuario(user);
+    }
 }

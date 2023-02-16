@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.comunique.model.Instituicoes;
 import com.comunique.model.Noticias;
 import com.comunique.repository.NoticiasRepository;
 
@@ -31,8 +32,12 @@ public class NoticiasService {
         return noticiasRepository.findAll();
     }
 
-    public List<Noticias> getAllNoticiasPageable(Pageable pageable) {
-        return noticiasRepository.findAllByOrderByIdNoticiaDesc(pageable).getContent();
+    public List<Noticias> getAllNoticiasInsituto(Instituicoes instituicao) {
+        return noticiasRepository.findAllByInstituicao(instituicao);
+    }
+
+    public List<Noticias> getAllNoticiasPageable(Instituicoes instituicao, Pageable pageable) {
+        return noticiasRepository.findAllByInstituicaoOrderByIdNoticiaDesc(instituicao, pageable).getContent();
     }
 
     @Transactional

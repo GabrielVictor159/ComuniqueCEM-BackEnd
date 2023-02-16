@@ -25,8 +25,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.comunique.dto.QuestoesDTO;
+import com.comunique.model.Admins;
+import com.comunique.model.Instituicoes;
 import com.comunique.model.Questoes;
 import com.comunique.service.AdminsService;
+import com.comunique.service.InstituicoesService;
 import com.comunique.service.QuestoesService;
 
 @RestController
@@ -39,62 +42,85 @@ public class QuestoesController {
     @Autowired
     AdminsService adminsService;
 
+    @Autowired
+    InstituicoesService instituicoesService;
+
     @GetMapping("/{id}")
     public ResponseEntity<Questoes> findQuestionIp(@PathVariable(value = "id") UUID id) {
         Optional<Questoes> questao = questoesService.getQuestao(id);
         if (!questao.isPresent()) {
             return new ResponseEntity<Questoes>(HttpStatus.NOT_FOUND);
         } else {
-            questao.get().add(linkTo(methodOn(QuestoesController.class).findAll()).withRel("Todos as Questões"));
-            questao.get().add(linkTo(methodOn(QuestoesController.class).findQuestionLimit(10))
-                    .withRel("Questões aleatorias com tamanho de 10"));
+            questao.get().add(linkTo(
+                    methodOn(QuestoesController.class).findAll(questao.get().getInstituicao().getIdInstituicao()))
+                    .withRel("Todos as Questões"));
+            questao.get()
+                    .add(linkTo(methodOn(QuestoesController.class).findQuestionLimit(10,
+                            questao.get().getInstituicao().getIdInstituicao()))
+                            .withRel("Questões aleatorias com tamanho de 10"));
 
         }
 
         return new ResponseEntity<Questoes>(questao.get(), HttpStatus.OK);
     }
 
-    @GetMapping("/LimitRange/{limit}")
-    public ResponseEntity<List<Questoes>> findQuestionLimit(@PathVariable(value = "limit") int limit) {
-        List<Questoes> questoesList = questoesService.findRandomRowsLimited(limit);
-        if (questoesList.isEmpty()) {
+    @GetMapping("/LimitRange/{idInsituicao}/{limit}")
+    public ResponseEntity<List<Questoes>> findQuestionLimit(@PathVariable(value = "limit") int limit,
+            @PathVariable(value = "idInstituicao") UUID idInstituicao) {
+        Optional<Instituicoes> instituicao = instituicoesService.getInstituicao(idInstituicao);
+        if (instituicao.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            for (Questoes questao : questoesList) {
-                UUID id = questao.getIdQuestao();
-                questao.add(linkTo(methodOn(QuestoesController.class).findQuestionIp(id)).withSelfRel());
+            List<Questoes> questoesList = questoesService.findRandomRowsLimited(instituicao.get(), limit);
+            if (questoesList.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                for (Questoes questao : questoesList) {
+                    UUID id = questao.getIdQuestao();
+                    questao.add(linkTo(methodOn(QuestoesController.class).findQuestionIp(id)).withSelfRel());
+                }
+                return new ResponseEntity<List<Questoes>>(questoesList, HttpStatus.OK);
             }
-            return new ResponseEntity<List<Questoes>>(questoesList, HttpStatus.OK);
         }
     }
 
-    @GetMapping("/")
-    public ResponseEntity<List<Questoes>> findAll() {
-        List<Questoes> questoesList = questoesService.getAllQuestoes();
-        if (questoesList.isEmpty()) {
-            return new ResponseEntity<List<Questoes>>(HttpStatus.NO_CONTENT);
+    @GetMapping("/getAll/{idInstituicao}")
+    public ResponseEntity<List<Questoes>> findAll(@PathVariable(value = "idInstituicao") UUID idInstituicao) {
+        Optional<Instituicoes> instituicao = instituicoesService.getInstituicao(idInstituicao);
+        if (instituicao.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            for (Questoes questao : questoesList) {
-                UUID id = questao.getIdQuestao();
-                questao.add(linkTo(methodOn(QuestoesController.class).findQuestionIp(id)).withSelfRel());
+            List<Questoes> questoesList = questoesService.getAllQuestoesByInstituicao(instituicao.get());
+            if (questoesList.isEmpty()) {
+                return new ResponseEntity<List<Questoes>>(HttpStatus.NO_CONTENT);
+            } else {
+                for (Questoes questao : questoesList) {
+                    UUID id = questao.getIdQuestao();
+                    questao.add(linkTo(methodOn(QuestoesController.class).findQuestionIp(id)).withSelfRel());
+                }
+                return new ResponseEntity<List<Questoes>>(questoesList, HttpStatus.OK);
             }
-            return new ResponseEntity<List<Questoes>>(questoesList, HttpStatus.OK);
         }
     }
 
     @PostMapping("/{adminNome}/{senhaAdmin}")
     public ResponseEntity<Questoes> cadastrarQuestion(@PathVariable(value = "adminNome") String adminNome,
             @PathVariable(value = "senhaAdmin") String senhaAdmin, @RequestBody @Valid QuestoesDTO questoesDto) {
-        if (adminsService.Login(adminNome, senhaAdmin).isEmpty()) {
+        Optional<Admins> admin = adminsService.Login(adminNome, senhaAdmin);
+        if (admin.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
             Questoes questao = new Questoes();
             BeanUtils.copyProperties(questoesDto, questao);
+            questao.setInstituicao(admin.get().getInstituicao());
             Questoes questaoPersistir = questoesService.Cadastrar(questao);
             questaoPersistir.add(
                     linkTo(methodOn(QuestoesController.class).findQuestionIp(questao.getIdQuestao())).withSelfRel());
-            questaoPersistir.add(linkTo(methodOn(QuestoesController.class).findAll()).withRel("Todos as Questões"));
-            questaoPersistir.add(linkTo(methodOn(QuestoesController.class).findQuestionLimit(10))
+            questaoPersistir.add(
+                    linkTo(methodOn(QuestoesController.class).findAll(admin.get().getInstituicao().getIdInstituicao()))
+                            .withRel("Todos as Questões"));
+            questaoPersistir.add(linkTo(methodOn(QuestoesController.class).findQuestionLimit(10,
+                    admin.get().getInstituicao().getIdInstituicao()))
                     .withRel("Questões aleatorias com tamanho de 10"));
             return new ResponseEntity<Questoes>(questao, HttpStatus.OK);
         }
@@ -106,38 +132,51 @@ public class QuestoesController {
             @PathVariable(value = "adminNome") String adminNome, @PathVariable(value = "adminSenha") String adminSenha,
             @RequestBody @Valid QuestoesDTO questoesDTO) {
         Optional<Questoes> questao = questoesService.getQuestao(id);
-        if (adminsService.Login(adminNome, adminSenha).isEmpty()) {
+        Optional<Admins> admin = adminsService.Login(adminNome, adminSenha);
+
+        if (admin.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } else if (questao.isEmpty()) {
+            return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
+        } else if (admin.get().getInstituicao() != questao.get().getInstituicao()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
-            if (questao.isEmpty()) {
-                return new ResponseEntity<Object>(HttpStatus.NOT_FOUND);
-            } else {
-                BeanUtils.copyProperties(questoesDTO, questao);
-                try {
-                    Questoes questaoAlterada = questoesService.Cadastrar(questao.get());
-                    questaoAlterada
-                            .add(linkTo(methodOn(QuestoesController.class).findQuestionIp(id))
-                                    .withSelfRel());
-                    questaoAlterada.add(linkTo(methodOn(QuestoesController.class).findQuestionLimit(10))
-                            .withRel("Questões aleatorias com tamanho de 10"));
-                    questaoAlterada.add(
-                            linkTo(methodOn(QuestoesController.class).findAll()).withRel("todas as questoes"));
-                    return new ResponseEntity<Object>(questaoAlterada, HttpStatus.OK);
-                } catch (Exception e) {
-                    return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-                }
+
+            BeanUtils.copyProperties(questoesDTO, questao);
+            try {
+                Questoes questaoAlterada = questoesService.Cadastrar(questao.get());
+                questaoAlterada
+                        .add(linkTo(methodOn(QuestoesController.class).findQuestionIp(id))
+                                .withSelfRel());
+                questaoAlterada.add(linkTo(methodOn(QuestoesController.class).findQuestionLimit(10,
+                        admin.get().getInstituicao().getIdInstituicao()))
+                        .withRel("Questões aleatorias com tamanho de 10"));
+                questaoAlterada.add(
+                        linkTo(methodOn(QuestoesController.class)
+                                .findAll(admin.get().getInstituicao().getIdInstituicao()))
+                                .withRel("todas as questoes"));
+                return new ResponseEntity<Object>(questaoAlterada, HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+
             }
         }
     }
 
     @DeleteMapping("/{adminNome}/{senhaAdmin}/{questao}")
     public ResponseEntity<Object> deleteQuestion(@PathVariable(value = "adminNome") String adminNome,
-            @PathVariable(value = "senhaNome") String senhaAdmin, @PathVariable(value = "questao") UUID questao) {
+            @PathVariable(value = "senhaNome") String senhaAdmin, @PathVariable(value = "questao") UUID id) {
+        Optional<Questoes> questao = questoesService.getQuestao(id);
+        Optional<Admins> admin = adminsService.Login(adminNome, senhaAdmin);
         if (adminsService.Login(adminNome, senhaAdmin).isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } else if (questao.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else if (admin.get().getInstituicao() != questao.get().getInstituicao()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
             try {
-                questoesService.Deletar(questao);
+                questoesService.Deletar(questao.get().getIdQuestao());
                 return new ResponseEntity<>(HttpStatus.OK);
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
