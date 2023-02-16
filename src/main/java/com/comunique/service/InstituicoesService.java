@@ -1,5 +1,6 @@
 package com.comunique.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,6 +25,10 @@ public class InstituicoesService {
 
     public Optional<Instituicoes> getInstituicao(UUID id) {
         return instituicoesRepository.findById(id);
+    }
+
+    public List<Instituicoes> getAll() {
+        return instituicoesRepository.findAll();
     }
 
     public Optional<Instituicoes> LoginUsuario(String nomeInstituicao, String senha) {
