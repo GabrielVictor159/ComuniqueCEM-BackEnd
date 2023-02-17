@@ -51,6 +51,9 @@ public class CronogramaController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             try {
+                cronograma.get().add(
+                        linkTo(methodOn(CronogramaController.class).getAll(emailUsuario, senhaUsuario))
+                                .withRel("Todos os seus cronogramas"));
                 return new ResponseEntity<>(cronograma.get(), HttpStatus.OK);
             } catch (Exception e) {
                 return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

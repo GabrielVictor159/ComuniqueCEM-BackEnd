@@ -3,6 +3,8 @@ package com.comunique.model;
 import java.io.Serializable;
 import java.util.UUID;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,7 +15,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "chat")
-public class Chat implements Serializable {
+public class Chat extends RepresentationModel<Chat> implements Serializable {
 	private static final long serialVersionUID = 1l;
 
 	@Id
