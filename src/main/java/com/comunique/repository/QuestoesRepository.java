@@ -16,4 +16,6 @@ public interface QuestoesRepository extends JpaRepository<Questoes, UUID> {
     List<Questoes> findRandomRowsLimited(Instituicoes instituicao, int limit);
 
     List<Questoes> findAllByInstituicao(Instituicoes instituicao);
+
+    void deleteAllByInstituicao(Instituicoes instituicao);
 }

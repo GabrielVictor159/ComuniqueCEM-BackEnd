@@ -85,9 +85,10 @@ public class ModelCadastrosTests {
         String dateString = "2023-02-09";
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = dateFormat.parse(dateString);
-        CronogramaDTO cronogramaDto = new CronogramaDTO(date, "blue", 30, "dasdas", user);
+        CronogramaDTO cronogramaDto = new CronogramaDTO(date, "blue", 30, "dasdas");
         Cronograma cronograma = new Cronograma();
         BeanUtils.copyProperties(cronogramaDto, cronograma);
+        cronograma.setUsuario(user);
         return cronogramaService.Cadastrar(cronograma);
     }
 

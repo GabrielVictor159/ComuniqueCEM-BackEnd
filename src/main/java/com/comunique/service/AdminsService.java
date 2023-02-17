@@ -45,4 +45,9 @@ public class AdminsService {
     public void Deletar(UUID id) {
         adminsRepository.deleteById(id);
     }
+
+    @Transactional
+    public void DeletarAllByInstituicao(Instituicoes instituicao) {
+        adminsRepository.deleteAllByInstituicao(instituicao);
+    }
 }

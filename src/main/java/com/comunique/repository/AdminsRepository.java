@@ -17,4 +17,6 @@ public interface AdminsRepository extends JpaRepository<Admins, UUID> {
     Optional<Admins> login(String Nome, String Senha);
 
     List<Admins> findAllByInstituicao(Instituicoes instituicao);
+
+    void deleteAllByInstituicao(Instituicoes instituicao);
 }

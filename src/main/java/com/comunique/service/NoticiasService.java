@@ -44,4 +44,9 @@ public class NoticiasService {
     public void Deletar(UUID noticia) {
         noticiasRepository.deleteById(noticia);
     }
+
+    @Transactional
+    public void DeletarAllByInstituicao(Instituicoes instituicao) {
+        noticiasRepository.deleteAllByInstituicao(instituicao);
+    }
 }

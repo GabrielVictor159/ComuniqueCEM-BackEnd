@@ -43,4 +43,9 @@ public class QuestoesService {
     public void Deletar(UUID questao) {
         questoesRepository.deleteById(questao);
     }
+
+    @Transactional
+    public void DeletarAllByInstituicao(Instituicoes instituicao) {
+        questoesRepository.deleteAllByInstituicao(instituicao);
+    }
 }

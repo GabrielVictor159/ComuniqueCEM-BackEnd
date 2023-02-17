@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.comunique.model.Instituicoes;
 import com.comunique.model.Usuarios;
 
 @Repository
@@ -18,4 +19,6 @@ public interface UsuariosRepository extends JpaRepository<Usuarios, UUID> {
 
     @Query("SELECT e FROM Usuarios e WHERE e.instituicao = ?1")
     List<Usuarios> getAllUsuariosInstituicao(UUID idInstituicao);
+
+    void deleteAllByInstituicao(Instituicoes instituicao);
 }

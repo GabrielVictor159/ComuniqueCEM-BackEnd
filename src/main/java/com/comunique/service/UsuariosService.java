@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.comunique.functions.MD5Encoder;
+import com.comunique.model.Instituicoes;
 import com.comunique.model.Usuarios;
 import com.comunique.repository.UsuariosRepository;
 
@@ -39,7 +40,12 @@ public class UsuariosService {
 	@Transactional
 	public void Deletar(UUID id) {
 		usuariosRepository.deleteById(id);
-		;
+
+	}
+
+	@Transactional
+	public void DeletarAllByInstituicao(Instituicoes instituicao) {
+		usuariosRepository.deleteAllByInstituicao(instituicao);
 	}
 
 }

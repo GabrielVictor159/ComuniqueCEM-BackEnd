@@ -24,10 +24,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.comunique.dto.InstituicoesDTO;
 import com.comunique.model.Admins;
 import com.comunique.model.AdminsMaster;
+import com.comunique.model.Chat;
 import com.comunique.model.Instituicoes;
+import com.comunique.model.Usuarios;
 import com.comunique.service.AdminsMasterService;
 import com.comunique.service.AdminsService;
+import com.comunique.service.ChatService;
+import com.comunique.service.CronogramaService;
 import com.comunique.service.InstituicoesService;
+import com.comunique.service.MensagensService;
+import com.comunique.service.NoticiasService;
+import com.comunique.service.QuestoesService;
+import com.comunique.service.UsuariosService;
 
 @RestController
 @RequestMapping(value = "/Instituicoes", produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -40,6 +48,18 @@ public class InstituicoesController {
     AdminsMasterService adminsMasterService;
     @Autowired
     AdminsService adminsService;
+    @Autowired
+    CronogramaService cronogramaService;
+    @Autowired
+    MensagensService mensagensService;
+    @Autowired
+    ChatService chatService;
+    @Autowired
+    UsuariosService usuariosService;
+    @Autowired
+    QuestoesService questoesService;
+    @Autowired
+    NoticiasService noticiasService;
 
     @GetMapping("/admin/{nomeAdmin}/{senhaAdmin}/{id}")
     public ResponseEntity<Object> findInstituicaoAdmin(@PathVariable(value = "nomeAdmin") String nomeAdmin,
@@ -141,6 +161,23 @@ public class InstituicoesController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             try {
+                noticiasService.DeletarAllByInstituicao(instituicao.get());
+                questoesService.DeletarAllByInstituicao(instituicao.get());
+                List<Usuarios> usuarios = usuariosService
+                        .getAllUsuariosInstituicao(instituicao.get().getIdInstituicao());
+                for (Usuarios user : usuarios) {
+                    cronogramaService.DeletarAllByUsuario(user);
+                }
+                for (Usuarios user : usuarios) {
+                    List<Chat> chats = chatService.getChatByUser(user);
+                    for (Chat chat : chats) {
+                        mensagensService.DeleteForChat(chat);
+                    }
+                }
+                for (Usuarios user : usuarios) {
+                    chatService.DeletarAllByUsuario(user);
+                }
+                usuariosService.DeletarAllByInstituicao(instituicao.get());
                 instituicoesService.Deletar(instituicao.get().getIdInstituicao());
                 return new ResponseEntity<>(HttpStatus.OK);
             } catch (Exception e) {

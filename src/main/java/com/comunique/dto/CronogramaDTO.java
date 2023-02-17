@@ -4,8 +4,6 @@ import java.util.Date;
 
 import javax.validation.constraints.NotBlank;
 
-import com.comunique.model.Usuarios;
-
 public class CronogramaDTO {
 
 	@NotBlank
@@ -19,15 +17,11 @@ public class CronogramaDTO {
 	@NotBlank
 	private String atividade;
 
-	@NotBlank
-	private Usuarios usuario;
-
-	public CronogramaDTO(Date dataAtividade, String cor, int prazo, String atividade, Usuarios usuario) {
+	public CronogramaDTO(Date dataAtividade, String cor, int prazo, String atividade) {
 		this.dataAtividade = dataAtividade;
 		this.cor = cor;
 		this.prazo = prazo;
 		this.atividade = atividade;
-		this.usuario = usuario;
 	}
 
 	public Date getDataAtividade() {
@@ -62,22 +56,14 @@ public class CronogramaDTO {
 		this.atividade = atividade;
 	}
 
-	public Usuarios getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuarios usuario) {
-		this.usuario = usuario;
-	}
-
 	@Override
 	public String toString() {
-		return "CronogramaDTO{" +
-				"dataAtividade=" + dataAtividade +
-				", cor='" + cor + '\'' +
-				", prazo=" + prazo +
-				", atividade='" + atividade + '\'' +
-				", usuario=" + usuario +
-				'}';
+		return "{" +
+				" dataAtividade='" + getDataAtividade() + "'" +
+				", cor='" + getCor() + "'" +
+				", prazo='" + getPrazo() + "'" +
+				", atividade='" + getAtividade() + "'" +
+				"}";
 	}
+
 }

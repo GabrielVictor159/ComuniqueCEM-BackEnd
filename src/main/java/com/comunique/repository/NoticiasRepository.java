@@ -16,4 +16,6 @@ public interface NoticiasRepository extends JpaRepository<Noticias, UUID> {
     Page<Noticias> findAllByInstituicaoOrderByIdNoticiaDesc(Instituicoes instituicao, Pageable pageable);
 
     List<Noticias> findAllByInstituicao(Instituicoes instituicao);
+
+    void deleteAllByInstituicao(Instituicoes instituicao);
 }
