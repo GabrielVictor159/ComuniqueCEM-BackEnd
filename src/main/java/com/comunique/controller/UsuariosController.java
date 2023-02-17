@@ -146,6 +146,24 @@ public class UsuariosController {
         }
     }
 
+    @PutMapping("/online/{emailUsuario}/{senhaUsuario}/{online}")
+    public ResponseEntity<Object> Online(@PathVariable boolean online,
+            @PathVariable(value = "emailUsuario") String emailUsuario,
+            @PathVariable(value = "senhaUsuario") String senhaUsuario) {
+        Optional<Usuarios> usuario = usuariosService.Login(emailUsuario, senhaUsuario);
+        if (usuario.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } else {
+            try {
+                usuario.get().setUsuarioOnline(online);
+                usuariosService.Cadastrar(usuario.get());
+                return new ResponseEntity<>(usuario.get(), HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
     @DeleteMapping("/{emailUsuario}/{senhaUsuario}")
 
     public ResponseEntity<Object> deletarUsuario(@PathVariable(value = "emailUsuario") String emailUsuario,

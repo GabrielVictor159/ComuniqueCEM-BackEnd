@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +17,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "mensagens")
-public class Mensagens implements Serializable {
+public class Mensagens extends RepresentationModel<Mensagens> implements Serializable {
 	private static final long serialVersionUID = 1l;
 
 	@Id
@@ -44,9 +46,13 @@ public class Mensagens implements Serializable {
 	@Column(nullable = false)
 	private boolean isfile;
 
+	@Column(nullable = false)
+	private boolean deletada;
+
 	public Mensagens() {
 		super();
 		this.dataMensagem = new Date();
+		this.deletada = false;
 	}
 
 	public Mensagens(UUID idMensagens, UUID usuarioEnviou, String mensagem, Date dataMensagem, Chat chat, boolean lida,
@@ -60,6 +66,7 @@ public class Mensagens implements Serializable {
 		this.lida = lida;
 		this.entregue = entregue;
 		this.isfile = isfile;
+		this.deletada = false;
 	}
 
 	public UUID getIdMensagens() {
@@ -138,6 +145,18 @@ public class Mensagens implements Serializable {
 		this.isfile = isfile;
 	}
 
+	public boolean isDeletada() {
+		return this.deletada;
+	}
+
+	public boolean getDeletada() {
+		return this.deletada;
+	}
+
+	public void setDeletada(boolean deletada) {
+		this.deletada = deletada;
+	}
+
 	@Override
 	public String toString() {
 		return "{" +
@@ -149,6 +168,7 @@ public class Mensagens implements Serializable {
 				", lida='" + isLida() + "'" +
 				", entregue='" + isEntregue() + "'" +
 				", isfile='" + isIsfile() + "'" +
+				", deletada='" + isDeletada() + "'" +
 				"}";
 	}
 

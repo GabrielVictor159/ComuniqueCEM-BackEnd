@@ -4,15 +4,11 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotBlank;
 
-import com.comunique.model.Chat;
-
 public class MensagensDTO {
 	@NotBlank
 	private UUID usuarioEnviou;
 	@NotBlank
 	private String mensagem;
-	@NotBlank
-	private Chat chat;
 	@NotBlank
 	private boolean lida;
 	@NotBlank
@@ -23,11 +19,10 @@ public class MensagensDTO {
 	public MensagensDTO() {
 	}
 
-	public MensagensDTO(UUID usuarioEnviou, String mensagem, Chat chat, boolean lida, boolean entregue,
+	public MensagensDTO(UUID usuarioEnviou, String mensagem, boolean lida, boolean entregue,
 			boolean isfile) {
 		this.usuarioEnviou = usuarioEnviou;
 		this.mensagem = mensagem;
-		this.chat = chat;
 		this.lida = lida;
 		this.entregue = entregue;
 		this.isfile = isfile;
@@ -47,14 +42,6 @@ public class MensagensDTO {
 
 	public void setMensagem(String mensagem) {
 		this.mensagem = mensagem;
-	}
-
-	public Chat getChat() {
-		return this.chat;
-	}
-
-	public void setChat(Chat chat) {
-		this.chat = chat;
 	}
 
 	public boolean isLida() {
@@ -98,7 +85,6 @@ public class MensagensDTO {
 		return "{" +
 				" usuarioEnviou='" + getUsuarioEnviou() + "'" +
 				", mensagem='" + getMensagem() + "'" +
-				", chat='" + getChat() + "'" +
 				", lida='" + isLida() + "'" +
 				", entregue='" + isEntregue() + "'" +
 				", isfile='" + isIsfile() + "'" +
