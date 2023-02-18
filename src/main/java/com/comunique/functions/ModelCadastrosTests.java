@@ -112,8 +112,8 @@ public class ModelCadastrosTests {
         return instituicoesService.Cadastrar(instituicao);
     }
 
-    public static Admins CadastrarAdmin(Instituicoes instituicao, AdminsService adminsService) {
-        AdminsDTO dto = new AdminsDTO(AleatoryString.getAlphaNumericString(7), AleatoryString.getAlphaNumericString(7));
+    public static Admins CadastrarAdmin(Instituicoes instituicao, AdminsService adminsService, String senha) {
+        AdminsDTO dto = new AdminsDTO(AleatoryString.getAlphaNumericString(7), senha);
         Admins admin = new Admins();
         BeanUtils.copyProperties(dto, admin);
         admin.setInstituicao(instituicao);

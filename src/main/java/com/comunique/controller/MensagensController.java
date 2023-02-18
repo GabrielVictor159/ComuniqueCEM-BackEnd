@@ -183,7 +183,8 @@ public class MensagensController {
     public ResponseEntity<Object> DeletarPedido(@RequestBody @Valid Mensagens mensagem) {
         try {
             mensagem.setDeletada(true);
-            return new ResponseEntity<>(HttpStatus.OK);
+            Mensagens cadastro = mensagensService.Cadastrar(mensagem);
+            return new ResponseEntity<>(cadastro, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

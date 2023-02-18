@@ -68,7 +68,7 @@ public class AdminController {
     }
 
     @GetMapping("/getOne/{nomeAdminMaster}/{senhaAdminMaster}/{id}")
-    public ResponseEntity<Object> getOne(@PathVariable String nomeAdminMaster,
+    public ResponseEntity<Object> getOneAdmin(@PathVariable String nomeAdminMaster,
             @PathVariable String senhaAdminMaster, @PathVariable UUID id) {
         Optional<AdminsMaster> adminMaster = adminsMasterService.Login(nomeAdminMaster, senhaAdminMaster);
         Optional<Admins> admin = adminsService.getOne(id);
@@ -103,9 +103,8 @@ public class AdminController {
     }
 
     @PostMapping("/{nomeAdminMaster}/{senhaAdminMaster}/{idInstituicao}")
-    public ResponseEntity<Object> adicionar(@PathVariable String nomeAdminMaster,
-            @PathVariable String senhaAdminMaster, @PathVariable UUID idInstituicao,
-            @RequestBody @Valid AdminsDTO dto) {
+    public ResponseEntity<Object> adicionar(@RequestBody @Valid AdminsDTO dto, @PathVariable String nomeAdminMaster,
+            @PathVariable String senhaAdminMaster, @PathVariable UUID idInstituicao) {
         Optional<AdminsMaster> adminMaster = adminsMasterService.Login(nomeAdminMaster, senhaAdminMaster);
         Optional<Instituicoes> instituicao = instituicoesService.getInstituicao(idInstituicao);
         if (adminMaster.isEmpty()) {
@@ -127,9 +126,8 @@ public class AdminController {
     }
 
     @PutMapping("/{nomeAdminMaster}/{senhaAdminMaster}/{id}")
-    public ResponseEntity<Object> alterar(@PathVariable String nomeAdminMaster,
-            @PathVariable String senhaAdminMaster, @PathVariable UUID id,
-            @RequestBody @Valid AdminsDTO dto) {
+    public ResponseEntity<Object> alterar(@RequestBody @Valid AdminsDTO dto, @PathVariable String nomeAdminMaster,
+            @PathVariable String senhaAdminMaster, @PathVariable UUID id) {
         Optional<AdminsMaster> adminMaster = adminsMasterService.Login(nomeAdminMaster, senhaAdminMaster);
         Optional<Admins> admin = adminsService.getOne(id);
         if (adminMaster.isEmpty()) {
@@ -148,11 +146,13 @@ public class AdminController {
 
     }
 
-    @DeleteMapping("/{adminNome}/{senhaAdmin}/{id}")
+    @DeleteMapping("/{nomeAdminMaster}/{senhaAdminMaster}/{id}")
     public ResponseEntity<Object> deletar(@PathVariable String nomeAdminMaster,
-            @PathVariable String senhaAdminMaster, @PathVariable UUID id,
-            @RequestBody @Valid AdminsDTO dto) {
+            @PathVariable String senhaAdminMaster, @PathVariable UUID id) {
         Optional<AdminsMaster> adminMaster = adminsMasterService.Login(nomeAdminMaster, senhaAdminMaster);
+        System.out.println(id);
+        System.out.println(senhaAdminMaster);
+        System.out.println(nomeAdminMaster);
         Optional<Admins> admin = adminsService.getOne(id);
         if (adminMaster.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -163,7 +163,7 @@ public class AdminController {
                 adminsService.Deletar(admin.get().getIdAdmin());
                 return new ResponseEntity<>(HttpStatus.OK);
             } catch (Exception e) {
-                return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
 

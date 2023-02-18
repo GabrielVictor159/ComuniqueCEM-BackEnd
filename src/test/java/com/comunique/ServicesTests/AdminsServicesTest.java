@@ -38,7 +38,8 @@ public class AdminsServicesTest {
     public String Cadastrar() {
         try {
             Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
-            Admins admin = ModelCadastrosTests.CadastrarAdmin(instituicao, adminsService);
+            Admins admin = ModelCadastrosTests.CadastrarAdmin(instituicao, adminsService,
+                    AleatoryString.getAlphaNumericString(7));
             adminsService.Deletar(admin.getIdAdmin());
             instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso";
