@@ -229,7 +229,6 @@ public class AdminControllerTest {
                 AdminMasterExample.senha + "a",
                 admin3.getIdAdmin());
         assertEquals(HttpStatus.UNAUTHORIZED, response2.getStatusCode());
-        Admins admin4 = ModelCadastrosTests.CadastrarAdmin(instituicao, adminsService, senha);
         UUID idFalso = UUID.randomUUID();
         ResponseEntity<Object> response3 = testRestTemplate.exchange(
                 URI,

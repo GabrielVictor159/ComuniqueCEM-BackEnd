@@ -46,32 +46,38 @@ public class QuestoesController {
     InstituicoesService instituicoesService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Questoes> findQuestionIp(@PathVariable(value = "id") UUID id) {
+    public ResponseEntity<Object> findQuestionIp(@PathVariable UUID id) {
         Optional<Questoes> questao = questoesService.getQuestao(id);
         if (!questao.isPresent()) {
-            return new ResponseEntity<Questoes>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            questao.get().add(linkTo(
-                    methodOn(QuestoesController.class).findAll(questao.get().getInstituicao().getIdInstituicao()))
-                    .withRel("Todos as Questões"));
-            questao.get()
-                    .add(linkTo(methodOn(QuestoesController.class).findQuestionLimit(10,
-                            questao.get().getInstituicao().getIdInstituicao()))
-                            .withRel("Questões aleatorias com tamanho de 10"));
+            try {
+                questao.get().add(linkTo(
+                        methodOn(QuestoesController.class).findAll(questao.get().getInstituicao().getIdInstituicao()))
+                        .withRel("Todos as Questões"));
+                questao.get().add(linkTo(
+                        methodOn(QuestoesController.class)
+                                .findQuestionLimit(questao.get().getInstituicao().getIdInstituicao(), 10))
+                        .withRel("Questões aleatorias com tamanho de 10"));
+            } catch (Exception e) {
+                System.out.println(e.getCause());
+            }
+            return new ResponseEntity<>(questao.get(), HttpStatus.OK);
 
         }
 
-        return new ResponseEntity<Questoes>(questao.get(), HttpStatus.OK);
     }
 
-    @GetMapping("/LimitRange/{idInsituicao}/{limit}")
-    public ResponseEntity<List<Questoes>> findQuestionLimit(@PathVariable(value = "limit") int limit,
-            @PathVariable(value = "idInstituicao") UUID idInstituicao) {
+    @GetMapping("/LimitRange/{idInstituicao}/{limit}")
+    public ResponseEntity<Object> findQuestionLimit(@PathVariable UUID idInstituicao,
+            @PathVariable int limit) {
+        System.out.println(idInstituicao);
         Optional<Instituicoes> instituicao = instituicoesService.getInstituicao(idInstituicao);
         if (instituicao.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            List<Questoes> questoesList = questoesService.findRandomRowsLimited(instituicao.get(), limit);
+            List<Questoes> questoesList = questoesService.findRandomRowsLimited(instituicao.get().getIdInstituicao(),
+                    limit);
             if (questoesList.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } else {
@@ -79,9 +85,10 @@ public class QuestoesController {
                     UUID id = questao.getIdQuestao();
                     questao.add(linkTo(methodOn(QuestoesController.class).findQuestionIp(id)).withSelfRel());
                 }
-                return new ResponseEntity<List<Questoes>>(questoesList, HttpStatus.OK);
+                return new ResponseEntity<>(questoesList, HttpStatus.OK);
             }
         }
+
     }
 
     @GetMapping("/getAll/{idInstituicao}")
@@ -119,8 +126,9 @@ public class QuestoesController {
             questaoPersistir.add(
                     linkTo(methodOn(QuestoesController.class).findAll(admin.get().getInstituicao().getIdInstituicao()))
                             .withRel("Todos as Questões"));
-            questaoPersistir.add(linkTo(methodOn(QuestoesController.class).findQuestionLimit(10,
-                    admin.get().getInstituicao().getIdInstituicao()))
+            questaoPersistir.add(linkTo(methodOn(QuestoesController.class).findQuestionLimit(
+                    admin.get().getInstituicao().getIdInstituicao(),
+                    10))
                     .withRel("Questões aleatorias com tamanho de 10"));
             return new ResponseEntity<Questoes>(questao, HttpStatus.OK);
         }
@@ -148,8 +156,9 @@ public class QuestoesController {
                 questaoAlterada
                         .add(linkTo(methodOn(QuestoesController.class).findQuestionIp(id))
                                 .withSelfRel());
-                questaoAlterada.add(linkTo(methodOn(QuestoesController.class).findQuestionLimit(10,
-                        admin.get().getInstituicao().getIdInstituicao()))
+                questaoAlterada.add(linkTo(methodOn(QuestoesController.class).findQuestionLimit(
+                        admin.get().getInstituicao().getIdInstituicao(),
+                        10))
                         .withRel("Questões aleatorias com tamanho de 10"));
                 questaoAlterada.add(
                         linkTo(methodOn(QuestoesController.class)
@@ -163,9 +172,9 @@ public class QuestoesController {
         }
     }
 
-    @DeleteMapping("/{adminNome}/{senhaAdmin}/{questao}")
-    public ResponseEntity<Object> deleteQuestion(@PathVariable(value = "adminNome") String adminNome,
-            @PathVariable(value = "senhaNome") String senhaAdmin, @PathVariable(value = "questao") UUID id) {
+    @DeleteMapping("/{adminNome}/{senhaAdmin}/{id}")
+    public ResponseEntity<Object> deleteQuestion(@PathVariable String adminNome,
+            @PathVariable String senhaAdmin, @PathVariable UUID id) {
         Optional<Questoes> questao = questoesService.getQuestao(id);
         Optional<Admins> admin = adminsService.Login(adminNome, senhaAdmin);
         if (adminsService.Login(adminNome, senhaAdmin).isEmpty()) {

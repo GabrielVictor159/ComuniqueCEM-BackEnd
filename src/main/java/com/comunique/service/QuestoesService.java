@@ -35,8 +35,8 @@ public class QuestoesService {
         return questoesRepository.findAllByInstituicao(instituicao);
     }
 
-    public List<Questoes> findRandomRowsLimited(Instituicoes instituicao, int limit) {
-        return questoesRepository.findRandomRowsLimited(instituicao, limit);
+    public List<Questoes> findRandomRowsLimited(UUID id, int limit) {
+        return questoesRepository.findRandomRowsLimited(id, limit);
     }
 
     @Transactional
