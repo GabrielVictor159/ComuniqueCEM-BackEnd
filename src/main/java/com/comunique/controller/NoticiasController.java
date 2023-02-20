@@ -99,7 +99,7 @@ public class NoticiasController {
     }
 
     @PostMapping("/{adminNome}/{senhaAdmin}")
-    public ResponseEntity<Object> cadastrarQuestion(@PathVariable(value = "adminNome") String adminNome,
+    public ResponseEntity<Object> cadastrarNoticia(@PathVariable(value = "adminNome") String adminNome,
             @PathVariable(value = "senhaAdmin") String senhaAdmin, @RequestBody @Valid NoticiasDTO noticiasDto) {
         Optional<Admins> admin = adminsService.Login(adminNome, senhaAdmin);
         if (admin.isEmpty()) {
@@ -158,7 +158,7 @@ public class NoticiasController {
         }
     }
 
-    @DeleteMapping("/{adminNome}/{AdminSenha}/{id}")
+    @DeleteMapping("/{adminNome}/{adminSenha}/{id}")
     public ResponseEntity<Object> deleteNoticia(@PathVariable(value = "id") UUID id,
             @PathVariable(value = "adminNome") String adminNome,
             @PathVariable(value = "adminSenha") String adminSenha) {
