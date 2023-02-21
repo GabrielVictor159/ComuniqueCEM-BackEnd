@@ -70,4 +70,16 @@
 | DELETE      | /Noticias/{adminNome}/{adminSenha}/{id}       | UUID id, String adminNome, String adminSenha | Exclui a notícia com o ID especificado para a instituição do administrador com o nome e senha especificados                                                                     |
 
 
+<h2>Rotas de cronograma</h2>
+
+| HTTP Method | Endpoint | Parâmetros | Descrição | Retornos Possíveis |
+|-------------|----------|------------|----------|--------------------|
+| GET         | /{emailUsuario}/{senhaUsuario}/{id} | id: UUID, emailUsuario: String, senhaUsuario: String | Busca um cronograma específico pelo ID. | 200 OK com o Cronograma solicitado, 401 UNAUTHORIZED se o usuário não estiver logado, 404 NOT FOUND se o cronograma não for encontrado, 500 INTERNAL SERVER ERROR em caso de erro interno. |
+| GET         | /getAll/{emailUsuario}/{senhaUsuario} | emailUsuario: String, senhaUsuario: String | Busca todos os cronogramas do usuário logado. | 200 OK com uma lista de todos os cronogramas, 401 UNAUTHORIZED se o usuário não estiver logado, 500 INTERNAL SERVER ERROR em caso de erro interno. |
+| POST        | /{emailUsuario}/{senhaUsuario} | emailUsuario: String, senhaUsuario: String, body: CronogramaDTO | Cadastra um novo cronograma para o usuário logado. | 200 OK com o cronograma cadastrado, 401 UNAUTHORIZED se o usuário não estiver logado, 500 INTERNAL SERVER ERROR em caso de erro interno. |
+| PUT         | /{emailUsuario}/{senhaUsuario}/{id} | id: UUID, emailUsuario: String, senhaUsuario: String, body: CronogramaDTO | Altera um cronograma existente. | 200 OK com o cronograma atualizado, 401 UNAUTHORIZED se o usuário não estiver logado, 404 NOT FOUND se o cronograma não for encontrado, 500 INTERNAL SERVER ERROR em caso de erro interno. |
+| DELETE      | /{emailUsuario}/{senhaUsuario}/{id} | id: UUID, emailUsuario: String, senhaUsuario: String | Exclui um cronograma existente. | 200 OK se o cronograma foi excluído com sucesso, 401 UNAUTHORIZED se o usuário não estiver logado, 404 NOT FOUND se o cronograma não for encontrado, 500 INTERNAL SERVER ERROR em caso de erro interno. |
+| DELETE      | /{emailUsuario}/{senhaUsuario} | emailUsuario: String, senhaUsuario: String | Exclui todos os cronogramas do usuário logado. | 200 OK se todos os cronogramas foram excluídos com sucesso, 401 UNAUTHORIZED se o usuário não estiver logado, 500 INTERNAL SERVER ERROR em caso de erro interno. |
+
+
 
