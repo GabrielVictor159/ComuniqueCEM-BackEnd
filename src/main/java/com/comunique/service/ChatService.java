@@ -31,6 +31,10 @@ public class ChatService {
         return chatRepository.findAllByUser(user);
     }
 
+    public Optional<Chat> getChatByTwoUser(Usuarios user1, Usuarios user2) {
+        return chatRepository.findByUsuario1AndUsuario2(user1, user2);
+    }
+
     @Transactional
     public void Deletar(Chat chat) {
         chatRepository.delete(chat);
