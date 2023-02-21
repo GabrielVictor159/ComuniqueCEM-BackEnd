@@ -17,8 +17,7 @@ public interface UsuariosRepository extends JpaRepository<Usuarios, UUID> {
     @Query("SELECT e FROM Usuarios e WHERE e.email = ?1 AND e.senha = ?2")
     Optional<Usuarios> login(String Email, String Senha);
 
-    @Query("SELECT e FROM Usuarios e WHERE e.instituicao = ?1")
-    List<Usuarios> getAllUsuariosInstituicao(UUID idInstituicao);
+    List<Usuarios> findAllByInstituicao(Instituicoes instituicao);
 
     void deleteAllByInstituicao(Instituicoes instituicao);
 }

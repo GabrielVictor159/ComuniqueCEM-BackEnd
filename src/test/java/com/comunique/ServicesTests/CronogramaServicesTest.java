@@ -43,7 +43,7 @@ public class CronogramaServicesTest {
     public String Cadastro() {
         try {
             Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
-            Usuarios user = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
+            Usuarios user = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService, "6515");
             Cronograma cronograma = ModelCadastrosTests.CadastrarCronograma(user, cronogramaService);
             System.out.println(user);
             System.out.println(cronograma);
@@ -60,7 +60,7 @@ public class CronogramaServicesTest {
     public String GetCronograma() {
         try {
             Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
-            Usuarios user = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
+            Usuarios user = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService, "6515");
             Cronograma cronograma = ModelCadastrosTests.CadastrarCronograma(user, cronogramaService);
             Optional<Cronograma> test = cronogramaService.getCronograma(cronograma.getIdCronograma());
             System.out.println(test);
@@ -76,7 +76,7 @@ public class CronogramaServicesTest {
     public String GetUserCronogramas() {
         try {
             Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
-            Usuarios user = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
+            Usuarios user = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService, "6515");
             Cronograma cronograma = ModelCadastrosTests.CadastrarCronograma(user, cronogramaService);
             List<Cronograma> list = cronogramaService.getCronogramaUser(user);
             System.out.println(list);

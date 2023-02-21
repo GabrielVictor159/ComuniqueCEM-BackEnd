@@ -4,9 +4,12 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.comunique.dto.InstituicoesDTO;
+import com.comunique.functions.AleatoryString;
 import com.comunique.functions.ModelCadastrosTests;
 import com.comunique.model.Instituicoes;
 import com.comunique.service.InstituicoesService;
@@ -43,9 +46,10 @@ public class InstituicoesServicesTest {
 
     public String loginUsuario() {
         try {
-            Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
+            String senha = "4645";
+            Instituicoes instituicao = CadastrarInstituicao(senha, AleatoryString.getAlphaNumericString(7));
             Optional<Instituicoes> test = instituicoesService.LoginUsuario(instituicao.getNome(),
-                    instituicao.getSenha());
+                    senha);
             if (test.isEmpty()) {
                 return "Não foi possivel fazer o login na instituição";
             }
@@ -58,9 +62,10 @@ public class InstituicoesServicesTest {
 
     public String loginProfessores() {
         try {
-            Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
+            String senhaProfessor = "4645";
+            Instituicoes instituicao = CadastrarInstituicao("56456", senhaProfessor);
             Optional<Instituicoes> test = instituicoesService.LoginProfessores(instituicao.getNome(),
-                    instituicao.getSenhaProfessores());
+                    senhaProfessor);
             if (test.isEmpty()) {
                 return "Não foi possivel fazer o login na instituição";
             }
@@ -69,5 +74,12 @@ public class InstituicoesServicesTest {
         } catch (Exception e) {
             return e.getMessage();
         }
+    }
+
+    public Instituicoes CadastrarInstituicao(String senha, String senhaProfessor) {
+        InstituicoesDTO dto = new InstituicoesDTO(AleatoryString.getAlphaNumericString(7), senha, senhaProfessor);
+        Instituicoes instituto = new Instituicoes();
+        BeanUtils.copyProperties(dto, instituto);
+        return instituicoesService.Cadastrar(instituto);
     }
 }

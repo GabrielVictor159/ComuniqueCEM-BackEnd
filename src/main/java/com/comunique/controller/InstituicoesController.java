@@ -164,7 +164,7 @@ public class InstituicoesController {
                 noticiasService.DeletarAllByInstituicao(instituicao.get());
                 questoesService.DeletarAllByInstituicao(instituicao.get());
                 List<Usuarios> usuarios = usuariosService
-                        .getAllUsuariosInstituicao(instituicao.get().getIdInstituicao());
+                        .getAllUsuariosInstituicao(instituicao.get());
                 for (Usuarios user : usuarios) {
                     cronogramaService.DeletarAllByUsuario(user);
                 }

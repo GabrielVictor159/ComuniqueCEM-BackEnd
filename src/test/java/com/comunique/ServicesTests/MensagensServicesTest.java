@@ -52,8 +52,8 @@ public class MensagensServicesTest {
     public String DeleteInMensagensTest() {
         try {
             Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
-            Usuarios user1 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
-            Usuarios user2 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
+            Usuarios user1 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService, "6515");
+            Usuarios user2 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService, "6515");
             Chat chat = ModelCadastrosTests.CadastrarChat(user1, user2, chatService);
             Mensagens mensagem1 = ModelCadastrosTests.CadastrarMensagem(chat, user1.getIdUsuario(), mensagensService);
             Mensagens mensagem2 = ModelCadastrosTests.CadastrarMensagem(chat, user2.getIdUsuario(), mensagensService);
@@ -75,8 +75,8 @@ public class MensagensServicesTest {
     public String GetAllMensagensForChatTest() {
         try {
             Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
-            Usuarios user1 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
-            Usuarios user2 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
+            Usuarios user1 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService, "6515");
+            Usuarios user2 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService, "6515");
             Chat chat = ModelCadastrosTests.CadastrarChat(user1, user2, chatService);
             Mensagens mensagem1 = ModelCadastrosTests.CadastrarMensagem(chat, user1.getIdUsuario(), mensagensService);
             Mensagens mensagem2 = ModelCadastrosTests.CadastrarMensagem(chat, user2.getIdUsuario(), mensagensService);
@@ -96,8 +96,8 @@ public class MensagensServicesTest {
     public String CadastrarMensagemTest() {
         try {
             Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
-            Usuarios user1 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
-            Usuarios user2 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
+            Usuarios user1 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService, "6515");
+            Usuarios user2 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService, "6515");
             Chat chat = ModelCadastrosTests.CadastrarChat(user1, user2, chatService);
             Mensagens mensagem = ModelCadastrosTests.CadastrarMensagem(chat, user1.getIdUsuario(), mensagensService);
             System.out.println(mensagem);

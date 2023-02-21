@@ -38,11 +38,11 @@ import com.comunique.service.UsuariosService;
 
 public class ModelCadastrosTests {
 
-    public static Usuarios CadastrarUsuario(Instituicoes instituicao, UsuariosService usuariosService) {
+    public static Usuarios CadastrarUsuario(Instituicoes instituicao, UsuariosService usuariosService, String senha) {
 
         UsuariosDTO userDto = new UsuariosDTO(AleatoryString.getAlphaNumericString(7),
                 typeUsuario.ALUNO, AleatoryString.getAlphaNumericString(7),
-                AleatoryString.getAlphaNumericString(7),
+                senha,
                 AleatoryString.getAlphaNumericString(7), AleatoryString.getAlphaNumericString(7), true);
 
         Usuarios user = new Usuarios();

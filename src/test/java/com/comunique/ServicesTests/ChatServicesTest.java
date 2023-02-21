@@ -40,9 +40,9 @@ public class ChatServicesTest {
     public String GetChatByUserTest() {
         try {
             Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
-            Usuarios user1 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
-            Usuarios user2 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
-            Usuarios user3 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
+            Usuarios user1 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService, "6515");
+            Usuarios user2 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService, "6515");
+            Usuarios user3 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService, "6515");
             Chat chat = ModelCadastrosTests.CadastrarChat(user1, user2, chatService);
             Chat chat2 = ModelCadastrosTests.CadastrarChat(user1, user3, chatService);
             List<Chat> listChats = chatService.getChatByUser(user1);
@@ -62,8 +62,8 @@ public class ChatServicesTest {
     public String GetChatTest() {
         try {
             Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
-            Usuarios user1 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
-            Usuarios user2 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
+            Usuarios user1 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService, "6515");
+            Usuarios user2 = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService, "6515");
             Chat chat = ModelCadastrosTests.CadastrarChat(user1, user2, chatService);
             Optional<Chat> chat2 = chatService.getChatById(chat.getIdChat());
             System.out.println(chat2.get());

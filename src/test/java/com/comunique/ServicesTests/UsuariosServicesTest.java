@@ -49,7 +49,7 @@ public class UsuariosServicesTest {
     public String cadastrarExcluir() {
         try {
             Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
-            Usuarios usuario = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
+            Usuarios usuario = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService, "6515");
             usuariosService.Deletar(usuario.getIdUsuario());
             instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso Registrar e deletar usuario";
@@ -61,7 +61,7 @@ public class UsuariosServicesTest {
     public String GetUser() {
         try {
             Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
-            Usuarios usuario = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
+            Usuarios usuario = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService, "6515");
             Optional<Usuarios> usuarioBusca = usuariosService.getUser(usuario.getIdUsuario());
             if (usuarioBusca.isEmpty()) {
                 usuariosService.Deletar(usuario.getIdUsuario());
@@ -79,7 +79,7 @@ public class UsuariosServicesTest {
     public String UpdateUser() {
         try {
             Instituicoes instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
-            Usuarios usuario = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService);
+            Usuarios usuario = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService, "6515");
             usuario.setEmail("reter");
             usuario.setNomeUsuario("kghjjgh");
             usuario.setFotoBackground("ytyj");

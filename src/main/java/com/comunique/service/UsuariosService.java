@@ -33,8 +33,8 @@ public class UsuariosService {
 		return teste;
 	}
 
-	public List<Usuarios> getAllUsuariosInstituicao(UUID idInstituicao) {
-		return usuariosRepository.getAllUsuariosInstituicao(idInstituicao);
+	public List<Usuarios> getAllUsuariosInstituicao(Instituicoes instituicao) {
+		return usuariosRepository.findAllByInstituicao(instituicao);
 	}
 
 	@Transactional

@@ -22,10 +22,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.comunique.dto.UsuariosDTO;
+import com.comunique.model.Admins;
 import com.comunique.model.Chat;
 import com.comunique.model.Instituicoes;
 import com.comunique.model.Usuarios;
 import com.comunique.model.enums.typeUsuario;
+import com.comunique.service.AdminsService;
 import com.comunique.service.ChatService;
 import com.comunique.service.InstituicoesService;
 import com.comunique.service.MensagensService;
@@ -44,6 +46,8 @@ public class UsuariosController {
     ChatService chatService;
     @Autowired
     MensagensService mensagensService;
+    @Autowired
+    AdminsService adminsService;
 
     @GetMapping("/{email}/{senha}")
     public ResponseEntity<Usuarios> Login(@PathVariable(value = "email") String email,
@@ -57,18 +61,21 @@ public class UsuariosController {
     }
 
     @GetMapping("/getAllUsersIntituto/{idInstituto}/{emailUsuario}/{senhaUsuario}")
-    public ResponseEntity<List<Usuarios>> getAllUsuariosInstituto(@PathVariable(value = "idInstituto") UUID idInstituto,
+    public ResponseEntity<Object> getAllUsuariosInstituto(@PathVariable UUID idInstituto,
             @PathVariable(value = "emailUsuario") String email, @PathVariable(value = "senhaUsuario") String senha) {
         Optional<Usuarios> usuarioLogin = usuariosService.Login(email, senha);
+        Optional<Instituicoes> instituicao = instituicoesService.getInstituicao(idInstituto);
         if (usuarioLogin.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
+        } else if (instituicao.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            if (usuarioLogin.get().getInstituicao().getIdInstituicao() != idInstituto) {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            } else {
-                return new ResponseEntity<List<Usuarios>>(usuariosService.getAllUsuariosInstituicao(idInstituto),
+            if (instituicao.get() == usuarioLogin.get().getInstituicao()) {
+                return new ResponseEntity<>(usuariosService.getAllUsuariosInstituicao(instituicao.get()),
                         HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
         }
     }
@@ -86,42 +93,42 @@ public class UsuariosController {
 
     @PostMapping("/{nomeInstituicao}/{senhaInstituicao}")
     public ResponseEntity<Object> registrarUsuario(@RequestBody @Valid UsuariosDTO usuarioDto,
-            @PathVariable(value = "nomeInstituicao") String nomeInstituicao,
-            @PathVariable(value = "senhaInstituicao") String senhaInstituicao) {
+            @PathVariable String nomeInstituicao,
+            @PathVariable String senhaInstituicao) {
         if (usuarioDto.getTipoUsuario() == typeUsuario.ALUNO) {
             Optional<Instituicoes> testeInstituicao = instituicoesService.LoginUsuario(nomeInstituicao,
                     senhaInstituicao);
             if (testeInstituicao.isEmpty()) {
-                String error = "Você não possui autorização para se registrar nessa instituição";
-                return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             } else {
                 try {
                     Usuarios usuario = new Usuarios();
                     BeanUtils.copyProperties(usuarioDto, usuario);
-                    usuariosService.Cadastrar(usuario);
-                    return new ResponseEntity<>(usuario, HttpStatus.OK);
+                    usuario.setInstituicao(testeInstituicao.get());
+                    Usuarios cadastro = usuariosService.Cadastrar(usuario);
+                    return new ResponseEntity<>(cadastro, HttpStatus.OK);
                 } catch (Exception e) {
-                    String error = e.getMessage();
-                    return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             }
+
         } else if (usuarioDto.getTipoUsuario() == typeUsuario.PROFESSOR) {
             Optional<Instituicoes> testeInstituicao = instituicoesService.LoginProfessores(nomeInstituicao,
                     senhaInstituicao);
             if (testeInstituicao.isEmpty()) {
-                String error = "Você não possui autorização para se registrar nessa instituição";
-                return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             } else {
                 try {
                     Usuarios usuario = new Usuarios();
                     BeanUtils.copyProperties(usuarioDto, usuario);
-                    usuariosService.Cadastrar(usuario);
-                    return new ResponseEntity<>(usuario, HttpStatus.OK);
+                    usuario.setInstituicao(testeInstituicao.get());
+                    Usuarios cadastro = usuariosService.Cadastrar(usuario);
+                    return new ResponseEntity<>(cadastro, HttpStatus.OK);
                 } catch (Exception e) {
-                    String error = e.getMessage();
-                    return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             }
+
         } else {
             String error = "Tipo de usuario invalido";
             return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
@@ -129,7 +136,7 @@ public class UsuariosController {
     }
 
     @PutMapping("/{emailUsuario}/{senhaUsuario}")
-    public ResponseEntity<Object> updateUsuario(@RequestBody @Valid UsuariosDTO usuarioDto,
+    public ResponseEntity<Object> updateUsuario(@RequestBody @Valid UsuariosDTO dto,
             @PathVariable(value = "emailUsuario") String emailUsuario,
             @PathVariable(value = "senhaUsuario") String senhaUsuario) {
         Optional<Usuarios> usuario = usuariosService.Login(emailUsuario, senhaUsuario);
@@ -137,12 +144,39 @@ public class UsuariosController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
             try {
-                BeanUtils.copyProperties(usuario.get(), usuarioDto);
-                usuariosService.Cadastrar(usuario.get());
-                return new ResponseEntity<>(usuario.get(), HttpStatus.OK);
+                dto.setTipoUsuario(usuario.get().getTipoUsuario());
+                BeanUtils.copyProperties(usuario.get(), dto);
+                Usuarios user = usuariosService.Cadastrar(usuario.get());
+                return new ResponseEntity<>(user, HttpStatus.OK);
             } catch (Exception e) {
                 return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
+        }
+    }
+
+    @PutMapping("/admin/{nomeAdmin}/{senhaAdmin}/{id}")
+    public ResponseEntity<Object> updateUsuarioAdmin(@RequestBody @Valid UsuariosDTO dto,
+            @PathVariable String nomeAdmin, @PathVariable String senhaAdmin,
+            @PathVariable UUID id) {
+        Optional<Admins> admin = adminsService.Login(nomeAdmin, senhaAdmin);
+        Optional<Usuarios> usuario = usuariosService.getUser(id);
+        if (admin.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } else if (usuario.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            if (admin.get().getInstituicao() != usuario.get().getInstituicao()) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            } else {
+                try {
+                    BeanUtils.copyProperties(usuario.get(), dto);
+                    Usuarios user = usuariosService.Cadastrar(usuario.get());
+                    return new ResponseEntity<>(user, HttpStatus.OK);
+                } catch (Exception e) {
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            }
+
         }
     }
 
@@ -186,4 +220,32 @@ public class UsuariosController {
         }
     }
 
+    @DeleteMapping("/admin/{nomeAdmin}/{senhaAdmin}/{id}")
+    public ResponseEntity<Object> deletarUsuarioAdmin(@PathVariable String nomeAdmin, @PathVariable String senhaAdmin,
+            @PathVariable UUID id) {
+        Optional<Admins> admin = adminsService.Login(nomeAdmin, senhaAdmin);
+        Optional<Usuarios> usuario = usuariosService.getUser(id);
+        if (admin.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } else if (usuario.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            if (admin.get().getInstituicao() != usuario.get().getInstituicao()) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            } else {
+                try {
+                    List<Chat> chatsUsuario = chatService.getChatByUser(usuario.get());
+                    for (Chat chat : chatsUsuario) {
+                        mensagensService.DeleteForChat(chat);
+                    }
+                    chatService.DeletarAllByUsuario(usuario.get());
+                    usuariosService.Deletar(usuario.get().getIdUsuario());
+                    return new ResponseEntity<>(HttpStatus.OK);
+                } catch (Exception e) {
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            }
+
+        }
+    }
 }
