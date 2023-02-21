@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.comunique.functions.MD5Encoder;
@@ -35,6 +36,10 @@ public class UsuariosService {
 
 	public List<Usuarios> getAllUsuariosInstituicao(Instituicoes instituicao) {
 		return usuariosRepository.findAllByInstituicao(instituicao);
+	}
+
+	public List<Usuarios> getAllUsuariosInstituicaoPaginado(Instituicoes instituicao, Pageable pageable) {
+		return usuariosRepository.findAllByInstituicao(instituicao, pageable).getContent();
 	}
 
 	@Transactional
