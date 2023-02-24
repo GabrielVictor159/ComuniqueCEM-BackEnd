@@ -103,9 +103,9 @@ public class MensagensController {
     }
 
     @PutMapping("/confirmarEntrega/{emailUsuario}/{senhaUsuario}/{id}")
-    public ResponseEntity<Object> confirmarEntrega(@PathVariable String emailUsuario, @PathVariable String SenhaUsuario,
+    public ResponseEntity<Object> confirmarEntrega(@PathVariable String emailUsuario, @PathVariable String senhaUsuario,
             @PathVariable UUID id) {
-        Optional<Usuarios> usuario = usuariosService.Login(emailUsuario, SenhaUsuario);
+        Optional<Usuarios> usuario = usuariosService.Login(emailUsuario, senhaUsuario);
         Optional<Mensagens> mensagem = mensagensService.getMensagem(id);
 
         if (usuario.isEmpty()) {
@@ -129,9 +129,9 @@ public class MensagensController {
     }
 
     @PutMapping("/confirmarLida/{emailUsuario}/{senhaUsuario}/{id}")
-    public ResponseEntity<Object> confirmarLida(@PathVariable String emailUsuario, @PathVariable String SenhaUsuario,
+    public ResponseEntity<Object> confirmarLida(@PathVariable String emailUsuario, @PathVariable String senhaUsuario,
             @PathVariable UUID id) {
-        Optional<Usuarios> usuario = usuariosService.Login(emailUsuario, SenhaUsuario);
+        Optional<Usuarios> usuario = usuariosService.Login(emailUsuario, senhaUsuario);
         Optional<Mensagens> mensagem = mensagensService.getMensagem(id);
 
         if (usuario.isEmpty()) {
@@ -153,36 +153,39 @@ public class MensagensController {
             }
         }
     }
-
-    @PutMapping("/confirmarEntregaLida/{emailUsuario}/{senhaUsuario}/{id}")
-    public ResponseEntity<Object> confirmarEntregaLida(@PathVariable String emailUsuario,
-            @PathVariable String SenhaUsuario,
-            @PathVariable UUID id) {
-        Optional<Usuarios> usuario = usuariosService.Login(emailUsuario, SenhaUsuario);
-        Optional<Mensagens> mensagem = mensagensService.getMensagem(id);
-
-        if (usuario.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        } else if (mensagem.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else if (usuario.get().getIdUsuario() == mensagem.get().getUsuarioEnviou()) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        } else if (usuario.get().getIdUsuario() != mensagem.get().getUsuarioEnviou()) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        } else {
-            try {
-                mensagensService.Deletar(mensagem.get().getIdMensagens());
-                return new ResponseEntity<>(HttpStatus.OK);
-            } catch (Exception e) {
-                return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+    @PutMapping("/confirmarLidaChat/{emailUsuario}/{senhaUsuario}/{id}")
+public ResponseEntity<Object> confirmarLidaChat(@PathVariable String emailUsuario, @PathVariable String senhaUsuario,
+@PathVariable UUID id) {
+    Optional<Usuarios> usuario = usuariosService.Login(emailUsuario, senhaUsuario);
+    Optional<Chat> chat = chatService.getChatById(id);
+    if (usuario.isEmpty()) {
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    } else if (chat.isEmpty()) {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    else if (chat.get().getUsuario1() != usuario.get() && chat.get().getUsuario2() != usuario.get()) {
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    } else {
+        try {
+            
+            mensagensService.confirmarLidaChat(chat.get(), usuario.get());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>( e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+            
+     
+}
 
-    @DeleteMapping("/DeletarPedido")
+
+
+    @PostMapping("/DeletarPedido")
     public ResponseEntity<Object> DeletarPedido(@RequestBody @Valid Mensagens mensagem) {
         try {
             mensagem.setDeletada(true);
+            mensagem.setEntregue(false);
+            mensagem.setLida(false);
             Mensagens cadastro = mensagensService.Cadastrar(mensagem);
             return new ResponseEntity<>(cadastro, HttpStatus.OK);
         } catch (Exception e) {

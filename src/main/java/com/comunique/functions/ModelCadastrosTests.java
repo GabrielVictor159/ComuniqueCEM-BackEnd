@@ -93,8 +93,8 @@ public class ModelCadastrosTests {
     }
 
     public static Mensagens CadastrarMensagem(Chat chat, UUID idUsuario, MensagensService mensagensService) {
-        MensagensDTO mensagemDto = new MensagensDTO(idUsuario, AleatoryString.getAlphaNumericString(7), true,
-                true, false);
+        MensagensDTO mensagemDto = new MensagensDTO(idUsuario, AleatoryString.getAlphaNumericString(7), false,
+                false, false);
         Mensagens mensagem = new Mensagens();
         System.out.println("\n dto: " + mensagemDto);
         BeanUtils.copyProperties(mensagemDto, mensagem);

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.comunique.model.Chat;
 import com.comunique.model.Mensagens;
+import com.comunique.model.Usuarios;
 import com.comunique.repository.MensagensRepository;
 
 import jakarta.transaction.Transactional;
@@ -48,5 +49,9 @@ public class MensagensService {
     @Transactional
     public void DeleteForChat(Chat chat) {
         mensagensRepository.deleteAllByChat(chat);
+    }
+    @Transactional
+    public void confirmarLidaChat(Chat chat, Usuarios usuario) {
+        mensagensRepository.usuarioLeuChat(chat, usuario.getIdUsuario());
     }
 }
