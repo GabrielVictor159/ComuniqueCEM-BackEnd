@@ -10,8 +10,6 @@ public class AdminsDTO {
     @NotBlank
     private String senha;
 
-    @NotBlank
-
     public AdminsDTO() {
     }
 

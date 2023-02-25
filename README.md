@@ -1,3 +1,486 @@
+<div style="text-align: center">
+    <h1>DTOs</h1>
+</div>
+<h2>DTO admin</h2>
+
+| Propriedade | Tipo | Restrições |
+| --- | --- | --- |
+| nome | String | NotBlank |
+| senha | String | NotBlank |
+
+<h2>DTO adminMaster</h2>
+
+| Propriedade | Tipo | Restrições |
+| --- | --- | --- |
+| nome | String | NotBlank |
+| senha | String | NotBlank |
+
+<h2>DTO chat</h2>
+
+| Propriedade | Tipo | Restrições |
+| --- | --- | --- |
+| usuario1 | Usuarios | NotBlank |
+| usuario2 | Usuarios | NotBlank |
+
+<h2>DTO cronograma</h2>
+
+| Propriedade | Tipo | Restrições |
+| --- | --- | --- |
+| dataAtividade | Date | NotBlank |
+| cor | String | NotBlank |
+| prazo | int | NotBlank |
+| atividade | String | NotBlank |
+
+<h2>DTO instituições</h2>
+
+| Propriedade | Tipo | Restrições |
+| --- | --- | --- |
+| nome | String | NotBlank |
+| senha | String | NotBlank |
+| senhaProfessores | String | NotBlank |
+
+<h2>DTO mensagens</h2>
+
+| Propriedade | Tipo | Restrições |
+| --- | --- | --- |
+| usuarioEnviou | UUID | NotBlank |
+| mensagem | String | NotBlank |
+| lida | boolean | NotBlank |
+| entregue | boolean | NotBlank |
+| isfile | boolean | NotBlank |
+
+<h2>DTO noticias</h2>
+
+| Propriedade | Tipo | Restrições |
+| --- | --- | --- |
+| titulo | String | NotBlank |
+| imagem | String | NotBlank |
+| texto | String | NotBlank |
+
+<h2>DTO questões</h2>
+
+| Propriedade | Tipo | Restrições |
+| --- | --- | --- |
+| Titulo | String | NotBlank |
+| Resposta1 | String | NotBlank |
+| Resposta2 | String | NotBlank |
+| Resposta3 | String | NotBlank |
+| Resposta4 | String | NotBlank |
+| RespostaCorreta | String | NotBlank |
+
+<h2>DTO usuarios</h2>
+
+| Propriedade | Tipo | Restrições |
+| --- | --- | --- |
+| nomeUsuario | String | NotBlank |
+| tipoUsuario | typeUsuario | NotBlank |
+| email | String | NotBlank |
+| senha | String | NotBlank |
+| fotoPerfil | String | NotBlank |
+| fotoBackground | String | NotBlank |
+| usuarioOnline | boolean | NotBlank |
+
+<div style="text-align: center">
+    <h1>ENUMS</h1>
+</div>
+
+<h2>typeUsuario</h2>
+
+| Valor | Descrição |
+| --- | --- |
+| ALUNO | Usuário do tipo aluno |
+| PROFESSOR | Usuário do tipo professor |
+
+<div style="text-align: center">
+    <h1>MODELS</h1>
+</div>
+
+<h2>admins</h2>
+
+| Atributo    | Tipo         | Descrição                                                                                               |
+|-------------|--------------|---------------------------------------------------------------------------------------------------------|
+| idAdmin     | UUID         | Chave primária da tabela `admins`.                                                                      |
+| nome        | String       | Nome do administrador.                                                                                  |
+| senha       | String       | Senha do administrador.                                                                                 |
+| instituicao | Instituicoes | Instituição que o administrador pertence.                                                               |
+
+**Restrições:**
+
+- `idAdmin`:
+  - Tipo: `UUID`
+  - Restrições:
+    - Chave primária da tabela `admins`.
+
+- `nome`:
+  - Tipo: `String`
+  - Restrições:
+    - Não pode ser nulo;
+    - Deve ser único.
+
+- `senha`:
+  - Tipo: `String`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `instituicao`:
+  - Tipo: `Instituicoes`
+  - Restrições:
+    - Não pode ser nulo;
+    - Chave estrangeira da tabela `instituicoes`.
+
+
+<h2>adminsMaster</h2>
+
+| Atributo    | Tipo   | Descrição                                                         |
+|-------------|--------|-------------------------------------------------------------------|
+| idAdmin     | UUID   | Chave primária da tabela `adminsmaster`.                           |
+| nome        | String | Nome do administrador master.                                      |
+| senha       | String | Senha do administrador master.                                     |
+
+**Restrições:**
+
+- `idAdmin`:
+  - Tipo: `UUID`
+  - Restrições:
+    - Chave primária da tabela `adminsmaster`.
+
+- `nome`:
+  - Tipo: `String`
+  - Restrições:
+    - Não pode ser nulo;
+    - Deve ser único.
+
+- `senha`:
+  - Tipo: `String`
+  - Restrições:
+    - Não pode ser nulo.
+
+<h2>chat</h2>
+
+| Atributo  | Tipo     | Descrição                                                                                                     |
+|-----------|----------|---------------------------------------------------------------------------------------------------------------|
+| idChat    | UUID     | Chave primária da tabela `chat`.                                                                               |
+| usuario1  | Usuarios | Usuário que iniciou a conversa.                                                                                |
+| usuario2  | Usuarios | Usuário que recebeu o convite de conversa.                                                                     |
+
+**Restrições:**
+
+- `idChat`:
+  - Tipo: `UUID`
+  - Restrições:
+    - Chave primária da tabela `chat`.
+
+- `usuario1`:
+  - Tipo: `Usuarios`
+  - Restrições:
+    - Não pode ser nulo;
+    - Chave estrangeira da tabela `usuarios`.
+
+- `usuario2`:
+  - Tipo: `Usuarios`
+  - Restrições:
+    - Não pode ser nulo;
+    - Chave estrangeira da tabela `usuarios`.
+
+<h2>cronograma</h2>
+
+| Atributo        | Tipo     | Descrição                                                                                                       |
+|-----------------|----------|-----------------------------------------------------------------------------------------------------------------|
+| idCronograma   | UUID     | Chave primária da tabela `cronograma`.                                                                           |
+| dataAtividade  | Date     | Data em que a atividade deve ser realizada.                                                                      |
+| cor            | String   | Cor associada à atividade no cronograma.                                                                         |
+| prazo          | int      | Prazo em dias para a realização da atividade.                                                                    |
+| atividade      | String   | Nome da atividade.                                                                                              |
+| usuario        | Usuarios | Usuário responsável pela atividade.                                                                              |
+
+**Restrições:**
+
+- `idCronograma`:
+  - Tipo: `UUID`
+  - Restrições:
+    - Chave primária da tabela `cronograma`.
+
+- `dataAtividade`:
+  - Tipo: `Date`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `cor`:
+  - Tipo: `String`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `prazo`:
+  - Tipo: `int`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `atividade`:
+  - Tipo: `String`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `usuario`:
+  - Tipo: `Usuarios`
+  - Restrições:
+    - Não pode ser nulo;
+    - Chave estrangeira da tabela `usuarios`.
+
+
+<h2>instituições</h2>
+
+| Atributo               | Tipo   | Descrição                                                                     |
+|------------------------|--------|-------------------------------------------------------------------------------|
+| idInstituicao        | UUID   | Chave primária da tabela `instituicoes`.                                     |
+| nome                 | String | Nome da instituição.                                                          |
+| senha                | String | Senha para acesso à conta da instituição.                                      |
+| senhaProfessores     | String | Senha para acesso à conta dos professores associados à instituição.           |
+
+**Restrições:**
+
+- `idInstituicao`:
+  - Tipo: `UUID`
+  - Restrições:
+    - Chave primária da tabela `instituicoes`.
+
+- `nome`:
+  - Tipo: `String`
+  - Restrições:
+    - Não pode ser nulo;
+    - Deve ser único.
+
+- `senha`:
+  - Tipo: `String`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `senhaProfessores`:
+  - Tipo: `String`
+  - Restrições:
+    - Não pode ser nulo.
+
+<h2>mensagens</h2>
+
+| Atributo         | Tipo   | Descrição                                                                                          |
+|------------------|--------|----------------------------------------------------------------------------------------------------|
+| idMensagens      | UUID   | Chave primária da tabela `mensagens`.                                                               |
+| usuarioEnviou    | UUID   | Chave estrangeira que referencia o `idUsuario` do usuário que enviou a mensagem.                   |
+| mensagem         | String | Conteúdo da mensagem.                                                                               |
+| dataMensagem     | Date   | Data em que a mensagem foi enviada.                                                                  |
+| chat             | Chat   | Chave estrangeira que referencia o `idChat` do chat ao qual a mensagem pertence.                    |
+| lida             | boolean| Booleano que indica se a mensagem já foi lida ou não.                                               |
+| entregue         | boolean| Booleano que indica se a mensagem já foi entregue ao destinatário ou não.                           |
+| isfile           | boolean| Booleano que indica se a mensagem é um arquivo ou não.                                              |
+| deletada         | boolean| Booleano que indica se a mensagem foi deletada ou não.                                              |
+
+**Restrições:**
+
+- `idMensagens`:
+  - Tipo: `UUID`
+  - Restrições:
+    - Chave primária da tabela `mensagens`.
+
+- `usuarioEnviou`:
+  - Tipo: `UUID`
+  - Restrições:
+    - Não pode ser nulo;
+    - Chave estrangeira que referencia o `idUsuario` do usuário que enviou a mensagem.
+
+- `mensagem`:
+  - Tipo: `String`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `dataMensagem`:
+  - Tipo: `Date`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `chat`:
+  - Tipo: `Chat`
+  - Restrições:
+    - Não pode ser nulo;
+    - Chave estrangeira que referencia o `idChat` do chat ao qual a mensagem pertence.
+
+- `lida`:
+  - Tipo: `boolean`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `entregue`:
+  - Tipo: `boolean`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `isfile`:
+  - Tipo: `boolean`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `deletada`:
+  - Tipo: `boolean`
+  - Restrições:
+    - Não pode ser nulo.
+
+<h2>noticias</h2>
+
+| Atributo    | Tipo        | Descrição                                                                                       |
+|-------------|-------------|-------------------------------------------------------------------------------------------------|
+| idNoticia   | UUID        | Chave primária da tabela `noticias`.                                                             |
+| titulo      | String      | Título da notícia.                                                                              |
+| imagem      | String      | URL da imagem da notícia.                                                                        |
+| texto       | String      | Texto da notícia.                                                                               |
+| instituicao | Instituicoes | Instituição à qual a notícia pertence.                                                            |
+
+**Restrições:**
+
+- `idNoticia`:
+  - Tipo: `UUID`
+  - Restrições:
+    - Chave primária da tabela `noticias`.
+
+- `titulo`:
+  - Tipo: `String`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `imagem`:
+  - Tipo: `String`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `texto`:
+  - Tipo: `String`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `instituicao`:
+  - Tipo: `Instituicoes`
+  - Restrições:
+    - Não pode ser nulo;
+    - Chave estrangeira da tabela `instituicoes`.
+
+<h2>questões</h2>
+
+| Atributo        | Tipo             | Descrição                                                                                  |
+|----------------|------------------|-------------------------------------------------------------------------------------------|
+| idQuestao       | UUID             | Chave primária da tabela `questoes`.                                                       |
+| Titulo          | String           | Título da questão.                                                                         |
+| Resposta1       | String           | Primeira opção de resposta.                                                                 |
+| Resposta2       | String           | Segunda opção de resposta.                                                                  |
+| Resposta3       | String           | Terceira opção de resposta.                                                                 |
+| Resposta4       | String           | Quarta opção de resposta.                                                                   |
+| RespostaCorreta | String           | String que representa a resposta correta.                                                  |
+| instituicao     | Instituicoes     | Instituição à qual a questão está associada.                                               |
+
+**Restrições:**
+
+- `idQuestao`:
+  - Tipo: `UUID`
+  - Restrições:
+    - Chave primária da tabela `questoes`.
+
+- `Titulo`:
+  - Tipo: `String`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `Resposta1`:
+  - Tipo: `String`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `Resposta2`:
+  - Tipo: `String`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `Resposta3`:
+  - Tipo: `String`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `Resposta4`:
+  - Tipo: `String`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `RespostaCorreta`:
+  - Tipo: `String`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `instituicao`:
+  - Tipo: `Instituicoes`
+  - Restrições:
+    - Não pode ser nulo;
+    - Chave estrangeira da tabela `instituicoes`.
+
+<h2>usuarios</h2>
+
+| Atributo         | Tipo         | Descrição                                                                                                                                                                                                                                                                                  |
+|-----------------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| idUsuario       | UUID         | Chave primária da tabela `usuarios`.                                                                                                                                                                                                                                                      |
+| nomeUsuario     | String       | Nome do usuário.                                                                                                                                                                                                                                                                           |
+| tipoUsuario     | typeUsuario  | Tipo do usuário, podendo ser `ADMINISTRADOR`, `PROFESSOR` ou `ALUNO`.                                                                                                                                                                                                                     |
+| email           | String       | E-mail do usuário.                                                                                                                                                                                                                                                                         |
+| senha           | String       | Senha do usuário, armazenada de forma criptografada.                                                                                                                                                                                                                                      |
+| fotoPerfil      | String       | Caminho para a foto de perfil do usuário.                                                                                                                                                                                                                                                  |
+| fotoBackground  | String       | Caminho para a foto de fundo do perfil do usuário.                                                                                                                                                                                                                                         |
+| usuarioOnline   | boolean      | Flag que indica se o usuário está online no momento.                                                                                                                                                                                                                                      |
+| instituicao     | Instituicoes | Instituição a qual o usuário está associado.                                                                                                                                                                                                                                               |
+
+**Restrições:**
+
+- `idUsuario`:
+  - Tipo: `UUID`
+  - Restrições:
+    - Chave primária da tabela `usuarios`.
+
+- `nomeUsuario`:
+  - Tipo: `String`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `tipoUsuario`:
+  - Tipo: `typeUsuario`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `email`:
+  - Tipo: `String`
+  - Restrições:
+    - Não pode ser nulo;
+    - Deve ser único.
+
+- `senha`:
+  - Tipo: `String`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `fotoPerfil`:
+  - Tipo: `String`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `fotoBackground`:
+  - Tipo: `String`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `usuarioOnline`:
+  - Tipo: `boolean`
+  - Restrições:
+    - Não pode ser nulo.
+
+- `instituicao`:
+  - Tipo: `Instituicoes`
+  - Restrições:
+    - Não pode ser nulo;
+    - Chave estrangeira da tabela `instituicoes`.
+
+
+
 
 <div style="text-align: center">
     <h1>ROTAS</h1>
