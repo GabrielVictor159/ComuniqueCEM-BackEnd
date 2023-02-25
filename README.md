@@ -1,4 +1,4 @@
-<div style="text-align: center">
+<div style="width:100%; text-align: center">
     <h1>DTOs</h1>
 </div>
 <h2>DTO admin</h2>
@@ -80,7 +80,7 @@
 | fotoBackground | String | NotBlank |
 | usuarioOnline | boolean | NotBlank |
 
-<div style="text-align: center">
+<div style="width:100%; text-align: center">
     <h1>ENUMS</h1>
 </div>
 
@@ -91,7 +91,7 @@
 | ALUNO | Usuário do tipo aluno |
 | PROFESSOR | Usuário do tipo professor |
 
-<div style="text-align: center">
+<div style="width:100%; text-align: center">
     <h1>MODELS</h1>
 </div>
 
@@ -482,16 +482,17 @@
 
 
 
-<div style="text-align: center">
+<div style="width:100%; text-align: center">
     <h1>ROTAS</h1>
 </div>
+<br/><br/><br/>
 <h2>Rotas de administrador master</h2>
 
 | HTTP Method | Endpoint | Parâmetros | Descrição | Retornos Possíveis |
 |-------------|----------|------------|----------|--------------------|
 | GET | `/AdminsMaster/{nome}/{senha}` | `@PathVariable String nome, @PathVariable String senha` | Permite o login de um adminMaster | `200 OK` com os dados do adminMaster, `401 UNAUTHORIZED`
 
-
+<br/><br/><br/>
 <h2>Rotas de administrador</h2>
 
 | HTTP Method | Endpoint | Parâmetros | Descrição | Retornos Possíveis |
@@ -504,7 +505,7 @@
 | PUT | `/Admins/{nomeAdminMaster}/{senhaAdminMaster}/{id}` | `@RequestBody @Valid AdminsDTO dto, @PathVariable String nomeAdminMaster, @PathVariable String senhaAdminMaster, @PathVariable UUID id`| Permite que um adminMaster altere os dados de um determinado admin | `200 OK` com os dados alterados, `401 UNAUTHORIZED`, `500 INTERNAL_SERVER_ERROR` com o texto do erro, `404 NOT_FOUND`
 | DELETE | `/Admins/{nomeAdminMaster}/{senhaAdminMaster}/{id}` | `@PathVariable String nomeAdminMaster, @PathVariable String senhaAdminMaster, @PathVariable UUID id` | Permite que um adminMaster exclua um determinado admin | `200 OK`, `401 UNAUTHORIZED`, `500 INTERNAL_SERVER_ERROR` com o texto do erro, `404 NOT_FOUND`
 
-
+<br/><br/><br/>
 <h2>Rotas de instituiçoes</h2>
 
 | HTTP Method | Endpoint | Parâmetros | Descrição | Retornos Possíveis |
@@ -516,7 +517,7 @@
 | PUT | `/Instituicoes/{nomeAdmin}/{senhaAdmin}/{id}` | `@PathVariable String nomeAdmin, n@PathVariable String senhaAdmin, @PathVariable UUID id, @RequestBody @Valid InstituicoesDTO instituicaoDto` | Esse método possiblita que um adminMaster altere os dados de uma instituição | `200 OK` com os dados alterados, `401 UNAUTHORIZED`, `404 NOT_FOUND`, `500 INTERNAL_SERVER_ERROR` com o texto do erro, `400 BAD_REQUEST`
 | DELETE | `/Instituicoes/{nomeAdmin}/{senhaAdmin}/{id}` | `@PathVariable String nomeAdmin, @PathVariable String senhaAdmin, @PathVariable UUID id` | Esse método possibilita que um adminMaster exclua uma instituição, bem como todas as noticias, questões, usuarios, chats e mensagens relacionadas a ela | `200 OK`, `401 UNAUTHORIZED`, `404 NOT_FOUND`, `500 INTERNAL_SERVER_ERROR` com o texto do erro
 
-
+<br/><br/><br/>
 <h2>Rotas de usuarios</h2>
 
 | HTTP Method | Endpoint | Parâmetros | Descrição | Retornos Possíveis |
@@ -533,7 +534,7 @@
 | DELETE | `/Usuarios/admin/{emailUsuario}/{senhaUsuario}` | `@PathVariable String emailUsuario, @PathVariable String senhaUsuario` | Esse método possibilita que um admmin exclua do sistema um usuario, bem como os cronogramas, chats e mensagens relacionadas a ele no sistema, todas as mensagens armazenadas internamente nos dispositivos não serão apagadas por esse método | `200 OK`, `401 UNAUTHORIZED`, `500 INTERNAL_SERVER_ERROR` com o texto do erro
 
 
-
+<br/><br/><br/>
 <h2>Rotas de questões</h2>
 
 | HTTP Method | Endpoint | Parâmetros | Descrição | Retornos Possíveis |
@@ -546,7 +547,7 @@
 | DELETE | `/Questoes/{adminNome}/{senhaAdmin}/{id}` | `@PathVariable String adminNome, @PathVariable String senhaAdmin, @PathVariable UUID id` | Exclui uma determinada questão | `200 OK`, `401 UNAUTHORIZED`, `404 NOT_FOUND`, `500 INTERNAL_SERVER_ERROR` com o texto do erro
 
 
-
+<br/><br/><br/>
 <h2>Rotas de noticias</h2>
 
 | HTTP Method | Endpoint | Parâmetros | Descrição | Retornos Possíveis |
@@ -558,6 +559,7 @@
 | PUT          | `/Noticias/{adminNome}/{adminSenha}/{id}` | `@PathVariable UUID id, @PathVariable String adminNome, @PathVariable String adminSenha, @RequestBody @Valid NoticiasDTO noticiasDTO` | Altera uma determinada noticia através do seu id | `200 OK` com a noticia alterada, `401 UNAUTHORIZED`, `404 NOT_FOUND`, `500 INTERNAL_SERVER_ERROR` com o texto do erro, `400 BAD_REQUEST`
 | DELETE           | `/Noticias/{adminNome}/{adminSenha}/{id}` | `@PathVariable UUID id, @PathVariable String adminNome, @PathVariable String adminSenha` | Exclui uma determinada noticia através do seu id | `200 OK`, `404 NOT_FOUND`, `401 UNAUTHORIZED`, `500 INTERNAL_SERVER_ERROR` com o texto do erro 
 
+<br/><br/><br/>
 <h2>Rotas de cronograma</h2>
 
 | HTTP Method | Endpoint | Parâmetros | Descrição | Retornos Possíveis |
@@ -569,7 +571,7 @@
 | DELETE         | `/Cronograma/{emailUsuario}/{senhaUsuario}/{id}` | `(@PathVariable String emailUsuario, @PathVariable String senhaUsuario, @PathVariable UUID id` | Deleta um determinado cronograma | `200 OK`, `401 UNAUTHORIZED`, `404 NOT_FOUND`, `500 INTERNAL_SERVER_ERROR` com o texto do erro
 | DELETE         | `/Cronograma/{emailUsuario}/{senhaUsuario}` | `(@PathVariable String emailUsuario, @PathVariable String senhaUsuario` | Deleta todos os cronogramas de um usuario | `200 OK`, `401 UNAUTHORIZED`, `500 INTERNAL_SERVER_ERROR` com o texto do erro
 
-
+<br/><br/><br/>
 <h2>Rotas de chat</h2>
 
 HTTP Method | Endpoint | Parâmetros | Descrição | Retornos Possíveis
@@ -579,6 +581,7 @@ GET | `/Chat/getAll/{emailUsuario}/{senhaUsuario}` | `@PathVariable String email
 POST | `/Chat/{emailUsuario}/{senhaUsuario}/{idUsuario}` | `@PathVariable String emailUsuario`, `@PathVariable String senhaUsuario`, `@PathVariable UUID idUsuario` | Cadastra um novo chat entre o usuário logado e o usuário passado como parâmetro. | `OK`, `UNAUTHORIZED`, `NOT_FOUND`, `CONFLICT`
 DELETE | `/Chat/{emailUsuario}/{senhaUsuario}/{id}` | `@PathVariable String emailUsuario`, `@PathVariable String senhaUsuario`, `@PathVariable UUID id` | Deleta um chat específico do usuário logado. | `OK`, `UNAUTHORIZED`, `NOT_FOUND`
 
+<br/><br/><br/>
 <h2>Rotas de mensagens</h2>
 
 | HTTP Method | Endpoint                                                       | Parâmetros                                                                                                                | Descrição                                                                                    | Retornos Possíveis                                                  |
