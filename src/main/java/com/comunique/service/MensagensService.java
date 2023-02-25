@@ -1,5 +1,7 @@
 package com.comunique.service;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,6 +20,8 @@ import jakarta.transaction.Transactional;
 public class MensagensService {
     @Autowired
     MensagensRepository mensagensRepository;
+    @Autowired
+    ImageService imageService;
 
     @Transactional
     public Mensagens Cadastrar(Mensagens mensagem) {
@@ -37,21 +41,58 @@ public class MensagensService {
     }
 
     @Transactional
-    public void Deletar(UUID idMensagem) {
-        mensagensRepository.deleteById(idMensagem);
+    public void Deletar(Mensagens mensagem) throws IOException {
+        if (mensagem.getIsfile()) {
+            try {
+                imageService.excluir(extrairLink(mensagem.getMensagem()), "");
+            } catch (Exception e) {
+
+            }
+        }
+        mensagensRepository.deleteById(mensagem.getIdMensagens());
     }
 
     @Transactional
-    public void DeleteIn(List<UUID> idMensagens) {
-        mensagensRepository.deleteByidMensagensIn(idMensagens);
+    public void deleteIn(List<Mensagens> mensagens) {
+        List<UUID> listIds = new ArrayList<>();
+        for (Mensagens mensagem : mensagens) {
+            listIds.add(mensagem.getIdMensagens());
+            try {
+                if (mensagem.getIsfile()) {
+                    imageService.excluir(extrairLink(mensagem.getMensagem()), "");
+                }
+            } catch (Exception e) {
+
+            }
+        }
+
+        mensagensRepository.deleteByidMensagensIn(listIds);
+
     }
 
     @Transactional
     public void DeleteForChat(Chat chat) {
+        List<Mensagens> listMessage = this.getAllMensagensForChat(chat);
+        for (Mensagens mensagem : listMessage) {
+            try {
+                if (mensagem.getIsfile()) {
+                    imageService.excluir(extrairLink(mensagem.getMensagem()), "");
+                }
+            } catch (Exception e) {
+
+            }
+        }
         mensagensRepository.deleteAllByChat(chat);
     }
+
     @Transactional
     public void confirmarLidaChat(Chat chat, Usuarios usuario) {
         mensagensRepository.usuarioLeuChat(chat, usuario.getIdUsuario());
+    }
+
+    public static String extrairLink(String str) {
+        int inicio = str.indexOf("§") + 1;
+        int fim = str.lastIndexOf("§");
+        return str.substring(inicio, fim);
     }
 }

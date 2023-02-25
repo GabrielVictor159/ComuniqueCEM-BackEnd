@@ -17,5 +17,3 @@ public class StaticResourceConfig implements WebServerFactoryCustomizer<Configur
         factory.setDocumentRoot(new File("src/main/resources/static"));
     }
 }
-
-

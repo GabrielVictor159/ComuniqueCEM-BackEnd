@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import com.comunique.model.Chat;
 import com.comunique.model.Mensagens;
-import com.comunique.model.Usuarios;
 
 @Repository
 public interface MensagensRepository extends JpaRepository<Mensagens, UUID> {
@@ -25,8 +24,6 @@ public interface MensagensRepository extends JpaRepository<Mensagens, UUID> {
 
     @Modifying
     @Query("UPDATE Mensagens e SET e.lida = true, e.entregue = true WHERE e.chat = :chat AND e.usuarioEnviou != :usuarioId")
-    int usuarioLeuChat(@Param("chat") Chat chat,@Param("usuarioId") UUID usuarioId);
-
-    
+    int usuarioLeuChat(@Param("chat") Chat chat, @Param("usuarioId") UUID usuarioId);
 
 }

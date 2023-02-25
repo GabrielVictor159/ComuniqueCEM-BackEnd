@@ -2,7 +2,6 @@ package com.comunique.ServicesTests;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -57,11 +56,11 @@ public class MensagensServicesTest {
             Chat chat = ModelCadastrosTests.CadastrarChat(user1, user2, chatService);
             Mensagens mensagem1 = ModelCadastrosTests.CadastrarMensagem(chat, user1.getIdUsuario(), mensagensService);
             Mensagens mensagem2 = ModelCadastrosTests.CadastrarMensagem(chat, user2.getIdUsuario(), mensagensService);
-            List<UUID> idMensagens = new ArrayList<>();
-            idMensagens.add(mensagem1.getIdMensagens());
-            idMensagens.add(mensagem2.getIdMensagens());
+            List<Mensagens> idMensagens = new ArrayList<>();
+            idMensagens.add(mensagem1);
+            idMensagens.add(mensagem2);
             System.out.println(idMensagens);
-            mensagensService.DeleteIn(idMensagens);
+            mensagensService.deleteIn(idMensagens);
             chatService.Deletar(chat);
             usuariosService.Deletar(user1.getIdUsuario());
             usuariosService.Deletar(user2.getIdUsuario());
@@ -101,7 +100,7 @@ public class MensagensServicesTest {
             Chat chat = ModelCadastrosTests.CadastrarChat(user1, user2, chatService);
             Mensagens mensagem = ModelCadastrosTests.CadastrarMensagem(chat, user1.getIdUsuario(), mensagensService);
             System.out.println(mensagem);
-            mensagensService.Deletar(mensagem.getIdMensagens());
+            mensagensService.Deletar(mensagem);
             chatService.Deletar(chat);
             usuariosService.Deletar(user1.getIdUsuario());
             usuariosService.Deletar(user2.getIdUsuario());
