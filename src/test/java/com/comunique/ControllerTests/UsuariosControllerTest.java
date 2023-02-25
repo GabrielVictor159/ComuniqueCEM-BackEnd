@@ -100,7 +100,6 @@ public class UsuariosControllerTest {
                                 HttpMethod.GET,
                                 null,
                                 Object.class,
-                                instituicao.getIdInstituicao(),
                                 usuario.getEmail(),
                                 senhaUsuario);
                 assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -110,31 +109,9 @@ public class UsuariosControllerTest {
                                 HttpMethod.GET,
                                 null,
                                 Object.class,
-                                instituicao.getIdInstituicao(),
                                 usuario.getEmail(),
                                 senhaUsuario + "5");
                 assertEquals(HttpStatus.UNAUTHORIZED, response2.getStatusCode());
-                UUID idFalso = UUID.randomUUID();
-                ResponseEntity<Object> response3 = testRestTemplate.exchange(
-                                URI,
-                                HttpMethod.GET,
-                                null,
-                                Object.class,
-                                idFalso,
-                                usuario.getEmail(),
-                                senhaUsuario);
-                assertEquals(HttpStatus.NOT_FOUND, response3.getStatusCode());
-                Instituicoes novaInstituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
-                ResponseEntity<Object> response4 = testRestTemplate.exchange(
-                                URI,
-                                HttpMethod.GET,
-                                null,
-                                Object.class,
-                                novaInstituicao.getIdInstituicao(),
-                                usuario.getEmail(),
-                                senhaUsuario);
-                assertEquals(HttpStatus.UNAUTHORIZED, response4.getStatusCode());
-                instituicoesService.Deletar(novaInstituicao.getIdInstituicao());
         }
 
         @Test
@@ -145,49 +122,18 @@ public class UsuariosControllerTest {
                                 HttpMethod.GET,
                                 null,
                                 Object.class,
-                                instituicao.getIdInstituicao(),
                                 usuario.getEmail(),
                                 senhaUsuario);
                 assertEquals(HttpStatus.OK, response1.getStatusCode());
+                System.out.println(response1.getBody());
                 ResponseEntity<Object> response2 = testRestTemplate.exchange(
                                 URI + "?pagina=0&tamanho=10",
                                 HttpMethod.GET,
                                 null,
                                 Object.class,
-                                instituicao.getIdInstituicao(),
                                 usuario.getEmail(),
                                 senhaUsuario + "5");
                 assertEquals(HttpStatus.UNAUTHORIZED, response2.getStatusCode());
-                UUID idFalso = UUID.randomUUID();
-                ResponseEntity<Object> response3 = testRestTemplate.exchange(
-                                URI + "?pagina=0&tamanho=10",
-                                HttpMethod.GET,
-                                null,
-                                Object.class,
-                                idFalso,
-                                usuario.getEmail(),
-                                senhaUsuario);
-                assertEquals(HttpStatus.NOT_FOUND, response3.getStatusCode());
-                Instituicoes novaInstituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
-                ResponseEntity<Object> response4 = testRestTemplate.exchange(
-                                URI + "?pagina=0&tamanho=10",
-                                HttpMethod.GET,
-                                null,
-                                Object.class,
-                                novaInstituicao.getIdInstituicao(),
-                                usuario.getEmail(),
-                                senhaUsuario);
-                assertEquals(HttpStatus.UNAUTHORIZED, response4.getStatusCode());
-                instituicoesService.Deletar(novaInstituicao.getIdInstituicao());
-                ResponseEntity<Object> response5 = testRestTemplate.exchange(
-                                URI + "?pagina=1&tamanho=5",
-                                HttpMethod.GET,
-                                null,
-                                Object.class,
-                                instituicao.getIdInstituicao(),
-                                usuario.getEmail(),
-                                senhaUsuario);
-                assertEquals(HttpStatus.OK, response5.getStatusCode());
         }
 
         @Test

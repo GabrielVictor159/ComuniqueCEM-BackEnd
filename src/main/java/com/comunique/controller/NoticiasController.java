@@ -67,7 +67,7 @@ public class NoticiasController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getNoticia(@PathVariable(value = "id") UUID id) {
+    public ResponseEntity<Object> getNoticia(@PathVariable UUID id) {
         Optional<Noticias> noticia = noticiasService.getNoticia(id);
 
         if (noticia.isEmpty()) {

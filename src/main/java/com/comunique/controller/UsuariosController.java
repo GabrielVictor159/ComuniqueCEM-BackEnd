@@ -62,47 +62,34 @@ public class UsuariosController {
         }
     }
 
-    @GetMapping("/getAllUsersIntituto/{idInstituto}/{emailUsuario}/{senhaUsuario}")
-    public ResponseEntity<Object> getAllUsuariosInstituto(@PathVariable UUID idInstituto,
-            @PathVariable(value = "emailUsuario") String email, @PathVariable(value = "senhaUsuario") String senha) {
+    @GetMapping("/getAllUsersIntituto/{emailUsuario}/{senhaUsuario}")
+    public ResponseEntity<Object> getAllUsuariosInstituto(@PathVariable(value = "emailUsuario") String email,
+            @PathVariable(value = "senhaUsuario") String senha) {
         Optional<Usuarios> usuarioLogin = usuariosService.Login(email, senha);
-        Optional<Instituicoes> instituicao = instituicoesService.getInstituicao(idInstituto);
         if (usuarioLogin.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
-        } else if (instituicao.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            if (instituicao.get() == usuarioLogin.get().getInstituicao()) {
-                return new ResponseEntity<>(usuariosService.getAllUsuariosInstituicao(instituicao.get()),
-                        HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
+            return new ResponseEntity<>(usuariosService.getAllUsuariosInstituicao(usuarioLogin.get().getInstituicao()),
+                    HttpStatus.OK);
+
         }
     }
 
-    @GetMapping("/getAllUsuariosInstitutoPaginado/{idInstituto}/{emailUsuario}/{senhaUsuario}")
+    @GetMapping("/getAllUsuariosInstitutoPaginado/{emailUsuario}/{senhaUsuario}")
     public ResponseEntity<Object> getAllUsuariosInstitutoPaginado(
-            @PathVariable UUID idInstituto,
             @PathVariable(value = "emailUsuario") String email,
             @PathVariable(value = "senhaUsuario") String senha,
             @RequestParam(value = "pagina", defaultValue = "0") Integer pagina,
             @RequestParam(value = "tamanho", defaultValue = "10") Integer tamanho) {
         Optional<Usuarios> usuarioLogin = usuariosService.Login(email, senha);
-        Optional<Instituicoes> instituicao = instituicoesService.getInstituicao(idInstituto);
         if (usuarioLogin.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        } else if (instituicao.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            if (instituicao.get() == usuarioLogin.get().getInstituicao()) {
-                List<Usuarios> usuarios = usuariosService.getAllUsuariosInstituicaoPaginado(
-                        instituicao.get(), PageRequest.of(pagina, tamanho));
-                return new ResponseEntity<>(usuarios, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
+            List<Usuarios> usuarios = usuariosService.getAllUsuariosInstituicaoPaginado(
+                    usuarioLogin.get().getInstituicao(), PageRequest.of(pagina, tamanho));
+            return new ResponseEntity<>(usuarios, HttpStatus.OK);
+
         }
     }
 
