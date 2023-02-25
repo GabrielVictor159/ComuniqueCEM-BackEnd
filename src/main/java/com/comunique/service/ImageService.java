@@ -17,15 +17,22 @@ public class ImageService {
 
     public void persistir(MultipartFile image, String folder) throws IOException {
         byte[] bytes = ImageResizer.resizeImage(image, 1000);
+        System.out.println(image.getOriginalFilename());
         Path path = Paths.get(folder + image.getOriginalFilename());
+        System.out.println(path);
         if (!Files.exists(Paths.get(folder))) {
-            criarPastaDeImagens(folder);
+            Files.createDirectories(Paths.get(folder));
         }
         Files.write(path, bytes);
     }
 
     public void excluir(String nomeImagem, String folder) throws IOException {
         Path path = Paths.get(folder + nomeImagem);
+        Files.deleteIfExists(path);
+    }
+
+    public void excluirPasta(String folder) throws IOException {
+        Path path = Paths.get(folder);
         Files.deleteIfExists(path);
     }
 
