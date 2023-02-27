@@ -16,7 +16,7 @@ public class ImageService {
     private static final String ROOT = "src/main/resources/static/images/";
 
     public void persistir(MultipartFile image, String folder) throws IOException {
-        if (image.getContentType() == "image/jpeg") {
+        if (image.getContentType() == "image/jpeg" || image.getContentType() == "image/png") {
             byte[] bytes = ImageResizer.resizeImage(image, 1000);
             Path path = Paths.get(folder + image.getOriginalFilename());
             if (!Files.exists(Paths.get(folder))) {

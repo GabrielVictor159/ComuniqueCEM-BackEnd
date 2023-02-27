@@ -19,6 +19,9 @@ import jakarta.transaction.Transactional;
 public class UsuariosService {
 	@Autowired
 	UsuariosRepository usuariosRepository;
+	@Autowired
+	ImageService imageService;
+	private static String GlobalPath = "src/main/resources/static/images/";
 
 	@Transactional
 	public Usuarios Cadastrar(Usuarios usuario) {
@@ -44,12 +47,31 @@ public class UsuariosService {
 
 	@Transactional
 	public void Deletar(UUID id) {
+		Optional<Usuarios> usuario = this.getUser(id);
+		if (usuario.isPresent()) {
+			try {
+				imageService.excluir("", GlobalPath + usuario.get().getFotoPerfil());
+				imageService.excluir("", GlobalPath + usuario.get().getFotoBackground());
+			} catch (Exception e) {
+
+			}
+		}
+
 		usuariosRepository.deleteById(id);
 
 	}
 
 	@Transactional
 	public void DeletarAllByInstituicao(Instituicoes instituicao) {
+		List<Usuarios> list = this.getAllUsuariosInstituicao(instituicao);
+		for (Usuarios usuario : list) {
+			try {
+				imageService.excluir("", GlobalPath + usuario.getFotoPerfil());
+				imageService.excluir("", GlobalPath + usuario.getFotoBackground());
+			} catch (Exception e) {
+
+			}
+		}
 		usuariosRepository.deleteAllByInstituicao(instituicao);
 	}
 

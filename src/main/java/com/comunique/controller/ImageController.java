@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -169,7 +170,7 @@ public class ImageController {
                     dto.setIsfile(true);
                     dto.setEntregue(false);
                     dto.setLida(false);
-                    dto.setMensagem("§" + GlobalPath + usuarioLogin.get().getInstituicao().getNome() + "/"
+                    dto.setMensagem("§" + usuarioLogin.get().getInstituicao().getNome() + "/"
                             + removeSpecialCharacters(chat.get().getUsuario1().getEmail()) + "&"
                             + removeSpecialCharacters(chat.get().getUsuario2().getEmail()) + "§" + decodedMessage);
                     dto.setUsuarioEnviou(usuarioLogin.get().getIdUsuario());
@@ -177,13 +178,70 @@ public class ImageController {
                     BeanUtils.copyProperties(dto, novaMensagem);
                     mensagensService.Cadastrar(novaMensagem);
                     return ResponseEntity.status(HttpStatus.OK)
-                            .body(GlobalPath + usuarioLogin.get().getInstituicao().getNome() + "/"
+                            .body(usuarioLogin.get().getInstituicao().getNome() + "/"
                                     + removeSpecialCharacters(chat.get().getUsuario1().getEmail()) + "&"
                                     + removeSpecialCharacters(chat.get().getUsuario2().getEmail()));
                 } catch (IOException e) {
                     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                             .body("Houve um Erro: " + e.getMessage());
                 }
+            }
+        }
+    }
+
+    @PutMapping("/usuarioImagePerfil/{login}/{senha}")
+    public ResponseEntity<Object> updateImagePeril(@RequestParam("image") MultipartFile image,
+            @PathVariable String login, @PathVariable String senha) {
+        Optional<Usuarios> usuario = usuariosService.Login(login, senha);
+        if (usuario.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } else {
+            try {
+                imageService.persistir(image,
+                        GlobalPath + usuario.get().getInstituicao().getNome() + "/" + usuario.get().getIdUsuario());
+                try {
+                    if (usuario.get().getFotoPerfil() != "userIcon.png") {
+                        imageService.excluir("", GlobalPath + usuario.get().getFotoPerfil());
+                    }
+                } catch (Exception e) {
+
+                }
+                usuario.get().setFotoPerfil(
+                        usuario.get().getInstituicao().getNome() + "/" + usuario.get().getIdUsuario() + "/"
+                                + image.getOriginalFilename());
+                usuariosService.Cadastrar(usuario.get());
+                return new ResponseEntity<>(HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
+    @PutMapping("/usuarioImageBackground/{login}/{senha}")
+    public ResponseEntity<Object> updateImageBackground(@RequestParam("image") MultipartFile image,
+            @PathVariable String login, @PathVariable String senha) {
+        Optional<Usuarios> usuario = usuariosService.Login(login, senha);
+        if (usuario.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } else {
+            try {
+
+                imageService.persistir(image,
+                        GlobalPath + usuario.get().getInstituicao().getNome() + "/" + usuario.get().getIdUsuario());
+                try {
+                    if (usuario.get().getFotoBackground() != "background.png") {
+                        imageService.excluir("", GlobalPath + usuario.get().getFotoBackground());
+                    }
+                } catch (Exception e) {
+
+                }
+                usuario.get().setFotoBackground(
+                        usuario.get().getInstituicao().getNome() + "/" + usuario.get().getIdUsuario() + "/"
+                                + image.getOriginalFilename());
+                usuariosService.Cadastrar(usuario.get());
+                return new ResponseEntity<>(HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }

@@ -18,6 +18,8 @@ import jakarta.transaction.Transactional;
 public class NoticiasService {
     @Autowired
     NoticiasRepository noticiasRepository;
+    @Autowired
+    ImageService imageService;
 
     @Transactional
     public Noticias Cadastrar(Noticias noticia) {
@@ -41,12 +43,28 @@ public class NoticiasService {
     }
 
     @Transactional
-    public void Deletar(UUID noticia) {
-        noticiasRepository.deleteById(noticia);
+    public void Deletar(UUID id) {
+        Optional<Noticias> noticia = this.getNoticia(id);
+        if (noticia.isPresent()) {
+            try {
+                imageService.excluir("", noticia.get().getImagem());
+            } catch (Exception e) {
+
+            }
+        }
+        noticiasRepository.deleteById(id);
     }
 
     @Transactional
     public void DeletarAllByInstituicao(Instituicoes instituicao) {
+        List<Noticias> list = this.getAllNoticiasInsituto(instituicao);
+        for (Noticias noticia : list) {
+            try {
+                imageService.excluir("", noticia.getImagem());
+            } catch (Exception e) {
+
+            }
+        }
         noticiasRepository.deleteAllByInstituicao(instituicao);
     }
 }

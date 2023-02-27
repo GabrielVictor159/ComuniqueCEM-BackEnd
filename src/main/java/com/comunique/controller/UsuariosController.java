@@ -118,6 +118,8 @@ public class UsuariosController {
                     Usuarios usuario = new Usuarios();
                     BeanUtils.copyProperties(usuarioDto, usuario);
                     usuario.setInstituicao(testeInstituicao.get());
+                    usuario.setFotoBackground("background.png");
+                    usuario.setFotoPerfil("userIcon.png");
                     Usuarios cadastro = usuariosService.Cadastrar(usuario);
                     return new ResponseEntity<>(cadastro, HttpStatus.OK);
                 } catch (Exception e) {
@@ -158,6 +160,8 @@ public class UsuariosController {
         } else {
             try {
                 dto.setTipoUsuario(usuario.get().getTipoUsuario());
+                dto.setFotoPerfil(usuario.get().getFotoPerfil());
+                dto.setFotoBackground(usuario.get().getFotoBackground());
                 BeanUtils.copyProperties(usuario.get(), dto);
                 Usuarios user = usuariosService.Cadastrar(usuario.get());
                 return new ResponseEntity<>(user, HttpStatus.OK);
