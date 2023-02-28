@@ -22,6 +22,7 @@ public class MensagensService {
     MensagensRepository mensagensRepository;
     @Autowired
     ImageService imageService;
+    private static String GlobalPath = "src/main/resources/static/images/";
 
     @Transactional
     public Mensagens Cadastrar(Mensagens mensagem) {
@@ -44,7 +45,7 @@ public class MensagensService {
     public void Deletar(Mensagens mensagem) throws IOException {
         if (mensagem.getIsfile()) {
             try {
-                imageService.excluir(extrairLink(mensagem.getMensagem()), "");
+                imageService.excluir("", GlobalPath + extrairLink(mensagem.getMensagem()));
             } catch (Exception e) {
 
             }
@@ -59,7 +60,7 @@ public class MensagensService {
             listIds.add(mensagem.getIdMensagens());
             try {
                 if (mensagem.getIsfile()) {
-                    imageService.excluir(extrairLink(mensagem.getMensagem()), "");
+                    imageService.excluir("", GlobalPath + extrairLink(mensagem.getMensagem()));
                 }
             } catch (Exception e) {
 
@@ -76,7 +77,7 @@ public class MensagensService {
         for (Mensagens mensagem : listMessage) {
             try {
                 if (mensagem.getIsfile()) {
-                    imageService.excluir(extrairLink(mensagem.getMensagem()), "");
+                    imageService.excluir("", GlobalPath + extrairLink(mensagem.getMensagem()));
                 }
             } catch (Exception e) {
 

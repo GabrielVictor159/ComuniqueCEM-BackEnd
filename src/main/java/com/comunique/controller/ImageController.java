@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -60,22 +61,27 @@ public class ImageController {
         return email.replaceAll("[^a-zA-Z0-9]+", "");
     }
 
-    @PostMapping("/admin/{adminNome}/{senhaAdmin}/{path}")
+    @PostMapping(value = "/admin/{adminNome}/{senhaAdmin}/{path}", consumes = { MediaType.ALL_VALUE })
+
     public ResponseEntity<Object> uploadAdminImage(@RequestParam("image") MultipartFile image,
-            @PathVariable(value = "adminNome") String adminNome,
-            @PathVariable(value = "senhaNome") String senhaAdmin,
-            @PathVariable(value = "path") String path) {
+            @PathVariable String adminNome,
+            @PathVariable String senhaAdmin,
+            @PathVariable String path) {
         Optional<Admins> adminLogin = adminsService.Login(adminNome, senhaAdmin);
         if (adminLogin.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
             try {
-                String decodedPath = URLDecoder.decode(path, StandardCharsets.UTF_8.toString());
-                imageService.persistir(image,
-                        GlobalPath + adminLogin.get().getInstituicao().getNome() + "/" + decodedPath);
-                return ResponseEntity.status(HttpStatus.OK).body("Imagem adicionada");
-            } catch (IOException e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Houve um Erro: " + e.getMessage());
+                System.out.println(path);
+                String decodedPath = URLDecoder.decode(path,
+                        StandardCharsets.UTF_8.toString());
+                // imageService.persistir(image,
+                // GlobalPath + adminLogin.get().getInstituicao().getNome() + "/" +
+                // decodedPath);
+                System.out.println(decodedPath);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
