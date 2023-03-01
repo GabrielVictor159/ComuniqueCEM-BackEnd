@@ -2,6 +2,7 @@ package com.comunique.ControllerTests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.file.Files;
@@ -69,7 +70,10 @@ public class ImageControllerTest {
     private Usuarios user2;
     private String senhaUser2 = AleatoryString.getAlphaNumericString(7);
     private Chat chat;
-
+    private static String GlobalPath = "src/main/resources/static/images/";
+    public static String removeSpecialCharacters(String email) {
+        return email.replaceAll("[^a-zA-Z0-9]+", "");
+    }
     @Before
     public void setUp() {
         this.instituicao = ModelCadastrosTests.CadastarInstituicoes(instituicoesService);
@@ -81,6 +85,7 @@ public class ImageControllerTest {
 
     @After
     public void setDown() {
+        mensagensService.DeleteForChat(chat);
         chatService.Deletar(chat);
         usuariosService.DeletarAllByInstituicao(instituicao);
         adminsService.DeletarAllByInstituicao(instituicao);
@@ -88,27 +93,86 @@ public class ImageControllerTest {
     }
 
     @Test
-    public void postAdmin() throws IOException, NoSuchMethodException, SecurityException {
+    public void updateImagePerfilTest() throws IOException, NoSuchMethodException, SecurityException {
         Path imagePath = Paths.get("src/test/resources/images/test.jpg");
+
+        FileSystemResource imageResource = new FileSystemResource(imagePath.toFile());
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("image", imageResource);
         assertEquals(true, Files.exists(imagePath));
-        FileSystemResource resource = new FileSystemResource(imagePath.toFile());
-        MultipartFile image = new MockMultipartFile("test.jpg", "test.jpg", "image/jpeg", resource.getInputStream());
-        String URI = Reflections.getURI(ImageController.class, "uploadAdminImage");
-        String originalString = "Hello, World!";
-        String encodedString = URLEncoder.encode(originalString, "UTF-8");
+        String URI = Reflections.getURI(ImageController.class, "updateImagePeril");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-
-        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("image", image);
-
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
         ResponseEntity<Object> response = testRestTemplate.exchange(
-                URI,
-                HttpMethod.POST,
-                new HttpEntity<>(body),
-                Object.class, admin.getNome(), senhaAdmin, encodedString);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-
+            URI,
+            HttpMethod.PUT,
+            requestEntity,
+            Object.class, user1.getEmail(), senhaUser1);
+    Path newPath = Paths.get(GlobalPath+user1.getInstituicao().getNome()+"/"+removeSpecialCharacters(user1.getEmail())+"/"+imageResource.getFilename());
+    assertEquals(true, Files.exists(newPath));
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    ResponseEntity<Object> response2 = testRestTemplate.exchange(
+        URI,
+        HttpMethod.PUT,
+        requestEntity,
+        Object.class, user1.getEmail(), senhaUser1+"5");
+assertEquals(HttpStatus.UNAUTHORIZED, response2.getStatusCode());
     }
+    @Test
+    public void updateImageBackgroundTest() throws IOException, NoSuchMethodException, SecurityException {
+        Path imagePath = Paths.get("src/test/resources/images/test.jpg");
+
+        FileSystemResource imageResource = new FileSystemResource(imagePath.toFile());
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("image", imageResource);
+        assertEquals(true, Files.exists(imagePath));
+        String URI = Reflections.getURI(ImageController.class, "updateImageBackground");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+        ResponseEntity<Object> response = testRestTemplate.exchange(
+            URI,
+            HttpMethod.PUT,
+            requestEntity,
+            Object.class, user1.getEmail(), senhaUser1);
+    Path newPath = Paths.get(GlobalPath+user1.getInstituicao().getNome()+"/"+removeSpecialCharacters(user1.getEmail())+"/"+imageResource.getFilename());
+    assertEquals(true, Files.exists(newPath));
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    ResponseEntity<Object> response2 = testRestTemplate.exchange(
+            URI,
+            HttpMethod.PUT,
+            requestEntity,
+            Object.class, user1.getEmail(), senhaUser1+"5");
+    assertEquals(HttpStatus.UNAUTHORIZED, response2.getStatusCode());
+    }
+
+
+    @Test
+    public void mensagensImagensTest() throws IOException, NoSuchMethodException, SecurityException {
+        Path imagePath = Paths.get("src/test/resources/images/test.jpg");
+
+        FileSystemResource imageResource = new FileSystemResource(imagePath.toFile());
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("image", imageResource);
+        assertEquals(true, Files.exists(imagePath));
+        String URI = Reflections.getURI(ImageController.class, "uploadChatImage");
+        System.out.println(URI);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+        String Mensagem = AleatoryString.getAlphaNumericString(7);
+        String encoderMensagem = URLEncoder.encode(Mensagem, "UTF-8");
+        ResponseEntity<Object> response = testRestTemplate.exchange(
+            URI,
+            HttpMethod.POST,
+            requestEntity,
+            Object.class, user1.getEmail(), senhaUser1,chat.getIdChat(), encoderMensagem);
+    Path newPath = Paths.get(GlobalPath+user1.getInstituicao().getNome()+ "/"
+    + removeSpecialCharacters(chat.getIdChat().toString()) +"/"+imageResource.getFilename());
+    assertEquals(true, Files.exists(newPath));
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+    
 
 }

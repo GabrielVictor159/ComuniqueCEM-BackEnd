@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -60,94 +61,7 @@ public class ImageController {
     public static String removeSpecialCharacters(String email) {
         return email.replaceAll("[^a-zA-Z0-9]+", "");
     }
-
-    @PostMapping(value = "/admin/{adminNome}/{senhaAdmin}/{path}", consumes = { MediaType.ALL_VALUE })
-
-    public ResponseEntity<Object> uploadAdminImage(@RequestParam("image") MultipartFile image,
-            @PathVariable String adminNome,
-            @PathVariable String senhaAdmin,
-            @PathVariable String path) {
-        Optional<Admins> adminLogin = adminsService.Login(adminNome, senhaAdmin);
-        if (adminLogin.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        } else {
-            try {
-                System.out.println(path);
-                String decodedPath = URLDecoder.decode(path,
-                        StandardCharsets.UTF_8.toString());
-                // imageService.persistir(image,
-                // GlobalPath + adminLogin.get().getInstituicao().getNome() + "/" +
-                // decodedPath);
-                System.out.println(decodedPath);
-                return new ResponseEntity<>(HttpStatus.OK);
-            } catch (Exception e) {
-                return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-    }
-
-    @DeleteMapping("/admin/{adminNome}/{senhaAdmin}/{path}")
-    public ResponseEntity<Object> deleteAdminImage(
-            @PathVariable(value = "adminNome") String adminNome,
-            @PathVariable(value = "senhaNome") String senhaAdmin,
-            @PathVariable(value = "path") String path) {
-        Optional<Admins> adminLogin = adminsService.Login(adminNome, senhaAdmin);
-        if (adminLogin.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        } else {
-            try {
-                String decodedPath = URLDecoder.decode(path, StandardCharsets.UTF_8.toString());
-                imageService.excluir(imageService.removePath(decodedPath),
-                        GlobalPath + adminLogin.get().getInstituicao().getNome() + "/"
-                                + imageService.removeNameForPath(decodedPath));
-                return ResponseEntity.status(HttpStatus.OK).body("Imagem apagada");
-            } catch (IOException e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Houve um Erro: " + e.getMessage());
-            }
-        }
-    }
-
-    @PostMapping("/adminMaster/{adminNome}/{senhaAdmin}/{path}")
-    public ResponseEntity<Object> uploadAdminMasterImage(@RequestParam("image") MultipartFile image,
-            @PathVariable(value = "adminNome") String adminNome,
-            @PathVariable(value = "senhaNome") String senhaAdmin,
-            @PathVariable(value = "path") String path) {
-        Optional<AdminsMaster> adminLogin = adminsMasterService.Login(adminNome, senhaAdmin);
-        if (adminLogin.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        } else {
-            try {
-                String decodedPath = URLDecoder.decode(path, StandardCharsets.UTF_8.toString());
-                imageService.persistir(image,
-                        GlobalPath + decodedPath);
-                return ResponseEntity.status(HttpStatus.OK).body("Imagem adicionada");
-            } catch (IOException e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Houve um Erro: " + e.getMessage());
-            }
-        }
-    }
-
-    @DeleteMapping("/adminMaster/{adminNome}/{senhaAdmin}/{path}")
-    public ResponseEntity<Object> deleteAdminMasterImage(
-            @PathVariable(value = "adminNome") String adminNome,
-            @PathVariable(value = "senhaNome") String senhaAdmin,
-            @PathVariable(value = "path") String path) {
-        Optional<AdminsMaster> adminLogin = adminsMasterService.Login(adminNome, senhaAdmin);
-        if (adminLogin.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        } else {
-            try {
-                String decodedPath = URLDecoder.decode(path, StandardCharsets.UTF_8.toString());
-                imageService.excluir(imageService.removePath(decodedPath),
-                        GlobalPath
-                                + imageService.removeNameForPath(decodedPath));
-                return ResponseEntity.status(HttpStatus.OK).body("Imagem apagada");
-            } catch (IOException e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Houve um Erro: " + e.getMessage());
-            }
-        }
-    }
-
+    
     @PostMapping("/mensagens/{usuarioNome}/{usuarioSenha}/{idChat}/{mensagem}")
     public ResponseEntity<Object> uploadChatImage(@RequestParam("image") MultipartFile image,
             @PathVariable String usuarioNome,
@@ -169,27 +83,23 @@ public class ImageController {
                 try {
                     String decodedMessage = URLDecoder.decode(mensagem, StandardCharsets.UTF_8.toString());
                     imageService.persistir(image,
-                            GlobalPath + usuarioLogin.get().getInstituicao().getNome() + "/"
-                                    + removeSpecialCharacters(chat.get().getUsuario1().getEmail()) + "&"
-                                    + removeSpecialCharacters(chat.get().getUsuario2().getEmail()));
+                    GlobalPath + usuarioLogin.get().getInstituicao().getNome() + "/"
+                    +removeSpecialCharacters(chat.get().getIdChat().toString())+ "/"
+                    );
                     MensagensDTO dto = new MensagensDTO();
                     dto.setIsfile(true);
                     dto.setEntregue(false);
                     dto.setLida(false);
                     dto.setMensagem("§" + usuarioLogin.get().getInstituicao().getNome() + "/"
-                            + removeSpecialCharacters(chat.get().getUsuario1().getEmail()) + "&"
-                            + removeSpecialCharacters(chat.get().getUsuario2().getEmail()) + "§" + decodedMessage);
+                    +removeSpecialCharacters(chat.get().getIdChat().toString())+ "/"+image.getOriginalFilename() + "§" + decodedMessage);
                     dto.setUsuarioEnviou(usuarioLogin.get().getIdUsuario());
                     Mensagens novaMensagem = new Mensagens();
                     BeanUtils.copyProperties(dto, novaMensagem);
+                    novaMensagem.setChat(chat.get());
                     mensagensService.Cadastrar(novaMensagem);
-                    return ResponseEntity.status(HttpStatus.OK)
-                            .body(usuarioLogin.get().getInstituicao().getNome() + "/"
-                                    + removeSpecialCharacters(chat.get().getUsuario1().getEmail()) + "&"
-                                    + removeSpecialCharacters(chat.get().getUsuario2().getEmail()));
+                    return new ResponseEntity<>(HttpStatus.OK);
                 } catch (IOException e) {
-                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                            .body("Houve um Erro: " + e.getMessage());
+                    return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             }
         }
@@ -204,16 +114,16 @@ public class ImageController {
         } else {
             try {
                 imageService.persistir(image,
-                        GlobalPath + usuario.get().getInstituicao().getNome() + "/" + usuario.get().getIdUsuario());
+                        GlobalPath + usuario.get().getInstituicao().getNome() + "/"+ removeSpecialCharacters(usuario.get().getEmail()) + "/");
                 try {
                     if (usuario.get().getFotoPerfil() != "userIcon.png") {
-                        imageService.excluir("", GlobalPath + usuario.get().getFotoPerfil());
+                        imageService.excluir( GlobalPath + usuario.get().getFotoPerfil());
                     }
                 } catch (Exception e) {
 
                 }
                 usuario.get().setFotoPerfil(
-                        usuario.get().getInstituicao().getNome() + "/" + usuario.get().getIdUsuario() + "/"
+                        usuario.get().getInstituicao().getNome() + "/" + removeSpecialCharacters(usuario.get().getEmail()) + "/"
                                 + image.getOriginalFilename());
                 usuariosService.Cadastrar(usuario.get());
                 return new ResponseEntity<>(HttpStatus.OK);
@@ -233,17 +143,17 @@ public class ImageController {
             try {
 
                 imageService.persistir(image,
-                        GlobalPath + usuario.get().getInstituicao().getNome() + "/" + usuario.get().getIdUsuario());
+                GlobalPath + usuario.get().getInstituicao().getNome() + "/"+ removeSpecialCharacters(usuario.get().getEmail()) + "/");
                 try {
                     if (usuario.get().getFotoBackground() != "background.png") {
-                        imageService.excluir("", GlobalPath + usuario.get().getFotoBackground());
+                        imageService.excluir( GlobalPath + usuario.get().getFotoBackground());
                     }
                 } catch (Exception e) {
 
                 }
                 usuario.get().setFotoBackground(
-                        usuario.get().getInstituicao().getNome() + "/" + usuario.get().getIdUsuario() + "/"
-                                + image.getOriginalFilename());
+                    usuario.get().getInstituicao().getNome() + "/" + removeSpecialCharacters(usuario.get().getEmail()) + "/"
+                    + image.getOriginalFilename());
                 usuariosService.Cadastrar(usuario.get());
                 return new ResponseEntity<>(HttpStatus.OK);
             } catch (Exception e) {

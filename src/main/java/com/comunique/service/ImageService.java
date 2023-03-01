@@ -35,9 +35,15 @@ public class ImageService {
 
     }
 
-    public void excluir(String nomeImagem, String folder) throws IOException {
-        Path path = Paths.get(folder + nomeImagem);
+    public void excluir(String folder) throws IOException {
+        Path path = Paths.get(folder );
         Files.deleteIfExists(path);
+        Path parentPath = path.getParent();
+
+        while (Files.isDirectory(parentPath) && Files.list(parentPath).count() == 0 && parentPath.getNameCount() > 1) {
+            Files.delete(parentPath);
+            parentPath = parentPath.getParent();
+        }
     }
 
     public void excluirPasta(String folder) throws IOException {

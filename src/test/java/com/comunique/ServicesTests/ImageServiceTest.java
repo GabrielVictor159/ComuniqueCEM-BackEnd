@@ -60,7 +60,7 @@ public class ImageServiceTest {
         Path path = Paths.get(folder + image.getOriginalFilename());
         assertTrue(Files.exists(path));
 
-        imageService.excluir(image.getOriginalFilename(), folder);
+        imageService.excluir(folder + image.getOriginalFilename());
         assertFalse(Files.exists(path));
     }
 

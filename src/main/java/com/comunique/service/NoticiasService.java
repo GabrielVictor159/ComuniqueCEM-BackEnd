@@ -47,7 +47,7 @@ public class NoticiasService {
         Optional<Noticias> noticia = this.getNoticia(id);
         if (noticia.isPresent()) {
             try {
-                imageService.excluir("", noticia.get().getImagem());
+                imageService.excluir( noticia.get().getImagem());
             } catch (Exception e) {
 
             }
@@ -60,7 +60,7 @@ public class NoticiasService {
         List<Noticias> list = this.getAllNoticiasInsituto(instituicao);
         for (Noticias noticia : list) {
             try {
-                imageService.excluir("", noticia.getImagem());
+                imageService.excluir( noticia.getImagem());
             } catch (Exception e) {
 
             }

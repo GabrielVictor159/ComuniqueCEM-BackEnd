@@ -45,7 +45,7 @@ public class MensagensService {
     public void Deletar(Mensagens mensagem) throws IOException {
         if (mensagem.getIsfile()) {
             try {
-                imageService.excluir("", GlobalPath + extrairLink(mensagem.getMensagem()));
+                imageService.excluir( GlobalPath + extrairLink(mensagem.getMensagem()));
             } catch (Exception e) {
 
             }
@@ -60,7 +60,7 @@ public class MensagensService {
             listIds.add(mensagem.getIdMensagens());
             try {
                 if (mensagem.getIsfile()) {
-                    imageService.excluir("", GlobalPath + extrairLink(mensagem.getMensagem()));
+                    imageService.excluir( GlobalPath + extrairLink(mensagem.getMensagem()));
                 }
             } catch (Exception e) {
 
@@ -77,7 +77,7 @@ public class MensagensService {
         for (Mensagens mensagem : listMessage) {
             try {
                 if (mensagem.getIsfile()) {
-                    imageService.excluir("", GlobalPath + extrairLink(mensagem.getMensagem()));
+                    imageService.excluir( GlobalPath + extrairLink(mensagem.getMensagem()));
                 }
             } catch (Exception e) {
 
