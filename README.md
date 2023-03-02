@@ -595,3 +595,14 @@ DELETE | `/Chat/{emailUsuario}/{senhaUsuario}/{id}` | `@PathVariable String emai
 | POST        | `/Mensagens/DeletarPedido`                                               | `@RequestBody @Valid Mensagens mensagem`                                                                                   | Marca uma mensagem como deletada, não entregue e não lida                                      | `200 OK` com a mensagem recém-adicionada ou `500 Internal Server Error` ou `400 BAD_REQUEST` |
 | DELETE      | `/Mensagens/DeletarConfirmar/{id}`                                        | `@PathVariable UUID id`                                                                                                    | Deleta uma mensagem                                                                           | `200 OK` ou `404 Not Found` ou `500 Internal Server Error`            |
 
+
+<br/><br/><br/>
+<h2>Rotas de imagens</h2>
+
+| HTTP Method | Endpoint | Parâmetros | Descrição | Retornos Possíveis |
+|-------------|----------|------------|----------|--------------------|
+| POST | `/Imagens/mensagens/{usuarioNome}/{usuarioSenha}/{idChat}/{mensagem}` | `@RequestParam("image") MultipartFile image, @PathVariable String usuarioNome, @PathVariable String usuarioSenha, @PathVariable UUID idChat, @PathVariable String mensagem` | Metodo para enviar mensagens com imagens | `200 OK`, `401 UNAUTHORIZED`, `404 NOT_FOUND`, `500 Internal Server Error` Com a mensagem de erro.
+| PUT | `/Imagens/usuarioImagePerfil/{login}/{senha}` | `@RequestParam("image") MultipartFile image, @PathVariable String login, @PathVariable String senha` | Método para trocar a imagem de perfil do usuario | `200 OK`, `401 UNAUTHORIZED`, `500 INTERNAL_SERVER_ERROR` Com a mensagem de erro.
+| PUT | `/Imagens/usuarioImageBackground/{login}/{senha}` | `@RequestParam("image") MultipartFile image, @PathVariable String login, @PathVariable String senha` | Método para trocar a imagem de background do usuario | `200 OK`, `401 UNAUTHORIZED`, `500 INTERNAL_SERVER_ERROR` Com a mensagem de erro.
+
+

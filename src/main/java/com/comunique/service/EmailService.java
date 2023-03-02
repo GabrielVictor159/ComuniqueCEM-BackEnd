@@ -1,9 +1,12 @@
 package com.comunique.service;
 
 import java.util.Properties;
+
+import javax.mail.AuthenticationFailedException;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
+import javax.mail.SendFailedException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
@@ -42,10 +45,14 @@ public class EmailService {
 
 	            return "E-mail enviado com sucesso";
 	        } catch (AddressException e) {
-	           return "Endereço de e-mail inválido: " + email.getTo();
-	        } catch (MessagingException e) {
-	           return "Ocorreu um erro ao enviar o e-mail: " + e.getMessage();
-	        }
+				return "Endereço de e-mail inválido: " + email.getTo();
+			} catch (AuthenticationFailedException e) {
+				return "Falha na autenticação: " + e.getMessage();
+			} catch (SendFailedException e) {
+				return "Erro no envio: " + e.getMessage();
+			}  catch (MessagingException e) {
+				return "Ocorreu um erro ao enviar o e-mail: " + e.getMessage();
+			}
 	
 	    }
 }
