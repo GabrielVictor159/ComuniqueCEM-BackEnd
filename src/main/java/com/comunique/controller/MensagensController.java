@@ -3,6 +3,7 @@ package com.comunique.controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -68,6 +69,31 @@ public class MensagensController {
         } else {
             try {
                 List<Mensagens> mensagens = mensagensService.getAllMensagensForChat(chat.get());
+                for (Mensagens mensagem : mensagens) {
+                    mensagem.add(
+                            linkTo(methodOn(MensagensController.class).getMessage(mensagem.getIdMensagens()))
+                                    .withSelfRel());
+                }
+                return new ResponseEntity<>(mensagens, HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
+    @GetMapping("/getAllUser/{emailUsuario}/{senhaUsuario}")
+    public ResponseEntity<Object> getAllMessageUser(@PathVariable String emailUsuario,
+            @PathVariable String senhaUsuario) {
+        Optional<Usuarios> usuario = usuariosService.Login(emailUsuario, senhaUsuario);
+        if (usuario.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } else {
+            try {
+                List<Chat> chats = chatService.getChatByUser(usuario.get());
+                List<Mensagens> mensagens = new ArrayList<>();
+                for (Chat chat : chats) {
+                    mensagens.addAll(mensagensService.getAllMensagensForChat(chat));
+                }
                 for (Mensagens mensagem : mensagens) {
                     mensagem.add(
                             linkTo(methodOn(MensagensController.class).getMessage(mensagem.getIdMensagens()))

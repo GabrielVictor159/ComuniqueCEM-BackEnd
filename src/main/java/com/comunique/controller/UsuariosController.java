@@ -118,7 +118,7 @@ public class UsuariosController {
                     Usuarios usuario = new Usuarios();
                     BeanUtils.copyProperties(usuarioDto, usuario);
                     usuario.setInstituicao(testeInstituicao.get());
-                    usuario.setFotoBackground("background.png");
+                    usuario.setFotoBackground("background.jpg");
                     usuario.setFotoPerfil("userIcon.png");
                     Usuarios cadastro = usuariosService.Cadastrar(usuario);
                     return new ResponseEntity<>(cadastro, HttpStatus.OK);
@@ -162,7 +162,7 @@ public class UsuariosController {
                 dto.setTipoUsuario(usuario.get().getTipoUsuario());
                 dto.setFotoPerfil(usuario.get().getFotoPerfil());
                 dto.setFotoBackground(usuario.get().getFotoBackground());
-                BeanUtils.copyProperties(usuario.get(), dto);
+                BeanUtils.copyProperties(dto, usuario.get());
                 Usuarios user = usuariosService.Cadastrar(usuario.get());
                 return new ResponseEntity<>(user, HttpStatus.OK);
             } catch (Exception e) {
@@ -186,7 +186,7 @@ public class UsuariosController {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             } else {
                 try {
-                    BeanUtils.copyProperties(usuario.get(), dto);
+                    BeanUtils.copyProperties(dto, usuario.get());
                     Usuarios user = usuariosService.Cadastrar(usuario.get());
                     return new ResponseEntity<>(user, HttpStatus.OK);
                 } catch (Exception e) {

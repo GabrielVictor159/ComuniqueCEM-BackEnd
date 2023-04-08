@@ -9,10 +9,12 @@ public class SchedulerConfig implements SchedulingConfigurer {
 
     @Scheduled(cron = "0 0 0 * * *")
     public void runEveryDay() {
+        
     }
 
     @Scheduled(cron = "0 0 0 1 * ?")
     public void runEveryMonth() {
+
     }
 
 }
