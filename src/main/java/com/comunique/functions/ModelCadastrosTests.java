@@ -43,7 +43,7 @@ public class ModelCadastrosTests {
         UsuariosDTO userDto = new UsuariosDTO(AleatoryString.getAlphaNumericString(7),
                 typeUsuario.ALUNO, AleatoryString.getAlphaNumericString(7),
                 senha,
-                AleatoryString.getAlphaNumericString(7), AleatoryString.getAlphaNumericString(7), true);
+                AleatoryString.getAlphaNumericString(7), true);
 
         Usuarios user = new Usuarios();
         BeanUtils.copyProperties(userDto, user);

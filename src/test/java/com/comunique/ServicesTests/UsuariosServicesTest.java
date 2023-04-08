@@ -82,7 +82,6 @@ public class UsuariosServicesTest {
             Usuarios usuario = ModelCadastrosTests.CadastrarUsuario(instituicao, usuariosService, "6515");
             usuario.setEmail("reter");
             usuario.setNomeUsuario("kghjjgh");
-            usuario.setFotoBackground("ytyj");
             usuario.setTipoUsuario(typeUsuario.PROFESSOR);
             usuario.setUsuarioOnline(false);
             usuario.setSenha("regerger");
@@ -101,7 +100,7 @@ public class UsuariosServicesTest {
             UsuariosDTO userDto = new UsuariosDTO(AleatoryString.getAlphaNumericString(7),
                     typeUsuario.ALUNO, AleatoryString.getAlphaNumericString(7),
                     AleatoryString.getAlphaNumericString(7),
-                    AleatoryString.getAlphaNumericString(7), AleatoryString.getAlphaNumericString(7), true);
+                    AleatoryString.getAlphaNumericString(7), true);
             Usuarios user = new Usuarios();
             BeanUtils.copyProperties(userDto, user);
             user.setInstituicao(instituicao);

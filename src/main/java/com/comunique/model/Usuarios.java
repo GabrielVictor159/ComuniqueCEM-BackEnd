@@ -41,9 +41,6 @@ public class Usuarios implements Serializable {
 	private String fotoPerfil;
 
 	@Column(nullable = false)
-	private String fotoBackground;
-
-	@Column(nullable = false)
 	private boolean usuarioOnline;
 
 	@ManyToOne
@@ -54,14 +51,13 @@ public class Usuarios implements Serializable {
 	}
 
 	public Usuarios(UUID idUsuario, String nomeUsuario, typeUsuario tipoUsuario, String email, String senha,
-			String fotoPerfil, String fotoBackground, boolean usuarioOnline, Instituicoes instituicao) {
+			String fotoPerfil, boolean usuarioOnline, Instituicoes instituicao) {
 		this.idUsuario = idUsuario;
 		this.nomeUsuario = nomeUsuario;
 		this.tipoUsuario = tipoUsuario;
 		this.email = email;
 		this.senha = MD5Encoder.encode(senha);
 		this.fotoPerfil = fotoPerfil;
-		this.fotoBackground = fotoBackground;
 		this.usuarioOnline = usuarioOnline;
 		this.instituicao = instituicao;
 	}
@@ -114,14 +110,6 @@ public class Usuarios implements Serializable {
 		this.fotoPerfil = fotoPerfil;
 	}
 
-	public String getFotoBackground() {
-		return this.fotoBackground;
-	}
-
-	public void setFotoBackground(String fotoBackground) {
-		this.fotoBackground = fotoBackground;
-	}
-
 	public boolean isUsuarioOnline() {
 		return this.usuarioOnline;
 	}
@@ -151,7 +139,6 @@ public class Usuarios implements Serializable {
 				", email='" + getEmail() + "'" +
 				", senha='" + getSenha() + "'" +
 				", fotoPerfil='" + getFotoPerfil() + "'" +
-				", fotoBackground='" + getFotoBackground() + "'" +
 				", usuarioOnline='" + isUsuarioOnline() + "'" +
 				", instituicao='" + getInstituicao() + "'" +
 				"}";

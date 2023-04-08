@@ -1,11 +1,14 @@
 package com.comunique.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,7 +40,7 @@ import com.comunique.service.MensagensService;
 import com.comunique.service.UsuariosService;
 
 @RestController
-@RequestMapping(value = "/Images")
+@RequestMapping(value = "/Images", produces = { MediaType.APPLICATION_JSON_VALUE })
 @CrossOrigin
 public class ImageController {
 
@@ -61,7 +64,7 @@ public class ImageController {
     public static String removeSpecialCharacters(String email) {
         return email.replaceAll("[^a-zA-Z0-9]+", "");
     }
-    
+
     @PostMapping("/mensagens/{usuarioNome}/{usuarioSenha}/{idChat}/{mensagem}")
     public ResponseEntity<Object> uploadChatImage(@RequestParam("image") MultipartFile image,
             @PathVariable String usuarioNome,
@@ -83,15 +86,15 @@ public class ImageController {
                 try {
                     String decodedMessage = URLDecoder.decode(mensagem, StandardCharsets.UTF_8.toString());
                     imageService.persistir(image,
-                    GlobalPath + usuarioLogin.get().getInstituicao().getNome() + "/"
-                    +removeSpecialCharacters(chat.get().getIdChat().toString())+ "/"
-                    );
+                            GlobalPath + usuarioLogin.get().getInstituicao().getNome() + "/"
+                                    + removeSpecialCharacters(chat.get().getIdChat().toString()) + "/");
                     MensagensDTO dto = new MensagensDTO();
                     dto.setIsfile(true);
                     dto.setEntregue(false);
                     dto.setLida(false);
                     dto.setMensagem("§" + usuarioLogin.get().getInstituicao().getNome() + "/"
-                    +removeSpecialCharacters(chat.get().getIdChat().toString())+ "/"+image.getOriginalFilename() + "§" + decodedMessage);
+                            + removeSpecialCharacters(chat.get().getIdChat().toString()) + "/"
+                            + image.getOriginalFilename() + "§" + decodedMessage);
                     dto.setUsuarioEnviou(usuarioLogin.get().getIdUsuario());
                     Mensagens novaMensagem = new Mensagens();
                     BeanUtils.copyProperties(dto, novaMensagem);
@@ -99,63 +102,40 @@ public class ImageController {
                     mensagensService.Cadastrar(novaMensagem);
                     return new ResponseEntity<>(HttpStatus.OK);
                 } catch (IOException e) {
-                    return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             }
         }
     }
 
-    @PutMapping("/usuarioImagePerfil/{login}/{senha}")
-    public ResponseEntity<Object> updateImagePeril(@RequestParam("image") MultipartFile image,
+    @PutMapping("/usuarioImage/{login}/{senha}")
+    public ResponseEntity<Object> updateImage(@RequestParam("image") MultipartFile image,
             @PathVariable String login, @PathVariable String senha) {
         Optional<Usuarios> usuario = usuariosService.Login(login, senha);
+        System.out.println(image.getOriginalFilename());
         if (usuario.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
             try {
-                imageService.persistir(image,
-                        GlobalPath + usuario.get().getInstituicao().getNome() + "/"+ removeSpecialCharacters(usuario.get().getEmail()) + "/");
-                try {
-                    if (usuario.get().getFotoPerfil() != "userIcon.png") {
-                        imageService.excluir( GlobalPath + usuario.get().getFotoPerfil());
-                    }
-                } catch (Exception e) {
+                Usuarios user = usuario.get();
+                String imagePath = GlobalPath + usuario.get().getInstituicao().getNome() + "/"
+                        + removeSpecialCharacters(usuario.get().getEmail()) + "/";
+                String originalFilename = image.getOriginalFilename();
 
+                // Verificar o tipo de imagem e atualizar o caminho da imagem correspondente
+                imageService.persistir(image, imagePath);
+                if (!user.getFotoPerfil().equals("userIcon.png")) {
+                    String a = GlobalPath + user.getFotoPerfil();
+                    System.out.println("\n\n\n\n\n\n PATH PASSADO: " + a + "\n\n\n\n\n");
+                    imageService.excluir(a);
                 }
-                usuario.get().setFotoPerfil(
-                        usuario.get().getInstituicao().getNome() + "/" + removeSpecialCharacters(usuario.get().getEmail()) + "/"
-                                + image.getOriginalFilename());
-                usuariosService.Cadastrar(usuario.get());
-                return new ResponseEntity<>(HttpStatus.OK);
-            } catch (Exception e) {
-                return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-    }
+                user.setFotoPerfil(
+                        usuario.get().getInstituicao().getNome() + "/"
+                                + removeSpecialCharacters(usuario.get().getEmail()) + "/"
+                                + originalFilename);
 
-    @PutMapping("/usuarioImageBackground/{login}/{senha}")
-    public ResponseEntity<Object> updateImageBackground(@RequestParam("image") MultipartFile image,
-            @PathVariable String login, @PathVariable String senha) {
-        Optional<Usuarios> usuario = usuariosService.Login(login, senha);
-        if (usuario.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        } else {
-            try {
-
-                imageService.persistir(image,
-                GlobalPath + usuario.get().getInstituicao().getNome() + "/"+ removeSpecialCharacters(usuario.get().getEmail()) + "/");
-                try {
-                    if (usuario.get().getFotoBackground() != "background.png") {
-                        imageService.excluir( GlobalPath + usuario.get().getFotoBackground());
-                    }
-                } catch (Exception e) {
-
-                }
-                usuario.get().setFotoBackground(
-                    usuario.get().getInstituicao().getNome() + "/" + removeSpecialCharacters(usuario.get().getEmail()) + "/"
-                    + image.getOriginalFilename());
-                usuariosService.Cadastrar(usuario.get());
-                return new ResponseEntity<>(HttpStatus.OK);
+                usuariosService.Cadastrar(user);
+                return new ResponseEntity<>(user, HttpStatus.OK);
             } catch (Exception e) {
                 return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }

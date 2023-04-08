@@ -50,8 +50,7 @@ public class UsuariosService {
 		Optional<Usuarios> usuario = this.getUser(id);
 		if (usuario.isPresent()) {
 			try {
-				imageService.excluir( GlobalPath + usuario.get().getFotoPerfil());
-				imageService.excluir( GlobalPath + usuario.get().getFotoBackground());
+				imageService.excluir(GlobalPath + usuario.get().getFotoPerfil());
 			} catch (Exception e) {
 
 			}
@@ -66,8 +65,7 @@ public class UsuariosService {
 		List<Usuarios> list = this.getAllUsuariosInstituicao(instituicao);
 		for (Usuarios usuario : list) {
 			try {
-				imageService.excluir( GlobalPath + usuario.getFotoPerfil());
-				imageService.excluir( GlobalPath + usuario.getFotoBackground());
+				imageService.excluir(GlobalPath + usuario.getFotoPerfil());
 			} catch (Exception e) {
 
 			}

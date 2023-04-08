@@ -161,7 +161,7 @@ public class UsuariosControllerTest {
                 String URI = Reflections.getURI(UsuariosController.class, "registrarUsuario");
                 UsuariosDTO dto = new UsuariosDTO(AleatoryString.getAlphaNumericString(7), typeUsuario.ALUNO,
                                 AleatoryString.getAlphaNumericString(7), AleatoryString.getAlphaNumericString(7),
-                                AleatoryString.getAlphaNumericString(7), AleatoryString.getAlphaNumericString(7), true);
+                                AleatoryString.getAlphaNumericString(7), true);
                 ResponseEntity<Object> response = testRestTemplate.postForEntity(
                                 URI,
                                 dto,
@@ -202,7 +202,7 @@ public class UsuariosControllerTest {
                 String URI = Reflections.getURI(UsuariosController.class, "updateUsuario");
                 UsuariosDTO dto = new UsuariosDTO(AleatoryString.getAlphaNumericString(7), usuario.getTipoUsuario(),
                                 AleatoryString.getAlphaNumericString(7), AleatoryString.getAlphaNumericString(7),
-                                AleatoryString.getAlphaNumericString(7), AleatoryString.getAlphaNumericString(7), true);
+                                AleatoryString.getAlphaNumericString(7), true);
                 ResponseEntity<Object> response = testRestTemplate.exchange(
                                 URI,
                                 HttpMethod.PUT,
@@ -308,7 +308,7 @@ public class UsuariosControllerTest {
                 String URI = Reflections.getURI(UsuariosController.class, "updateUsuarioAdmin");
                 UsuariosDTO dto = new UsuariosDTO(AleatoryString.getAlphaNumericString(7), typeUsuario.PROFESSOR,
                                 AleatoryString.getAlphaNumericString(7), AleatoryString.getAlphaNumericString(7),
-                                AleatoryString.getAlphaNumericString(7), AleatoryString.getAlphaNumericString(7), true);
+                                AleatoryString.getAlphaNumericString(7), true);
                 ResponseEntity<Object> response = testRestTemplate.exchange(
                                 URI,
                                 HttpMethod.PUT,

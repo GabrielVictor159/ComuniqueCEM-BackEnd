@@ -1,9 +1,12 @@
 package com.comunique.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
+import java.util.HashSet;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,34 +19,33 @@ public class ImageService {
     private static final String ROOT = "src/main/resources/static/images/";
 
     public void persistir(MultipartFile image, String folder) throws IOException {
-        if (image.getContentType() == "image/jpeg" || image.getContentType() == "image/png") {
+        if (image.getContentType().equals("image/jpeg") || image.getContentType().equals("image/png")) {
             byte[] bytes = ImageResizer.resizeImage(image, 1000);
-            Path path = Paths.get(folder + image.getOriginalFilename());
-            if (!Files.exists(Paths.get(folder))) {
-                Files.createDirectories(Paths.get(folder));
+            String fileName = image.getOriginalFilename();
+            Path path = Paths.get(folder);
+            if (!Files.exists(path)) {
+                Files.createDirectories(path);
             }
-
-            Files.write(path, bytes);
+            Files.write(path.resolve(fileName), bytes);
         } else {
-            Path path = Paths.get(folder + image.getOriginalFilename());
-            if (!Files.exists(Paths.get(folder))) {
-                Files.createDirectories(Paths.get(folder));
+            String fileName = image.getOriginalFilename();
+            Path path = Paths.get(folder + fileName);
+            if (!Files.exists(path)) {
+                Files.createDirectories(path);
             }
-
-            Files.write(path, image.getBytes());
+            Files.write(path.resolve(fileName), image.getBytes());
         }
-
     }
 
-    public void excluir(String folder) throws IOException {
-        Path path = Paths.get(folder );
-        Files.deleteIfExists(path);
-        Path parentPath = path.getParent();
-
-        while (Files.isDirectory(parentPath) && Files.list(parentPath).count() == 0 && parentPath.getNameCount() > 1) {
-            Files.delete(parentPath);
-            parentPath = parentPath.getParent();
-        }
+    public void excluir(String arquivoExcluir) {
+        Thread thread = new Thread(() -> {
+            try {
+                Runtime.getRuntime().exec("cmd /c del \"" + arquivoExcluir.replace("/", "\\") + "\"");
+            } catch (IOException e) {
+                System.out.println("Exceção lançada: " + e.getMessage());
+            }
+        });
+        thread.start();
     }
 
     public void excluirPasta(String folder) throws IOException {

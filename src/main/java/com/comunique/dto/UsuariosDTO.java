@@ -19,21 +19,18 @@ public class UsuariosDTO {
 	@NotBlank
 	private String fotoPerfil;
 	@NotBlank
-	private String fotoBackground;
-	@NotBlank
 	private boolean usuarioOnline;
 
 	public UsuariosDTO() {
 	}
 
 	public UsuariosDTO(String nomeUsuario, typeUsuario tipoUsuario, String email, String senha, String fotoPerfil,
-			String fotoBackground, boolean usuarioOnline) {
+			boolean usuarioOnline) {
 		this.nomeUsuario = nomeUsuario;
 		this.tipoUsuario = tipoUsuario;
 		this.email = email;
 		this.senha = senha;
 		this.fotoPerfil = fotoPerfil;
-		this.fotoBackground = fotoBackground;
 		this.usuarioOnline = usuarioOnline;
 	}
 
@@ -77,14 +74,6 @@ public class UsuariosDTO {
 		this.fotoPerfil = fotoPerfil;
 	}
 
-	public String getFotoBackground() {
-		return this.fotoBackground;
-	}
-
-	public void setFotoBackground(String fotoBackground) {
-		this.fotoBackground = fotoBackground;
-	}
-
 	public boolean isUsuarioOnline() {
 		return this.usuarioOnline;
 	}
@@ -105,7 +94,6 @@ public class UsuariosDTO {
 				", email='" + getEmail() + "'" +
 				", senha='" + getSenha() + "'" +
 				", fotoPerfil='" + getFotoPerfil() + "'" +
-				", fotoBackground='" + getFotoBackground() + "'" +
 				", usuarioOnline='" + isUsuarioOnline() + "'" +
 				"}";
 	}
