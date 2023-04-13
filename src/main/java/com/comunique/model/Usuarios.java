@@ -47,6 +47,13 @@ public class Usuarios implements Serializable {
 	@JoinColumn(name = "instituicao", nullable = false)
 	private Instituicoes instituicao;
 
+	@Column(nullable = true)
+	private String emailVerificationToken;
+
+	@Column(nullable = false)
+	private boolean emailVerified = false;
+
+
 	public Usuarios() {
 	}
 
@@ -128,6 +135,22 @@ public class Usuarios implements Serializable {
 
 	public void setInstituicao(Instituicoes instituicao) {
 		this.instituicao = instituicao;
+	}
+
+	public String getEmailVerificationToken() {
+		return this.emailVerificationToken;
+	}
+	
+	public void setEmailVerificationToken(String emailVerificationToken) {
+		this.emailVerificationToken = emailVerificationToken;
+	}
+	
+	public boolean isEmailVerified() {
+		return this.emailVerified;
+	}
+	
+	public void setEmailVerified(boolean emailVerified) {
+		this.emailVerified = emailVerified;
 	}
 
 	@Override

@@ -24,4 +24,7 @@ public interface UsuariosRepository extends JpaRepository<Usuarios, UUID> {
     Page<Usuarios> findAllByInstituicao(Instituicoes instituicao, Pageable pageable);
 
     void deleteAllByInstituicao(Instituicoes instituicao);
+
+    Optional<Usuarios> findByEmailVerificationToken(String emailVerificationToken);
+
 }
