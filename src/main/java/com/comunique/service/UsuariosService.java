@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.comunique.functions.MD5Encoder;
+import com.comunique.model.Email;
 import com.comunique.model.Instituicoes;
 import com.comunique.model.Usuarios;
 import com.comunique.repository.UsuariosRepository;
@@ -21,12 +22,41 @@ public class UsuariosService {
 	UsuariosRepository usuariosRepository;
 	@Autowired
 	ImageService imageService;
+	@Autowired
+	EmailService emailService;
 	private static String GlobalPath = "src/main/resources/static/images/";
 
 	@Transactional
 	public Usuarios Cadastrar(Usuarios usuario) {
-		return usuariosRepository.save(usuario);
+		String token = generateToken();
+		usuario.setEmailVerificationToken(token);
+	
+		Usuarios savedUser = usuariosRepository.save(usuario);
+	
+		String verificationLink = "mysql://localhost:3306/comunique/verify-email?token=" + token;
+		
+		String emailBody = "Clique no link a seguir para verificar seu e-mail: <a href=\"" + verificationLink + "\">" + verificationLink + "</a>";
+
+		//Não sei o que deveria ser o username
+		String emailUsername = "ComuniqueCEM";
+		//Não sei o que deveria ser a senha
+		String emailPassword = "comuniquecem123";
+
+		Email verificationEmail = new Email(usuario.getEmail(), "Verificação de e-mail", emailBody, emailUsername, emailPassword);
+	
+		emailService.sendEmail(verificationEmail);
+	
+		return savedUser;
 	}
+
+	public String generateToken() {
+		return UUID.randomUUID().toString();
+	}
+	
+	public Optional<Usuarios> findByEmailVerificationToken(String emailVerificationToken) {
+		return usuariosRepository.findByEmailVerificationToken(emailVerificationToken);
+	}
+	
 
 	public Optional<Usuarios> getUser(UUID idUsuario) {
 		return usuariosRepository.findById(idUsuario);
