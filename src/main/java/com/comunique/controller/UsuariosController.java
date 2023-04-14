@@ -50,6 +50,9 @@ public class UsuariosController {
     MensagensService mensagensService;
     @Autowired
     AdminsService adminsService;
+    @Autowired
+    EmailService emailService;
+
 
     @GetMapping("/{email}/{senha}")
     public ResponseEntity<Usuarios> Login(@PathVariable(value = "email") String email,
@@ -267,4 +270,25 @@ public class UsuariosController {
 
         }
     }
+
+    private boolean isValidEmail(String RemententeEmail) {
+        //No corpo do email, em vez de enviar um email avisando que
+        //está verificando a procedência do email, pode enviar um email
+        //de "boas-vindas". Isso disfarça-rá o email de validação com um de boas-vindas
+        //e o usuário nem saberá que está sendo verificado.
+        String subject = "Verificação de e-mail";
+        String body = "Esta é uma mensagem de verificação de e-mail. Por favor, ignore.";
+        String username = "seu_email@gmail.com"; // Substitua pelo e-mail de autenticação do remetente
+        String password = "sua_senha"; // Substitua pela senha do e-mail de autenticação do remetente
+    
+        Email emailObj = new Email(RemententeEmail, subject, body, username, password);
+        String emailResponse = emailService.sendEmail(emailObj);
+    
+        if (emailResponse.startsWith("Endereço de e-mail inválido")) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 }
