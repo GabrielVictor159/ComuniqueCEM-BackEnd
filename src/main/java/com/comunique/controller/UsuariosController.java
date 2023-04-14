@@ -23,14 +23,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.comunique.config.SystemConfigs;
 import com.comunique.dto.UsuariosDTO;
 import com.comunique.model.Admins;
 import com.comunique.model.Chat;
+import com.comunique.model.Email;
 import com.comunique.model.Instituicoes;
 import com.comunique.model.Usuarios;
 import com.comunique.model.enums.typeUsuario;
 import com.comunique.service.AdminsService;
 import com.comunique.service.ChatService;
+import com.comunique.service.EmailService;
 import com.comunique.service.InstituicoesService;
 import com.comunique.service.MensagensService;
 import com.comunique.service.UsuariosService;
@@ -52,7 +55,6 @@ public class UsuariosController {
     AdminsService adminsService;
     @Autowired
     EmailService emailService;
-
 
     @GetMapping("/{email}/{senha}")
     public ResponseEntity<Usuarios> Login(@PathVariable(value = "email") String email,
@@ -111,10 +113,11 @@ public class UsuariosController {
     public ResponseEntity<Object> registrarUsuario(@RequestBody @Valid UsuariosDTO usuarioDto,
             @PathVariable String nomeInstituicao,
             @PathVariable String senhaInstituicao) {
-
-        if (!isValidEmail(usuarioDto.getEmail())) {
-            return new ResponseEntity<>("E-mail inválido", HttpStatus.BAD_REQUEST);
+        if (SystemConfigs.sendEmail) {
+            if (!emailService.isValidEmail(usuarioDto.getEmail())) {
+                return new ResponseEntity<>("E-mail inválido", HttpStatus.BAD_REQUEST);
             }
+        }
         if (usuarioDto.getTipoUsuario() == typeUsuario.ALUNO) {
             Optional<Instituicoes> testeInstituicao = instituicoesService.LoginUsuario(nomeInstituicao,
                     senhaInstituicao);
@@ -178,9 +181,17 @@ public class UsuariosController {
             @PathVariable(value = "emailUsuario") String emailUsuario,
             @PathVariable(value = "senhaUsuario") String senhaUsuario) {
         Optional<Usuarios> usuario = usuariosService.Login(emailUsuario, senhaUsuario);
+
         if (usuario.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
+            if (usuario.get().getEmail() != dto.getEmail()) {
+                if (SystemConfigs.sendEmail) {
+                    if (!emailService.isValidEmail(dto.getEmail())) {
+                        return new ResponseEntity<>("E-mail inválido", HttpStatus.BAD_REQUEST);
+                    }
+                }
+            }
             try {
                 dto.setTipoUsuario(usuario.get().getTipoUsuario());
                 dto.setFotoPerfil(usuario.get().getFotoPerfil());
@@ -207,6 +218,13 @@ public class UsuariosController {
             if (admin.get().getInstituicao() != usuario.get().getInstituicao()) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             } else {
+                if (usuario.get().getEmail() != dto.getEmail()) {
+                    if (SystemConfigs.sendEmail) {
+                        if (!emailService.isValidEmail(dto.getEmail())) {
+                            return new ResponseEntity<>("E-mail inválido", HttpStatus.BAD_REQUEST);
+                        }
+                    }
+                }
                 try {
                     BeanUtils.copyProperties(dto, usuario.get());
                     Usuarios user = usuariosService.Cadastrar(usuario.get());
@@ -285,26 +303,6 @@ public class UsuariosController {
                 }
             }
 
-        }
-    }
-
-    private boolean isValidEmail(String RemententeEmail) {
-        //No corpo do email, em vez de enviar um email avisando que
-        //está verificando a procedência do email, pode enviar um email
-        //de "boas-vindas". Isso disfarça-rá o email de validação com um de boas-vindas
-        //e o usuário nem saberá que está sendo verificado.
-        String subject = "Verificação de e-mail";
-        String body = "Esta é uma mensagem de verificação de e-mail. Por favor, ignore.";
-        String username = "seu_email@gmail.com"; // Substitua pelo e-mail de autenticação do remetente
-        String password = "sua_senha"; // Substitua pela senha do e-mail de autenticação do remetente
-    
-        Email emailObj = new Email(RemententeEmail, subject, body, username, password);
-        String emailResponse = emailService.sendEmail(emailObj);
-    
-        if (emailResponse.startsWith("Endereço de e-mail inválido")) {
-            return false;
-        } else {
-            return true;
         }
     }
 

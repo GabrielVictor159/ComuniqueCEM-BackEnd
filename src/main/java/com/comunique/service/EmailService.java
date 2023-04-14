@@ -60,4 +60,21 @@ public class EmailService {
 		}
 
 	}
+
+	public boolean isValidEmail(String RemententeEmail) {
+
+		String subject = "Verificação de e-mail";
+		String body = "Esta é uma mensagem de verificação de e-mail. Por favor, ignore.";
+		String username = SystemConfigs.Email;
+		String password = SystemConfigs.senhaEmail;
+
+		Email emailObj = new Email(RemententeEmail, subject, body, username, password);
+		String emailResponse = sendEmail(emailObj);
+
+		if (emailResponse.startsWith("Endereço de e-mail inválido")) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 }
