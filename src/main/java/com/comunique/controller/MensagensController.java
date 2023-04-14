@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -205,13 +206,10 @@ public class MensagensController {
     }
 
     @PostMapping("/DeletarPedido")
-    public ResponseEntity<Object> DeletarPedido(@RequestBody @Valid Mensagens mensagem) {
+    public ResponseEntity<Object> DeletarPedido(@RequestBody Mensagens mensagem) {
         try {
-            mensagem.setDeletada(true);
-            mensagem.setEntregue(false);
-            mensagem.setLida(false);
-            Mensagens cadastro = mensagensService.Cadastrar(mensagem);
-            return new ResponseEntity<>(cadastro, HttpStatus.OK);
+            System.out.println(mensagem);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

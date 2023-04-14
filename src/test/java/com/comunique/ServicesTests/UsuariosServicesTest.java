@@ -14,6 +14,7 @@ import com.comunique.functions.ModelCadastrosTests;
 import com.comunique.model.Instituicoes;
 import com.comunique.model.Usuarios;
 import com.comunique.model.enums.typeUsuario;
+import com.comunique.repository.UsuariosRepository;
 import com.comunique.service.InstituicoesService;
 import com.comunique.service.UsuariosService;
 
@@ -54,7 +55,7 @@ public class UsuariosServicesTest {
             instituicoesService.Deletar(instituicao.getIdInstituicao());
             return "Sucesso Registrar e deletar usuario";
         } catch (Exception e) {
-            return e.getMessage();
+            return e.getLocalizedMessage();
         }
     }
 

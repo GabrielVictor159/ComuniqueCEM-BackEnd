@@ -1,6 +1,7 @@
 package com.comunique.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.UUID;
 
 import com.comunique.functions.MD5Encoder;
@@ -46,6 +47,12 @@ public class Usuarios implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "instituicao", nullable = false)
 	private Instituicoes instituicao;
+
+	@Column(nullable = true)
+	private String senhaProvisoria;
+
+	@Column(nullable = true)
+	private Date dataSenhaProvisoria;
 
 	public Usuarios() {
 	}
@@ -130,6 +137,22 @@ public class Usuarios implements Serializable {
 		this.instituicao = instituicao;
 	}
 
+	public String getSenhaProvisoria() {
+		return this.senhaProvisoria;
+	}
+
+	public void setSenhaProvisoria(String senhaProvisoria) {
+		this.senhaProvisoria = MD5Encoder.encode(senhaProvisoria);
+	}
+
+	public Date getDataSenhaProvisoria() {
+		return this.dataSenhaProvisoria;
+	}
+
+	public void setDataSenhaProvisoria(Date dataSenhaProvisoria) {
+		this.dataSenhaProvisoria = dataSenhaProvisoria;
+	}
+
 	@Override
 	public String toString() {
 		return "{" +
@@ -141,6 +164,8 @@ public class Usuarios implements Serializable {
 				", fotoPerfil='" + getFotoPerfil() + "'" +
 				", usuarioOnline='" + isUsuarioOnline() + "'" +
 				", instituicao='" + getInstituicao() + "'" +
+				", senhaProvisoria='" + getSenhaProvisoria() + "'" +
+				", dataSenhaProvisoria='" + getDataSenhaProvisoria() + "'" +
 				"}";
 	}
 

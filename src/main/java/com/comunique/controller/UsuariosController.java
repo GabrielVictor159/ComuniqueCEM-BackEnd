@@ -149,6 +149,23 @@ public class UsuariosController {
         }
     }
 
+    @PostMapping("/EsqueceuSenha/{emailUsuario}")
+    public ResponseEntity<Object> EsqueceuSenha(
+            @PathVariable(value = "emailUsuario") String emailUsuario) {
+        Optional<Usuarios> usuario = usuariosService.getUserByEmail(emailUsuario);
+        if (usuario.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } else {
+            boolean teste = usuariosService.enviarSenhaTemporariaPorEmail(usuario.get());
+
+            if (teste) {
+                return new ResponseEntity<>("Senha enviada para o seu email", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Houve um erro interno", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
     @PutMapping("/{emailUsuario}/{senhaUsuario}")
     public ResponseEntity<Object> updateUsuario(@RequestBody @Valid UsuariosDTO dto,
             @PathVariable(value = "emailUsuario") String emailUsuario,

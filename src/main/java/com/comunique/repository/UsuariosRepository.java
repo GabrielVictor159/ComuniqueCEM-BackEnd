@@ -16,10 +16,15 @@ import com.comunique.model.Usuarios;
 @Repository
 public interface UsuariosRepository extends JpaRepository<Usuarios, UUID> {
 
-    @Query("SELECT e FROM Usuarios e WHERE e.email = ?1 AND e.senha = ?2")
+    @Query("SELECT e FROM Usuarios e WHERE e.email = ?1 AND e.senha = ?2 OR e.senhaProvisoria = ?2 ")
     Optional<Usuarios> login(String Email, String Senha);
 
     List<Usuarios> findAllByInstituicao(Instituicoes instituicao);
+
+    Optional<Usuarios> findByEmail(String email);
+
+    @Query("SELECT e FROM Usuarios e WHERE e.senhaProvisoria <> 'default'")
+    List<Usuarios> findAllBySenhaTemporariaNotDefault();
 
     Page<Usuarios> findAllByInstituicao(Instituicoes instituicao, Pageable pageable);
 

@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+import org.apache.catalina.User;
 import org.springframework.beans.BeanUtils;
 
 import com.comunique.dto.AdminsDTO;
@@ -48,6 +49,10 @@ public class ModelCadastrosTests {
         Usuarios user = new Usuarios();
         BeanUtils.copyProperties(userDto, user);
         user.setInstituicao(instituicao);
+        user.setIdUsuario(UUID.randomUUID());
+        user.setSenhaProvisoria("default");
+        user.setDataSenhaProvisoria(new Date());
+        System.out.println(user);
         return usuariosService.Cadastrar(user);
 
     }
