@@ -119,7 +119,7 @@ public class ImageController {
             try {
                 Usuarios user = usuario.get();
                 String imagePath = GlobalPath + usuario.get().getInstituicao().getNome() + "/"
-                        + removeSpecialCharacters(usuario.get().getEmail()) + "/";
+                        + removeSpecialCharacters(usuario.get().getIdUsuario().toString()) + "/";
                 String originalFilename = image.getOriginalFilename();
 
                 // Verificar o tipo de imagem e atualizar o caminho da imagem correspondente
@@ -131,7 +131,7 @@ public class ImageController {
                 }
                 user.setFotoPerfil(
                         usuario.get().getInstituicao().getNome() + "/"
-                                + removeSpecialCharacters(usuario.get().getEmail()) + "/"
+                                + removeSpecialCharacters(usuario.get().getIdUsuario().toString()) + "/"
                                 + originalFilename);
 
                 usuariosService.Cadastrar(user);

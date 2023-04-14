@@ -37,15 +37,15 @@ public class ImageService {
         }
     }
 
-    public void excluir(String arquivoExcluir) {
-        Thread thread = new Thread(() -> {
-            try {
-                Runtime.getRuntime().exec("cmd /c del \"" + arquivoExcluir.replace("/", "\\") + "\"");
-            } catch (IOException e) {
-                System.out.println("Exceção lançada: " + e.getMessage());
-            }
-        });
-        thread.start();
+    public void excluir(String folder) throws IOException {
+        Path path = Paths.get(folder);
+        Files.deleteIfExists(path);
+        Path parentPath = path.getParent();
+
+        while (Files.isDirectory(parentPath) && Files.list(parentPath).count() == 0 && parentPath.getNameCount() > 1) {
+            Files.delete(parentPath);
+            parentPath = parentPath.getParent();
+        }
     }
 
     public void excluirPasta(String folder) throws IOException {
