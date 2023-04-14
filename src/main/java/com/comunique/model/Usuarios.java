@@ -43,6 +43,8 @@ public class Usuarios implements Serializable {
 	@Column(nullable = false)
 	private boolean usuarioOnline;
 
+	private String senhaTemporaria;
+
 	@ManyToOne
 	@JoinColumn(name = "instituicao", nullable = false)
 	private Instituicoes instituicao;
@@ -143,5 +145,13 @@ public class Usuarios implements Serializable {
 				", instituicao='" + getInstituicao() + "'" +
 				"}";
 	}
+
+	public Object getSenhaTemporaria() {
+		return this.senhaTemporaria;
+	}
+
+    public void setSenhaTemporaria(String senhaTemporaria) {
+		this.senhaTemporaria = senhaTemporaria;
+    }
 
 }
