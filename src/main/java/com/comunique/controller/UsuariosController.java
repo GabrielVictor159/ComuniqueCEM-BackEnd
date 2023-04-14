@@ -108,6 +108,10 @@ public class UsuariosController {
     public ResponseEntity<Object> registrarUsuario(@RequestBody @Valid UsuariosDTO usuarioDto,
             @PathVariable String nomeInstituicao,
             @PathVariable String senhaInstituicao) {
+
+        if (!isValidEmail(usuarioDto.getEmail())) {
+            return new ResponseEntity<>("E-mail inválido", HttpStatus.BAD_REQUEST);
+            }
         if (usuarioDto.getTipoUsuario() == typeUsuario.ALUNO) {
             Optional<Instituicoes> testeInstituicao = instituicoesService.LoginUsuario(nomeInstituicao,
                     senhaInstituicao);

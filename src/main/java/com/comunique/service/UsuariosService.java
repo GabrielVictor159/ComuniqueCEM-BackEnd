@@ -25,6 +25,14 @@ public class UsuariosService {
 
 	@Transactional
 	public Usuarios Cadastrar(Usuarios usuario) {
+
+		String emailResult = emailService.sendEmail(verificationEmail);
+    
+		if (emailResult.startsWith("Endereço de e-mail inválido")) {
+			// Retorna nulo ou lança uma exceção específica que pode ser tratada na camada de rota
+			return null;
+		}
+		
 		return usuariosRepository.save(usuario);
 	}
 
