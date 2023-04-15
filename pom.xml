@@ -12,7 +12,18 @@
 	<groupId>com.comunique</groupId>
 	<artifactId>comunique</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<spring.profiles.active>dev</spring.profiles.active>
+			</properties>
+		</profile>
+	</profiles>
 	<name>comunique</name>
 	<description>comunique cem app</description>
 	<properties>
