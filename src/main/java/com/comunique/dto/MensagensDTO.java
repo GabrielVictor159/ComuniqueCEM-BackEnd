@@ -2,18 +2,18 @@ package com.comunique.dto;
 
 import java.util.UUID;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class MensagensDTO {
-	@NotBlank
+	@NotNull
 	private UUID usuarioEnviou;
-	@NotBlank
+	@NotNull
 	private String mensagem;
-	@NotBlank
+	@NotNull
 	private boolean lida;
-	@NotBlank
+	@NotNull
 	private boolean entregue;
-	@NotBlank
+	@NotNull
 	private boolean isfile;
 
 	public MensagensDTO() {

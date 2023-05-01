@@ -28,8 +28,6 @@ public class UsuariosService {
 	UsuariosRepository usuariosRepository;
 	@Autowired
 	ImageService imageService;
-	@Autowired
-	EmailService emailService;
 	private static String GlobalPath = "src/main/resources/static/images/";
 
 	@Transactional
@@ -80,7 +78,7 @@ public class UsuariosService {
 					+ ". Por favor, use-a para fazer login, porem lembre-se essa senha sera apagada do sistema.";
 
 			Email email = new Email(usuario.getEmail(), subject, body, emailUsername, emailPassword);
-			emailService.sendEmail(email);
+			EmailService.sendEmail(email);
 			usuario.setSenhaProvisoria(senhaTemporaria);
 			usuario.setDataSenhaProvisoria(new Date());
 			usuariosRepository.save(usuario);
@@ -99,7 +97,6 @@ public class UsuariosService {
 		Calendar calAtual = Calendar.getInstance();
 		Calendar calComparacao = Calendar.getInstance();
 		calAtual.setTime(dataAtual);
-
 		for (Usuarios usuario : vetorUsuarios) {
 			calComparacao.setTime(usuario.getDataSenhaProvisoria());
 			long diferencaEmMilissegundos = calAtual.getTimeInMillis() -

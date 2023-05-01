@@ -1,15 +1,15 @@
 package com.comunique.dto;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class InstituicoesDTO {
-    @NotBlank
+    @NotNull
     private String nome;
 
-    @NotBlank
+    @NotNull
     private String senha;
 
-    @NotBlank
+    @NotNull
     private String senhaProfessores;
 
     public InstituicoesDTO() {

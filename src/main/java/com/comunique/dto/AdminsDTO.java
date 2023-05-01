@@ -1,13 +1,13 @@
 package com.comunique.dto;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class AdminsDTO {
 
-    @NotBlank
+    @NotNull
     private String nome;
 
-    @NotBlank
+    @NotNull
     private String senha;
 
     public AdminsDTO() {

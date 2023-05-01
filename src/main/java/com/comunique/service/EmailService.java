@@ -2,26 +2,25 @@ package com.comunique.service;
 
 import java.util.Properties;
 
-import javax.mail.AuthenticationFailedException;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.SendFailedException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.Address;
+import jakarta.mail.AuthenticationFailedException;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.SendFailedException;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
+import jakarta.mail.internet.AddressException;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 
 import org.springframework.stereotype.Service;
-
 import com.comunique.config.SystemConfigs;
+import com.comunique.emailsPages.CadastroUsuario;
 import com.comunique.model.Email;
 
-@Service
-public class EmailService {
-
-	public String sendEmail(Email email) {
+public interface EmailService {
+	public static String sendEmail(Email email) {
 		if (SystemConfigs.sendEmail) {
 			Properties props = new Properties();
 			props.put("mail.smtp.auth", "true");
@@ -30,7 +29,7 @@ public class EmailService {
 			props.put("mail.smtp.port", "587");
 
 			Session session = Session.getInstance(props,
-					new javax.mail.Authenticator() {
+					new jakarta.mail.Authenticator() {
 						protected PasswordAuthentication getPasswordAuthentication() {
 							return new PasswordAuthentication(email.getUsername(), email.getPassword());
 						}
@@ -58,23 +57,30 @@ public class EmailService {
 		} else {
 			return "Email desativado";
 		}
-
 	}
 
-	public boolean isValidEmail(String RemententeEmail) {
+	public static boolean isValidEmail(String RemententeEmail, String id) {
 
-		String subject = "Verificação de e-mail";
-		String body = "Esta é uma mensagem de verificação de e-mail. Por favor, ignore.";
-		String username = SystemConfigs.Email;
-		String password = SystemConfigs.senhaEmail;
+		try {
+			CadastroUsuario cadastroUsuario = new CadastroUsuario(id);
+			String subject = "Verificação de e-mail";
+			String body = cadastroUsuario.body;
+			String username = SystemConfigs.Email;
+			String password = SystemConfigs.senhaEmail;
 
-		Email emailObj = new Email(RemententeEmail, subject, body, username, password);
-		String emailResponse = sendEmail(emailObj);
+			Email emailObj = new Email(RemententeEmail, subject, body, username, password);
 
-		if (emailResponse.startsWith("Endereço de e-mail inválido")) {
+			String emailResponse = sendEmail(emailObj);
+
+			if (emailResponse.equals("E-mail enviado com sucesso")) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			return false;
-		} else {
-			return true;
 		}
 	}
+
 }

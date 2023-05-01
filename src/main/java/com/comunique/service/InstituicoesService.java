@@ -42,6 +42,7 @@ public class InstituicoesService {
 
     @Transactional
     public void Deletar(UUID id) {
+
         instituicoesRepository.deleteById(id);
     }
 

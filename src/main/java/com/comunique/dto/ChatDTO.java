@@ -1,15 +1,15 @@
 package com.comunique.dto;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.comunique.model.Usuarios;
 
 public class ChatDTO {
 
-	@NotBlank
+	@NotNull
 	private Usuarios usuario1;
 
-	@NotBlank
+	@NotNull
 	private Usuarios usuario2;
 
 	public ChatDTO(Usuarios usuario1, Usuarios usuario2) {

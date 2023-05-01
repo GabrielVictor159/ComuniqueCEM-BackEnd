@@ -1,12 +1,12 @@
 package com.comunique.dto;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class AdminsMasterDTO {
-    @NotBlank
+    @NotNull
     private String nome;
 
-    @NotBlank
+    @NotNull
     private String senha;
 
     public AdminsMasterDTO() {

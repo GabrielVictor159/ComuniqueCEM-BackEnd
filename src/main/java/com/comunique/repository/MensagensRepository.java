@@ -22,6 +22,9 @@ public interface MensagensRepository extends JpaRepository<Mensagens, UUID> {
 
     Mensagens findTopByChatOrderByDataMensagemDesc(Chat chat);
 
+    @Query("SELECT e FROM Mensagens e WHERE e.lida = true AND e.entregue = true")
+    List<Mensagens> findAllByLidaAndEntregue();
+
     @Modifying
     @Query("UPDATE Mensagens e SET e.lida = true, e.entregue = true WHERE e.chat = :chat AND e.usuarioEnviou != :usuarioId")
     int usuarioLeuChat(@Param("chat") Chat chat, @Param("usuarioId") UUID usuarioId);

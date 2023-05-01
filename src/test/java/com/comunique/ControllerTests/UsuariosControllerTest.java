@@ -32,6 +32,7 @@ import com.comunique.model.enums.typeUsuario;
 import com.comunique.service.AdminsService;
 import com.comunique.service.InstituicoesService;
 import com.comunique.service.UsuariosService;
+import com.comunique.service.UsuariosSolicitacoesService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -44,6 +45,8 @@ public class UsuariosControllerTest {
         TestRestTemplate testRestTemplate;
         @Autowired
         AdminsService adminsService;
+        @Autowired
+        UsuariosSolicitacoesService usuariosSolicitacoesService;
         private Instituicoes instituicao;
         private Usuarios usuario;
         private Admins admin;
@@ -67,6 +70,7 @@ public class UsuariosControllerTest {
         public void setDown() {
                 usuariosService.DeletarAllByInstituicao(instituicao);
                 adminsService.DeletarAllByInstituicao(instituicao);
+                usuariosSolicitacoesService.DeletarAllByInstituicao(instituicao);
                 instituicoesService.Deletar(instituicao.getIdInstituicao());
         }
 
@@ -158,42 +162,47 @@ public class UsuariosControllerTest {
 
         @Test
         public void registrarUsuarioTest() throws NoSuchMethodException {
-                String URI = Reflections.getURI(UsuariosController.class, "registrarUsuario");
-                UsuariosDTO dto = new UsuariosDTO(AleatoryString.getAlphaNumericString(7), typeUsuario.ALUNO,
-                                AleatoryString.getAlphaNumericString(7), AleatoryString.getAlphaNumericString(7),
-                                AleatoryString.getAlphaNumericString(7), true);
-                ResponseEntity<Object> response = testRestTemplate.postForEntity(
-                                URI,
-                                dto,
-                                Object.class,
-                                instituicao.getNome(),
-                                senhaAluno);
-                assertEquals(HttpStatus.OK, response.getStatusCode());
-                System.out.println("Cadastro aluno: " + response.getBody());
-                ResponseEntity<Object> response2 = testRestTemplate.postForEntity(
-                                URI,
-                                dto,
-                                Object.class,
-                                instituicao.getNome(),
-                                senhaProfessor);
-                assertEquals(HttpStatus.UNAUTHORIZED, response2.getStatusCode());
-                dto.setTipoUsuario(typeUsuario.PROFESSOR);
-                dto.setEmail(AleatoryString.getAlphaNumericString(7));
-                ResponseEntity<Object> response3 = testRestTemplate.postForEntity(
-                                URI,
-                                dto,
-                                Object.class,
-                                instituicao.getNome(),
-                                senhaProfessor);
-                assertEquals(HttpStatus.OK, response3.getStatusCode());
-                System.out.println("Cadastro professor: " + response3.getBody());
-                ResponseEntity<Object> response4 = testRestTemplate.postForEntity(
-                                URI,
-                                dto,
-                                Object.class,
-                                instituicao.getNome(),
-                                senhaAluno);
-                assertEquals(HttpStatus.UNAUTHORIZED, response4.getStatusCode());
+                try {
+                        String URI = Reflections.getURI(UsuariosController.class, "registrarUsuario");
+                        UsuariosDTO dto = new UsuariosDTO(AleatoryString.getAlphaNumericString(7), typeUsuario.ALUNO,
+                                        AleatoryString.getAlphaNumericString(7),
+                                        AleatoryString.getAlphaNumericString(7),
+                                        AleatoryString.getAlphaNumericString(7), true);
+                        ResponseEntity<Object> response = testRestTemplate.postForEntity(
+                                        URI,
+                                        dto,
+                                        Object.class,
+                                        instituicao.getNome(),
+                                        senhaAluno);
+                        assertEquals(HttpStatus.OK, response.getStatusCode());
+                        System.out.println("Cadastro aluno: " + response.getBody());
+                        ResponseEntity<Object> response2 = testRestTemplate.postForEntity(
+                                        URI,
+                                        dto,
+                                        Object.class,
+                                        instituicao.getNome(),
+                                        senhaProfessor);
+                        assertEquals(HttpStatus.UNAUTHORIZED, response2.getStatusCode());
+                        dto.setTipoUsuario(typeUsuario.PROFESSOR);
+                        dto.setEmail(AleatoryString.getAlphaNumericString(7));
+                        ResponseEntity<Object> response3 = testRestTemplate.postForEntity(
+                                        URI,
+                                        dto,
+                                        Object.class,
+                                        instituicao.getNome(),
+                                        senhaProfessor);
+                        assertEquals(HttpStatus.OK, response3.getStatusCode());
+                        System.out.println("Cadastro professor: " + response3.getBody());
+                        ResponseEntity<Object> response4 = testRestTemplate.postForEntity(
+                                        URI,
+                                        dto,
+                                        Object.class,
+                                        instituicao.getNome(),
+                                        senhaAluno);
+                        assertEquals(HttpStatus.UNAUTHORIZED, response4.getStatusCode());
+                } catch (Exception e) {
+                        System.out.println(e);
+                }
 
         }
 

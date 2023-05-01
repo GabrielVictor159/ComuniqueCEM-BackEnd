@@ -2,16 +2,15 @@ package com.comunique.dto;
 
 import java.util.UUID;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
-public class NoticiasDTO{
-	@NotBlank
-private String titulo;
-	@NotBlank
-private String imagem;
-	@NotBlank
-private String texto;
-
+public class NoticiasDTO {
+	@NotNull
+	private String titulo;
+	@NotNull
+	private String imagem;
+	@NotNull
+	private String texto;
 
 	public NoticiasDTO(String titulo, String imagem, String texto) {
 		this.titulo = titulo;

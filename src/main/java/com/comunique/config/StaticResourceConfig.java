@@ -9,7 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 
 @Configuration
-public class StaticResourceConfig implements WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> {
+public class StaticResourceConfig implements
+        WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> {
 
     @Override
     public void customize(ConfigurableServletWebServerFactory factory) {

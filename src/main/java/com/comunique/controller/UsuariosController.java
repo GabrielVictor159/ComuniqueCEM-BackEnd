@@ -30,6 +30,7 @@ import com.comunique.model.Chat;
 import com.comunique.model.Email;
 import com.comunique.model.Instituicoes;
 import com.comunique.model.Usuarios;
+import com.comunique.model.UsuariosSolicitacoes;
 import com.comunique.model.enums.typeUsuario;
 import com.comunique.service.AdminsService;
 import com.comunique.service.ChatService;
@@ -37,6 +38,7 @@ import com.comunique.service.EmailService;
 import com.comunique.service.InstituicoesService;
 import com.comunique.service.MensagensService;
 import com.comunique.service.UsuariosService;
+import com.comunique.service.UsuariosSolicitacoesService;
 
 @RestController
 @RequestMapping(value = "/Usuarios", produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -54,7 +56,7 @@ public class UsuariosController {
     @Autowired
     AdminsService adminsService;
     @Autowired
-    EmailService emailService;
+    UsuariosSolicitacoesService usuariosSolicitacoesService;
 
     @GetMapping("/{email}/{senha}")
     public ResponseEntity<Usuarios> Login(@PathVariable(value = "email") String email,
@@ -113,11 +115,7 @@ public class UsuariosController {
     public ResponseEntity<Object> registrarUsuario(@RequestBody @Valid UsuariosDTO usuarioDto,
             @PathVariable String nomeInstituicao,
             @PathVariable String senhaInstituicao) {
-        if (SystemConfigs.sendEmail) {
-            if (!emailService.isValidEmail(usuarioDto.getEmail())) {
-                return new ResponseEntity<>("E-mail inválido", HttpStatus.BAD_REQUEST);
-            }
-        }
+
         if (usuarioDto.getTipoUsuario() == typeUsuario.ALUNO) {
             Optional<Instituicoes> testeInstituicao = instituicoesService.LoginUsuario(nomeInstituicao,
                     senhaInstituicao);
@@ -125,13 +123,20 @@ public class UsuariosController {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             } else {
                 try {
-                    Usuarios usuario = new Usuarios();
+                    UsuariosSolicitacoes usuario = new UsuariosSolicitacoes();
                     BeanUtils.copyProperties(usuarioDto, usuario);
                     usuario.setInstituicao(testeInstituicao.get());
                     usuario.setFotoPerfil("userIcon.png");
-                    Usuarios cadastro = usuariosService.Cadastrar(usuario);
+                    System.out.println(usuario.toString());
+                    UsuariosSolicitacoes cadastro = usuariosSolicitacoesService.cadastrar(usuario);
+                    if (SystemConfigs.sendEmail) {
+                        if (!EmailService.isValidEmail(usuarioDto.getEmail(), cadastro.getId().toString())) {
+                            return new ResponseEntity<>("E-mail inválido", HttpStatus.BAD_REQUEST);
+                        }
+                    }
                     return new ResponseEntity<>(cadastro, HttpStatus.OK);
                 } catch (Exception e) {
+                    System.out.println(e);
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             }
@@ -143,10 +148,16 @@ public class UsuariosController {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             } else {
                 try {
-                    Usuarios usuario = new Usuarios();
+                    UsuariosSolicitacoes usuario = new UsuariosSolicitacoes();
                     BeanUtils.copyProperties(usuarioDto, usuario);
                     usuario.setInstituicao(testeInstituicao.get());
-                    Usuarios cadastro = usuariosService.Cadastrar(usuario);
+                    usuario.setFotoPerfil("userIcon.png");
+                    UsuariosSolicitacoes cadastro = usuariosSolicitacoesService.cadastrar(usuario);
+                    if (SystemConfigs.sendEmail) {
+                        if (!EmailService.isValidEmail(usuarioDto.getEmail(), cadastro.getId().toString())) {
+                            return new ResponseEntity<>("E-mail inválido", HttpStatus.BAD_REQUEST);
+                        }
+                    }
                     return new ResponseEntity<>(cadastro, HttpStatus.OK);
                 } catch (Exception e) {
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -185,13 +196,7 @@ public class UsuariosController {
         if (usuario.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
-            if (usuario.get().getEmail() != dto.getEmail()) {
-                if (SystemConfigs.sendEmail) {
-                    if (!emailService.isValidEmail(dto.getEmail())) {
-                        return new ResponseEntity<>("E-mail inválido", HttpStatus.BAD_REQUEST);
-                    }
-                }
-            }
+            dto.setEmail(usuario.get().getEmail());
             try {
                 dto.setTipoUsuario(usuario.get().getTipoUsuario());
                 dto.setFotoPerfil(usuario.get().getFotoPerfil());
@@ -218,13 +223,7 @@ public class UsuariosController {
             if (admin.get().getInstituicao() != usuario.get().getInstituicao()) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             } else {
-                if (usuario.get().getEmail() != dto.getEmail()) {
-                    if (SystemConfigs.sendEmail) {
-                        if (!emailService.isValidEmail(dto.getEmail())) {
-                            return new ResponseEntity<>("E-mail inválido", HttpStatus.BAD_REQUEST);
-                        }
-                    }
-                }
+                dto.setEmail(usuario.get().getEmail());
                 try {
                     BeanUtils.copyProperties(dto, usuario.get());
                     Usuarios user = usuariosService.Cadastrar(usuario.get());

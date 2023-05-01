@@ -2,19 +2,19 @@ package com.comunique.dto;
 
 import java.util.Date;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class CronogramaDTO {
 
-	@NotBlank
+	@NotNull
 	private Date dataAtividade;
 
-	@NotBlank
+	@NotNull
 	private String cor;
-	@NotBlank
+	@NotNull
 	private int prazo;
 
-	@NotBlank
+	@NotNull
 	private String atividade;
 
 	public CronogramaDTO(Date dataAtividade, String cor, int prazo, String atividade) {

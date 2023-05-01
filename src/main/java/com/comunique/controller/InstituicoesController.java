@@ -36,6 +36,7 @@ import com.comunique.service.MensagensService;
 import com.comunique.service.NoticiasService;
 import com.comunique.service.QuestoesService;
 import com.comunique.service.UsuariosService;
+import com.comunique.service.UsuariosSolicitacoesService;
 
 @RestController
 @RequestMapping(value = "/Instituicoes", produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -60,6 +61,8 @@ public class InstituicoesController {
     QuestoesService questoesService;
     @Autowired
     NoticiasService noticiasService;
+    @Autowired
+    UsuariosSolicitacoesService usuariosSolicitacoesService;
 
     @GetMapping("/admin/{nomeAdmin}/{senhaAdmin}/{id}")
     public ResponseEntity<Object> findInstituicaoAdmin(@PathVariable(value = "nomeAdmin") String nomeAdmin,
@@ -163,6 +166,7 @@ public class InstituicoesController {
             try {
                 noticiasService.DeletarAllByInstituicao(instituicao.get());
                 questoesService.DeletarAllByInstituicao(instituicao.get());
+                usuariosSolicitacoesService.DeletarAllByInstituicao(instituicao.get());
                 List<Usuarios> usuarios = usuariosService
                         .getAllUsuariosInstituicao(instituicao.get());
                 for (Usuarios user : usuarios) {

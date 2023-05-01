@@ -2,25 +2,25 @@ package com.comunique.dto;
 
 import java.util.Date;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.comunique.model.enums.typeUsuario;
 
 public class UsuariosDTO {
-	@NotBlank
+	@NotNull
 	@Size(min = 5)
 	private String nomeUsuario;
-	@NotBlank
+	@NotNull
 	private typeUsuario tipoUsuario;
-	@NotBlank
+	@NotNull
 	private String email;
-	@NotBlank
+	@NotNull
 	@Size(min = 8)
 	private String senha;
-	@NotBlank
+	@NotNull
 	private String fotoPerfil;
-	@NotBlank
+	@NotNull
 	private boolean usuarioOnline;
 
 	public UsuariosDTO() {
