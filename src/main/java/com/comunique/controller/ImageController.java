@@ -99,8 +99,8 @@ public class ImageController {
                     Mensagens novaMensagem = new Mensagens();
                     BeanUtils.copyProperties(dto, novaMensagem);
                     novaMensagem.setChat(chat.get());
-                    mensagensService.Cadastrar(novaMensagem);
-                    return new ResponseEntity<>(HttpStatus.OK);
+                    Mensagens cadastro = mensagensService.Cadastrar(novaMensagem);
+                    return new ResponseEntity<>(cadastro, HttpStatus.OK);
                 } catch (IOException e) {
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
                 }

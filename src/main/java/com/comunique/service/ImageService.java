@@ -18,22 +18,23 @@ public class ImageService {
 
     private static final String ROOT = "src/main/resources/static/images/";
 
-    public void persistir(MultipartFile image, String folder) throws IOException {
-        if (image.getContentType().equals("image/jpeg") || image.getContentType().equals("image/png")) {
-            byte[] bytes = ImageResizer.resizeImage(image, 1000);
-            String fileName = image.getOriginalFilename();
+    public void persistir(MultipartFile file, String folder) throws IOException {
+        String contentType = file.getContentType();
+        if (contentType != null && contentType.startsWith("image/")) {
+            byte[] bytes = ImageResizer.resizeImage(file, 1000);
+            String fileName = file.getOriginalFilename();
             Path path = Paths.get(folder);
             if (!Files.exists(path)) {
                 Files.createDirectories(path);
             }
             Files.write(path.resolve(fileName), bytes);
         } else {
-            String fileName = image.getOriginalFilename();
-            Path path = Paths.get(folder + fileName);
+            String fileName = file.getOriginalFilename();
+            Path path = Paths.get(folder);
             if (!Files.exists(path)) {
                 Files.createDirectories(path);
             }
-            Files.write(path.resolve(fileName), image.getBytes());
+            Files.write(path.resolve(fileName), file.getBytes());
         }
     }
 
