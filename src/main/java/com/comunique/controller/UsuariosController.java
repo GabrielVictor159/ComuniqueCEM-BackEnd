@@ -123,6 +123,7 @@ public class UsuariosController {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             } else {
                 try {
+                    if(SystemConfigs.sendEmail){
                     UsuariosSolicitacoes usuario = new UsuariosSolicitacoes();
                     BeanUtils.copyProperties(usuarioDto, usuario);
                     usuario.setInstituicao(testeInstituicao.get());
@@ -135,6 +136,15 @@ public class UsuariosController {
                         }
                     }
                     return new ResponseEntity<>(cadastro, HttpStatus.OK);
+                }
+                else{
+                        Usuarios usuario = new Usuarios();
+                    BeanUtils.copyProperties(usuarioDto, usuario);
+                    usuario.setInstituicao(testeInstituicao.get());
+                    usuario.setFotoPerfil("userIcon.png");
+                    Usuarios cadastro = usuariosService.Cadastrar(usuario);
+                    return new ResponseEntity<>(cadastro, HttpStatus.OK);
+                    }
                 } catch (Exception e) {
                     System.out.println(e);
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -148,6 +158,7 @@ public class UsuariosController {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             } else {
                 try {
+                    if(SystemConfigs.sendEmail){
                     UsuariosSolicitacoes usuario = new UsuariosSolicitacoes();
                     BeanUtils.copyProperties(usuarioDto, usuario);
                     usuario.setInstituicao(testeInstituicao.get());
@@ -159,6 +170,15 @@ public class UsuariosController {
                         }
                     }
                     return new ResponseEntity<>(cadastro, HttpStatus.OK);
+                    }
+                    else{
+                        Usuarios usuario = new Usuarios();
+                    BeanUtils.copyProperties(usuarioDto, usuario);
+                    usuario.setInstituicao(testeInstituicao.get());
+                    usuario.setFotoPerfil("userIcon.png");
+                    Usuarios cadastro = usuariosService.Cadastrar(usuario);
+                    return new ResponseEntity<>(cadastro, HttpStatus.OK);
+                    }
                 } catch (Exception e) {
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
                 }

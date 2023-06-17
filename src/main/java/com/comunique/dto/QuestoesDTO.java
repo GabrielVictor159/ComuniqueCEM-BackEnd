@@ -18,6 +18,10 @@ public class QuestoesDTO {
 	@NotNull
 	private String RespostaCorreta;
 
+	public QuestoesDTO()
+	{
+		
+	}
 	public QuestoesDTO(@NotNull String titulo, @NotNull String resposta1,
 			@NotNull String resposta2, @NotNull String resposta3, @NotNull String resposta4,
 			@NotNull String respostaCorreta) {
@@ -77,5 +81,11 @@ public class QuestoesDTO {
 	public void setRespostaCorreta(String respostaCorreta) {
 		RespostaCorreta = respostaCorreta;
 	}
-
+	@Override
+	public String toString() {
+		return "QuestoesDTO [Titulo=" + Titulo + ", Resposta1=" + Resposta1 + ", Resposta2=" + Resposta2
+				+ ", Resposta3=" + Resposta3 + ", Resposta4=" + Resposta4 + ", RespostaCorreta=" + RespostaCorreta
+				+ "]";
+	}
+	
 }

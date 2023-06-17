@@ -120,6 +120,7 @@ public class QuestoesController {
             Questoes questao = new Questoes();
             BeanUtils.copyProperties(questoesDto, questao);
             questao.setInstituicao(admin.get().getInstituicao());
+            System.out.println(questoesDto.toString());
             Questoes questaoPersistir = questoesService.Cadastrar(questao);
             questaoPersistir.add(
                     linkTo(methodOn(QuestoesController.class).findQuestionIp(questao.getIdQuestao())).withSelfRel());
